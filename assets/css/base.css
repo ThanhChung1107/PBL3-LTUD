@@ -8,6 +8,7 @@
     --header-height:120px;
     --navbar-height:34px;
     --header-with-search-height:calc(var(--header-height) - var(--navbar-height));
+    --header__bar-height:calc(var(--header-height) - var(--navbar-height));
 }
 *{
     /* tất cả phần từ box kế thừa giá trị từ phần tử cha */
@@ -36,6 +37,12 @@ html{
         transform: scale(var(--growth-to));
     }
 }
+.grid__column-2-4 {
+    padding-left: 5px;
+    padding-right: 5px;
+    width: calc(100% / 5); /* Chia đều 5 cột */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng width */
+}
 
 .grid{
     width: 1200px;
@@ -50,6 +57,13 @@ html{
     display: flex;
     flex-wrap: wrap;
 }
+ .grid__column-2-4 {
+        padding-left: 5px;
+        padding-right: 5px;
+        width: calc(100% / 5); /* Chia đều 5 cột */
+        box-sizing: border-box; /* Đảm bảo padding không làm tăng width */
+    }
+    
 
 .modal{
     position: fixed;
