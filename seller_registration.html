@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.7.2-web/css/all.min.css">
+    <link rel="stylesheet" href="account/account-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.7.2-web/">
+    <link rel="stylesheet" href="assets/css/seller_style.css">
+    <link rel="stylesheet" href="assets/css/pay.css">
+</head>
+<body>
+    <div class="seller">
+        <header class="seller-header">
+            <div class="seller-left">
+                <div class="header__logo">
+                        <a href="/" class="header__logo-link">
+                            <svg class="header__logo-img" width="457pt" height="50pt" viewBox="0 0 457 50" xmlns="http://www.w3.org/2000/svg">
+                                <g id="fontsvg1741265222034" stroke-linecap="round" fill-rule="evenodd" fill="#fff">
+                                    <path
+                                        d="M 36.1 25 L 50.5 0 L 72.15 37.5 L 64.95 50 L 50.5 25 L 43.3 37.5 L 50.5 50 L 36.1 50 L 21.65 25 L 14.45 37.5 L 21.65 50 L 7.2 50 L 0 37.5 L 21.65 0 L 36.1 25 Z M 261.75 25 L 276.15 0 L 297.8 37.5 L 290.6 50 L 276.15 25 L 268.95 37.5 L 276.15 50 L 261.75 50 L 247.3 25 L 240.1 37.5 L 247.3 50 L 232.85 50 L 225.65 37.5 L 247.3 0 L 261.75 25 Z M 386.4 50 L 371.95 25 L 386.4 25 L 393.6 12.5 L 379.15 12.5 L 364.75 37.5 L 371.95 50 L 357.5 50 L 350.3 37.5 L 371.95 0 L 400.8 0 L 408.05 12.5 L 393.6 37.5 L 400.8 50 L 386.4 50 Z M 204 12.5 L 182.35 50 L 175.15 37.5 L 196.8 0 L 225.65 0 L 232.9 12.5 L 211.25 50 L 196.8 50 L 204 37.5 L 196.8 25 L 211.25 25 L 218.45 12.5 L 204 12.5 Z M 328.65 12.5 L 307 50 L 299.8 37.5 L 321.45 0 L 350.3 0 L 357.55 12.5 L 335.9 50 L 321.45 50 L 328.65 37.5 L 321.45 25 L 335.9 25 L 343.1 12.5 L 328.65 12.5 Z M 153.5 37.5 L 146.3 25 L 160.75 25 L 167.95 37.5 L 160.75 50 L 131.85 50 L 124.65 37.5 L 146.3 0 L 175.15 0 L 182.4 12.5 L 153.5 12.5 L 139.1 37.5 L 153.5 37.5 Z M 88.6 37.5 L 103 37.5 L 110.25 50 L 81.35 50 L 74.15 37.5 L 95.8 0 L 124.65 0 L 131.9 12.5 L 103 12.5 L 99.4 18.75 L 113.85 18.75 L 106.6 31.25 L 92.2 31.25 L 88.6 37.5 Z M 413.65 12.5 L 406.45 0 L 449.75 0 L 456.95 12.5 L 442.55 12.5 L 428.15 37.45 L 435.3 50 L 420.9 50 L 413.65 37.5 L 428.1 12.5 L 413.65 12.5 Z"
+                                        vector-effect="non-scaling-stroke"
+                                    />
+                                </g>
+                            </svg>
+                        </a>
+                        
+                    </div>
+                <div class="seller-left-text">Đăng ký trở thành người bán</div>
+            </div>
+            <div class="seller-right">
+                <li class="header__navbar-item header__navbar-user">
+                            <img src="data:image/jpeg;base64,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" alt="" class="header__navbar-user-img">
+                            <span class="header__navbar-user-name">nhatle711</span>
+                            <ul class="header__navbar-user-menu">
+                                <li class="header__navbar-user-item">
+                                    <a href="account1.html" >Tài khoản của tôi</a>
+                                </li>
+                                
+                                <li class="header__navbar-user-item header__navbar-user-item--separate">
+                                    <a href="" >Đăng xuất</a>
+                                </li>
+                            </ul>
+
+                        </li>
+            </div>
+        </header>
+
+        <!-- contain -->
+         <div class="seller-contain">
+            <div class="seller-register-text">
+                <div class="register-text">Thông tin Shop</div>
+                <div class="register-info">
+                    <div class="register-input">
+                        <span class="register-lable">Tên shop</span>
+                        <input type="text" class="register-input-type" required>
+                    </div>
+                    <div class="register-input">
+                        <span class="register-lable">Địa chỉ</span>
+                        <input type="text" class="register-input-type" required>
+                    </div>
+                    <div class="register-input">
+                        <span class="register-lable">Số điện thoại</span>
+                        <input type="text" class="register-input-type" required>
+                    </div>
+                    <div class="register-input">
+                        <span class="register-lable">Email</span>
+                        <input type="email" class="register-input-type" required>
+                    </div>
+                </div>
+                <a href="" class="btn-save">Hoàn tất</a>
+            </div>
+         </div>
+
+         <!-- footer -->
+         <footer class="footer">
+            <div class="grid">
+                <div class="grid__row">
+                    <div class="grid__column-2-4">
+                        <h3 class="footer__heading">Chăm sóc khách hàng</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Trung tâm trợ giúp</a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Hướng dẫn mua hàng</a>
+                            </li>
+                        </ul>
+    
+                    </div>
+                    <div class="grid__column-2-4">
+                        <h3 class="footer__heading">Về MEGAMART</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Giới thiệu</a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Tuyển dụng</a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Điều khoản</a>
+                            </li>
+                        </ul>
+    
+                    </div>
+                    <div class="grid__column-2-4">
+                        <h3 class="footer__heading">Danh mục</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Thể thao</a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Thời trang</a>
+                            </li>
+                            <li class="footer-item">
+                                <a href="" class="footer-item__link">Gia dụng</a>
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <div class="grid__column-2-4">
+                        <h3 class="footer__heading">Theo dõi chúng tôi</h3>
+                        <ul class="footer-list">
+                            <li class="footer-item">
+                                
+                                <a href="" class="footer-item__link">
+                                    <i class="footer-item-icon  fab fa-facebook "></i>  
+                                    Facebook</a>
+                                </li>
+                                <li class="footer-item">
+                                <a href="" class="footer-item__link">
+                                    <i class="footer-item-icon  fa-brands fa-instagram   "></i>
+                                    Instagram</a>
+                                </li>
+                                <li class="footer-item">
+                                <a href="" class="footer-item__link">
+                                    <i class="footer-item-icon fa-brands fa-linkedin"></i>
+                                    Linkedin
+                                </a>
+                            </li>
+                        </ul>
+    
+                    </div>
+                   
+                    <div class="grid__column-2-4">
+                        <h3 class="footer__heading">MEGAMART trên ứng dụng(coming soon)</h3>
+                        <div class="footer__download-apps">
+                            <img src="/assets/img/googleplay.png" alt="" class="footer__download-apps-googleplay">
+                            <img src="/assets/img/appstore.png" alt="" class="footer__download-apps-appstore">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <div class="grid">
+                    <p class="footer__bottom-text">Địa chỉ:54 Nguyễn Lương Bằng, Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng ,Việt Nam</p>
+                    <p class="footer__bottom-text">Chịu Trách Nhiệm Quản Lý Nội Dung: Lê Thanh Chung,Nguyễn Lê Minh Chiến,Lê Minh Nhật</p>
+                   <p class="footer__bottom-text">© 2025 MEGAMART - All Rights Reserved</p>
+                </div>
+            </div>
+    
+    
+           </footer>
+    </div>
+</body>
+</html>
