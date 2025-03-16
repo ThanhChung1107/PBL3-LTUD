@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/base.css">
@@ -18,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.7.2-web/">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="seller_home">
@@ -36,7 +36,7 @@
                         </a>
                         
                     </div>
-                <div class="seller-left-text">Kênh người bán</div>
+                <div class="seller-left-text">Quản lý sản phẩm</div>
             </div>
             <div class="seller-right">
                 <li class="header__navbar-item header__navbar-user">
@@ -57,128 +57,59 @@
         </header>
     </div>
 
-    <!-- container -->
-     <div class="seller_home_contain">
-        <div class="seller-sidebar">
-            <ul class="sidebar-list-item">
-                <li class="siderbar-item">
-                    <div class="sidebar-item-header">
-                        <a href="" class="siderbar-item-label">Quản lí đơn hàng </a>
-                        <i class='bx bx-chevron-up item-icon'></i>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <a href="" class="active">Tất cả</a>
-                        </li> 
-                    </ul>
-                </li>
-                <li class="siderbar-item">
-                    <div class="sidebar-item-header">
-                        <a href="" class="siderbar-item-label">Quản lí sản phẩm </a>
-                        <i class='bx bx-chevron-up item-icon'></i>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <a href="product_manager.html">Tất cả sản phẩm</a>
-                        </li> 
-                        <li class="dropdown-item">
-                            <a href="">Thêm sản phẩm</a>
-                        </li> 
-                    </ul>
-                </li>
-                <li class="siderbar-item">
-                    <div class="sidebar-item-header">
-                        <a href="" class="siderbar-item-label">Chăm sóc khách hàng </a>
-                        <i class='bx bx-chevron-up item-icon'></i>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <a href="">Quản lí đánh giá</a>
-                        </li> 
-                    </ul>
-                </li>
-                <li class="siderbar-item">
-                    <div class="sidebar-item-header">
-                        <a href="" class="siderbar-item-label">Tài chính </a>
-                        <i class='bx bx-chevron-up item-icon'></i>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <a href="">Doanh thu</a>
-                        </li> 
-                    </ul>
-                </li>
-                <li class="siderbar-item">
-                    <div class="sidebar-item-header">
-                        <a href="" class="siderbar-item-label">Quản lí Shop </a>
-                        <i class='bx bx-chevron-up item-icon'></i>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item">
-                            <a href="">Hồ sơ Shop</a>
-                        </li> 
-                        
-                    </ul>
-                </li>
-            </ul>
+    <div class="add_product_contain">
+        <div class="suggest_add_product">
+            <div class="suggest_header">Gợi ý điền thông tin</div>
+            <div class="suggest_conttent">
+                <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+                <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+                <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+                <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+                <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+            </div>
         </div>
+        <div class="add_product_conttent">
+            <div class="add_product_conttent_header">
+                <div class="basic_info_lable">Thông tin cơ bản</div>
+                <div class="sell_info_lable">Thông tin bán hàng</div>
+            </div>
 
-        <div class="order-manager">
-            <div class="order-manager-all">
-                <div class="order-manager-all-title">Tất Cả</div>
-                <div class="order-manager-all-conttent">
-                    <div class="order-manager-all-search">
-                        <select id="filter" class="order-manager-all-select">
-                            <option value="order_id">Mã đơn hàng</option>
-                            <option value="buyer_name">Tên người mua</option>
-                            <option value="product">Sản phẩm</option>
-                        </select>
-                        <input type="text" class="order-manager-all-input" id="SearchInput" placeholder="Mã đơn hàng">
+            <div class="basic_info_conttent">
+                <p class="basic_info_conttent_header">Thông tin cơ bản</p>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Hình ảnh sản phẩm</div>
+                    <div class="container">
+                        <input type="file" id="file" accept="image/*" hidden>
+                        <div class="img-area" data-img="">
+                            <i class='bx bxs-cloud-upload icon'></i>
+                            <h3>Upload Image</h3>
+                        </div>
+                        <button class="select-image">Select Image</button>
                     </div>
-                    <div class="search-result"><span class="count">1</span>Kết quả tìm thấy</div>
-                    <table class="table-order">
-                        <thead>
-                            <tr>
-                                <th class="col_product">Sản phẩm</th>
-                                <th class="col_category">Danh mục</th>
-                                <th class="col_sum_product">Tổng đơn hàng</th>
-                                <th class="col_revenue">Doanh thu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="col_product_value">
-                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                    <div class="col_product_name">Product name</div>
-                                </td>
-                                <td class="col_category_value">Dien thoai</td>
-                                <td class="col_sum_product_value">150</td>
-                                <td class="col_revenue_value">2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td class="col_product_value">
-                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                    <div class="col_product_name">Product name</div>
-                                </td>
-                                <td class="col_category_value">Dien thoai</td>
-                                <td class="col_sum_product_value">150</td>
-                                <td class="col_revenue_value">2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td class="col_product_value">
-                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                    <div class="col_product_name">Product name</div>
-                                </td>
-                                <td class="col_category_value">Dien thoai</td>
-                                <td class="col_sum_product_value">150</td>
-                                <td class="col_revenue_value">2.000.000</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Tên sản phẩm</div>
+                    <input type="text" class="basic_name_input" placeholder="Tên sản phẩm">
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Ngành hàng</div>
+                    <div class="category_list">
+                        <div class="category_item">giày dép</div>
+                        <div class="category_item">Áo</div>
+                        <div class="category_item">Quần</div>
+                        <div class="category_item">Đồng hồ</div>
+                        <div class="category_item">Máy tính</div>
+                    </div>
+                    <input type="text" class="category_input" placeholder="Ngành hàng">
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Mô tả sản phẩm</div>
+                    <input type="text" class="basic_name_input">
                 </div>
             </div>
         </div>
-     </div>
-     <script src="seller_script.js"></script>
+    </div>
+    <script src="seller_script.js"></script>
+    <script src="add_product.js"></script>
 </body>
 </html>

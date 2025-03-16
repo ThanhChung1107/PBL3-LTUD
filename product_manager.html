@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/base.css">
@@ -36,7 +35,7 @@
                         </a>
                         
                     </div>
-                <div class="seller-left-text">Kênh người bán</div>
+                <div class="seller-left-text">Quản lý sản phẩm</div>
             </div>
             <div class="seller-right">
                 <li class="header__navbar-item header__navbar-user">
@@ -57,8 +56,7 @@
         </header>
     </div>
 
-    <!-- container -->
-     <div class="seller_home_contain">
+    <div class="product_manager_contain">
         <div class="seller-sidebar">
             <ul class="sidebar-list-item">
                 <li class="siderbar-item">
@@ -68,7 +66,7 @@
                     </div>
                     <ul class="dropdown-menu">
                         <li class="dropdown-item">
-                            <a href="" class="active">Tất cả</a>
+                            <a href="seller_manager_home.html">Tất cả</a>
                         </li> 
                     </ul>
                 </li>
@@ -79,10 +77,10 @@
                     </div>
                     <ul class="dropdown-menu">
                         <li class="dropdown-item">
-                            <a href="product_manager.html">Tất cả sản phẩm</a>
+                            <a href="" class="active">Tất cả sản phẩm</a>
                         </li> 
                         <li class="dropdown-item">
-                            <a href="">Thêm sản phẩm</a>
+                            <a href="add_product.html">Thêm sản phẩm</a>
                         </li> 
                     </ul>
                 </li>
@@ -123,62 +121,140 @@
             </ul>
         </div>
 
-        <div class="order-manager">
-            <div class="order-manager-all">
-                <div class="order-manager-all-title">Tất Cả</div>
-                <div class="order-manager-all-conttent">
-                    <div class="order-manager-all-search">
-                        <select id="filter" class="order-manager-all-select">
-                            <option value="order_id">Mã đơn hàng</option>
-                            <option value="buyer_name">Tên người mua</option>
-                            <option value="product">Sản phẩm</option>
-                        </select>
-                        <input type="text" class="order-manager-all-input" id="SearchInput" placeholder="Mã đơn hàng">
+        <div class="all-product">
+            <div class="all-product-header">
+                <div class="all-product-title">Sản phẩm</div>
+                <div class="add-product"><span>+</span>  Thêm sản phẩm mới</div>
+            </div>
+            <div class="all-product-list">
+                <div class="all-product-item item-active" onclick="showSection('all-product')">Tất cả</div>
+                <div class="all-product-item" onclick="showSection('is-active-product')">Đang hoạt Động(<span class="is-active">0</span>)</div>
+                <div class="all-product-item">Vi phạm(<span class="violate">0</span>)</div>
+                <div class="all-product-item">chờ duyệt bởi Admin(<span class="Pending-approval">0</span>)</div>
+            </div>
+            <div id="all-product" class="all-product-conttent section active">
+                <div class="all-product-search">
+                    <div class="product-search">
+                        <label for="" class="product-search-lable">Tìm kiếm sản phẩm</label>
+                        <input type="text" class="product-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
                     </div>
-                    <div class="search-result"><span class="count">1</span>Kết quả tìm thấy</div>
-                    <table class="table-order">
-                        <thead>
-                            <tr>
-                                <th class="col_product">Sản phẩm</th>
-                                <th class="col_category">Danh mục</th>
-                                <th class="col_sum_product">Tổng đơn hàng</th>
-                                <th class="col_revenue">Doanh thu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="col_product_value">
-                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                    <div class="col_product_name">Product name</div>
-                                </td>
-                                <td class="col_category_value">Dien thoai</td>
-                                <td class="col_sum_product_value">150</td>
-                                <td class="col_revenue_value">2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td class="col_product_value">
-                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                    <div class="col_product_name">Product name</div>
-                                </td>
-                                <td class="col_category_value">Dien thoai</td>
-                                <td class="col_sum_product_value">150</td>
-                                <td class="col_revenue_value">2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td class="col_product_value">
-                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                    <div class="col_product_name">Product name</div>
-                                </td>
-                                <td class="col_category_value">Dien thoai</td>
-                                <td class="col_sum_product_value">150</td>
-                                <td class="col_revenue_value">2.000.000</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="category-search">
+                        <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
+                        <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    </div>
+                    <button class="btn-product-search">Tìm</button>
                 </div>
+                <div class="num_of_product"><span class="count_product">X</span> Sản phẩm</div>
+                <table class="table-product">
+                    <thead>
+                        <tr>
+                            <th class="col_product">Sản phẩm</th>
+                            <th class="col_revenue">Doanh thu</th>
+                            <th class="col_price">Giá</th>
+                            <th class="col_stock">Kho hàng</th>
+                            <th class="col_category">Danh mục</th>
+                            <th class="col_status">Tình trạng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col_product_value">
+                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                <div class="col_product_name">iPhone 15 Pro</div>
+                            </td>
+                            <td class="col_revenue_value">50.000.000</td>
+                            <td class="col_price_value">25.000.000</td>
+                            <td class="col_stock_value">10</td>
+                            <td class="col_category_value">Điện thoại</td>
+                            <td class="col_status_value">Đang hoạt động</td>
+                        </tr>
+                        <tr>
+                            <td class="col_product_value">
+                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                <div class="col_product_name">Samsung Galaxy S23</div>
+                            </td>
+                            <td class="col_revenue_value">30.000.000</td>
+                            <td class="col_price_value">15.000.000</td>
+                            <td class="col_stock_value">5</td>
+                            <td class="col_category_value">Điện thoại</td>
+                            <td class="col_status_value">Vi phạm</td>
+                        </tr>
+                        <tr>
+                            <td class="col_product_value">
+                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                <div class="col_product_name">MacBook Air M2</div>
+                            </td>
+                            <td class="col_revenue_value">100.000.000</td>
+                            <td class="col_price_value">30.000.000</td>
+                            <td class="col_stock_value">8</td>
+                            <td class="col_category_value">Laptop</td>
+                            <td class="col_status_value">Chờ duyệt</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                
+            </div>
+
+            <div id="is-active-product" class="all-product-conttent section">
+                <div class="all-product-search">
+                    <div class="product-search">
+                        <label for="" class="product-search-lable">Tìm kiếm sản phẩm</label>
+                        <input type="text" class="product-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    </div>
+                    <div class="category-search">
+                        <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
+                        <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    </div>
+                    <button class="btn-product-search">Tìm</button>
+                </div>
+                <div class="num_of_product"><span class="count_product">X</span> Sản phẩm</div>
+                <table class="table-product">
+                    <thead>
+                        <tr>
+                            <th class="col_product">Sản phẩm</th>
+                            <th class="col_revenue">Doanh thu</th>
+                            <th class="col_price">Giá</th>
+                            <th class="col_stock">Kho hàng</th>
+                            <th class="col_category">Danh mục</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col_product_value">
+                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                <div class="col_product_name">cccccc</div>
+                            </td>
+                            <td class="col_revenue_value">50.000.000</td>
+                            <td class="col_price_value">25.000.000</td>
+                            <td class="col_stock_value">10</td>
+                            <td class="col_category_value">Điện thoại</td>
+                        </tr>
+                        <tr>
+                            <td class="col_product_value">
+                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                <div class="col_product_name">Samsung Galaxy S23</div>
+                            </td>
+                            <td class="col_revenue_value">30.000.000</td>
+                            <td class="col_price_value">15.000.000</td>
+                            <td class="col_stock_value">5</td>
+                            <td class="col_category_value">Điện thoại</td>
+                        </tr>
+                        <tr>
+                            <td class="col_product_value">
+                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                <div class="col_product_name">MacBook Air M2</div>
+                            </td>
+                            <td class="col_revenue_value">100.000.000</td>
+                            <td class="col_price_value">30.000.000</td>
+                            <td class="col_stock_value">8</td>
+                            <td class="col_category_value">Laptop</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-     </div>
-     <script src="seller_script.js"></script>
+    </div>
+    <script src="seller_script.js"></script>
 </body>
 </html>
