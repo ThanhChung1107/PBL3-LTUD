@@ -57,6 +57,8 @@ document.getElementById("filter").addEventListener("change", function() {
     document.getElementById("SearchInput").placeholder = selectedText;
 });
 
+
+
 function showSection(sectionId) {
     // Ẩn tất cả các section
     document.querySelectorAll('.section').forEach(section => {

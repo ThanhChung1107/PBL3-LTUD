@@ -48,6 +48,16 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+function hienPopup() {
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function anPopup() {
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
 
 
 

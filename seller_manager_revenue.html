@@ -12,11 +12,13 @@
     <link rel="stylesheet" href="account/account-style.css">
     <link rel="stylesheet" href="assets/css/pay.css">
     <link rel="stylesheet" href="assets/css/seller_style.css">
+    <link rel="stylesheet" href="assets/css/takecare_revenue.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.7.2-web/">
+    <!-- <link rel="stylesheet" href="http://127.0.0.1:5500/assets/fonts/fontawesome-free-6.7.2-web/css/all.min.css"> -->
+
 </head>
 <body>
     <div class="seller_home">
@@ -35,7 +37,7 @@
                         </a>
                         
                     </div>
-                <div class="seller-left-text">Quản lý sản phẩm</div>
+                <div class="seller-left-text">Doanh thu</div>
             </div>
             <div class="seller-right">
                 <li class="header__navbar-item header__navbar-user">
@@ -56,7 +58,8 @@
         </header>
     </div>
 
-    <div class="product_manager_contain">
+    <!-- container -->
+     <div class="seller_home_contain">
         <div class="seller-sidebar">
             <ul class="sidebar-list-item">
                 <li class="siderbar-item">
@@ -66,7 +69,7 @@
                     </div>
                     <ul class="dropdown-menu">
                         <li class="dropdown-item">
-                            <a href="seller_manager_home.html">Tất cả</a>
+                            <a href="" class="active">Tất cả</a>
                         </li> 
                     </ul>
                 </li>
@@ -77,7 +80,7 @@
                     </div>
                     <ul class="dropdown-menu">
                         <li class="dropdown-item">
-                            <a href="" class="active">Tất cả sản phẩm</a>
+                            <a href="product_manager.html">Tất cả sản phẩm</a>
                         </li> 
                         <li class="dropdown-item">
                             <a href="add_product.html">Thêm sản phẩm</a>
@@ -121,140 +124,156 @@
             </ul>
         </div>
 
-        <div class="all-product">
-            <div class="all-product-header">
-                <div class="all-product-title">Sản phẩm</div>
-                <div class="add-product"><a href="add_product.html"><span>+</span>  Thêm sản phẩm mới</a></div>
-            </div>
-            <div class="all-product-list">
-                <div class="all-product-item item-active" onclick="showSection('all-product')">Tất cả</div>
-                <div class="all-product-item" onclick="showSection('is-active-product')">Đang hoạt Động(<span class="is-active">0</span>)</div>
-                <div class="all-product-item">Vi phạm(<span class="violate">0</span>)</div>
-                <div class="all-product-item">chờ duyệt bởi Admin(<span class="Pending-approval">0</span>)</div>
-            </div>
-            <div id="all-product" class="all-product-conttent section active">
-                <div class="all-product-search">
-                    <div class="product-search">
-                        <label for="" class="product-search-lable">Tìm kiếm sản phẩm</label>
-                        <input type="text" class="product-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+        <div class="main_page">
+            <div class="main_page__total">
+                <h3 class="main_page__total-header">Tổng Quan Doanh Thu</h3>
+                <div class="main_page__total-wrapper">
+                    <div class="main_page__total-rev">
+                        <div class="main_page__total-text">Tổng cộng</div>
+                        <div class="main_page__total-num">0đ</div>
                     </div>
-                    <div class="category-search">
-                        <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                        <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    <div class="main_page__total-mon">
+                        <div class="main_page__total-text">Tháng này</div>
+                        <div class="main_page__total-num">0đ</div>
                     </div>
-                    <button class="btn-product-search">Tìm</button>
-                </div>
-                <div class="num_of_product"><span class="count_product">X</span> Sản phẩm</div>
-                <table class="table-product">
-                    <thead>
-                        <tr>
-                            <th class="col_product">Sản phẩm</th>
-                            <th class="col_revenue">Doanh thu</th>
-                            <th class="col_price">Giá</th>
-                            <th class="col_stock">Kho hàng</th>
-                            <th class="col_category">Danh mục</th>
-                            <th class="col_status">Tình trạng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col_product_value">
-                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                <div class="col_product_name">iPhone 15 Pro</div>
-                            </td>
-                            <td class="col_revenue_value">50.000.000</td>
-                            <td class="col_price_value">25.000.000</td>
-                            <td class="col_stock_value">10</td>
-                            <td class="col_category_value">Điện thoại</td>
-                            <td class="col_status_value">Đang hoạt động</td>
-                        </tr>
-                        <tr>
-                            <td class="col_product_value">
-                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                <div class="col_product_name">Samsung Galaxy S23</div>
-                            </td>
-                            <td class="col_revenue_value">30.000.000</td>
-                            <td class="col_price_value">15.000.000</td>
-                            <td class="col_stock_value">5</td>
-                            <td class="col_category_value">Điện thoại</td>
-                            <td class="col_status_value">Vi phạm</td>
-                        </tr>
-                        <tr>
-                            <td class="col_product_value">
-                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                <div class="col_product_name">MacBook Air M2</div>
-                            </td>
-                            <td class="col_revenue_value">100.000.000</td>
-                            <td class="col_price_value">30.000.000</td>
-                            <td class="col_stock_value">8</td>
-                            <td class="col_category_value">Laptop</td>
-                            <td class="col_status_value">Chờ duyệt</td>
-                        </tr>
-                    </tbody>
-                </table>
 
-                
+                </div>
             </div>
 
-            <div id="is-active-product" class="all-product-conttent section">
-                <div class="all-product-search">
-                    <div class="product-search">
-                        <label for="" class="product-search-lable">Tìm kiếm sản phẩm</label>
-                        <input type="text" class="product-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+            <div class="main_page">
+                <div class="main_page__total">
+                    <h3 class="main_page__total-header">Chi tiết</h3>
+                    <div class="main_page__list-eval-search">
+                        <span class="main_page__list-eval--text" style="padding-left: 0;">Từ:</span>
+                        <input type="date"  class="date">
+                        <span class="main_page__list-eval--text">Đến:</span>
+                        <input type="date" class="date">
                     </div>
-                    <div class="category-search">
-                        <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                        <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    <div class="main_page__order-wrapper">
+                       <div class="main_page__order-header">
+                        <div class="main_page__order-header-product">Sản phẩm</div>
+                        <div class="main_page__order-header-buyer">Người mua</div>
+                        <div class="main_page__order-header-money">Số tiền thanh toán</div>
+                       </div>
+                       <!-- No-eval: main_page__list-eval-product__no-eval-->
+                       <div class="main_page__order-list">
+                        <svg class="main_page__list-eval-product__no-eval-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 93 87">
+                            <defs>
+                                <rect id="defaultpage_nodata-a" width="45" height="33" x="44" y="32" rx="2"></rect>
+                                <mask id="defaultpage_nodata-b" width="45" height="33" x="0" y="0" fill="#fff" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox">
+                                    <use href="#defaultpage_nodata-a"></use>
+                                </mask>
+                            </defs>
+                            <g fill="none" fill-rule="evenodd" transform="translate(-3 -4)">
+                                <rect width="96" height="96"></rect>
+                                <ellipse cx="48" cy="85" fill="#F2F2F2" rx="45" ry="6"></ellipse>
+                                <path fill="#FFF" stroke="#D8D8D8" d="M79.5,17.4859192 L66.6370555,5.5 L17,5.5 C16.1715729,5.5 15.5,6.17157288 15.5,7 L15.5,83 C15.5,83.8284271 16.1715729,84.5 17,84.5 L78,84.5 C78.8284271,84.5 79.5,83.8284271 79.5,83 L79.5,17.4859192 Z"></path>
+                                <path fill="#DBDBDB" fill-rule="nonzero" d="M66,6 L67.1293476,6 L67.1293476,16.4294956 C67.1293476,17.1939227 67.7192448,17.8136134 68.4469198,17.8136134 L79,17.8136134 L79,19 L68.4469198,19 C67.0955233,19 66,17.849146 66,16.4294956 L66,6 Z"></path>
+                                <g fill="#D8D8D8" transform="translate(83 4)">
+                                    <circle cx="7.8" cy="10.28" r="3" opacity=".5"></circle>
+                                    <circle cx="2" cy="3" r="2" opacity=".3"></circle>
+                                    <path fill-rule="nonzero" d="M10.5,1 C9.67157288,1 9,1.67157288 9,2.5 C9,3.32842712 9.67157288,4 10.5,4 C11.3284271,4 12,3.32842712 12,2.5 C12,1.67157288 11.3284271,1 10.5,1 Z M10.5,7.10542736e-15 C11.8807119,7.10542736e-15 13,1.11928813 13,2.5 C13,3.88071187 11.8807119,5 10.5,5 C9.11928813,5 8,3.88071187 8,2.5 C8,1.11928813 9.11928813,7.10542736e-15 10.5,7.10542736e-15 Z" opacity=".3"></path>
+                                </g>
+                                <path fill="#FAFAFA" d="M67.1963269,6.66851903 L67.1963269,16.32 C67.2587277,17.3157422 67.675592,17.8136134 68.4469198,17.8136134 C69.2182476,17.8136134 72.735941,17.8136134 79,17.8136134 L67.1963269,6.66851903 Z"></path>
+                                <use fill="#FFF" stroke="#D8D8D8" stroke-dasharray="3" stroke-width="2" mask="url(#defaultpage_nodata-b)" href="#defaultpage_nodata-a"></use>
+                                <rect width="1" height="12" x="54" y="46" fill="#D8D8D8" rx=".5"></rect>
+                                <rect width="1" height="17" x="62" y="40" fill="#D8D8D8" rx=".5"></rect>
+                                <rect width="1" height="10" x="70" y="48" fill="#D8D8D8" rx=".5"></rect>
+                                <rect width="1" height="14" x="78" y="43" fill="#D8D8D8" rx=".5"></rect>
+                            </g>
+                        </svg>
+                        <div class="main_page__list-eval-product__no-eval-text">Không có dữ liệu</div>
+
+
+                        <ul style="margin: 0; padding: 0; ">
+                            <li class="main_page__order-item">
+                                <div class="main_page__order-item-info">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="main_page__order-img">
+                                   
+                                        <h5 class="main_page__order-item-name">Robot tự động</h5>
+                                        
+                                    </div>
+                                    
+                                        <div class="main_page__order-item-infocustom-user">
+                                            <img src="assets/img/logoshop.webp" class="main_page__order-item-infocustom-img" alt="">
+                                            <h5 class="main_page__order-username">Nhatle11</h5>
+                                        </div>
+                                   
+
+                                    <div class="main_page__order-pay">2.000.000đ</div>
+                                
+                            </li>
+                            <li class="main_page__order-item">
+                                <div class="main_page__order-item-info">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="main_page__order-img">
+                                   
+                                        <h5 class="main_page__order-item-name">Robot tự động</h5>
+                                        
+                                    </div>
+                                    
+                                        <div class="main_page__order-item-infocustom-user">
+                                            <img src="assets/img/logoshop.webp" class="main_page__order-item-infocustom-img" alt="">
+                                            <h5 class="main_page__order-username">Nhatle11</h5>
+                                        </div>
+                                   
+
+                                    <div class="main_page__order-pay">2.000.000đ</div>
+                                
+                            </li>
+                            <li class="main_page__order-item">
+                                <div class="main_page__order-item-info">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="main_page__order-img">
+                                   
+                                        <h5 class="main_page__order-item-name">Robot tự động</h5>
+                                        
+                                    </div>
+                                    
+                                        <div class="main_page__order-item-infocustom-user">
+                                            <img src="assets/img/logoshop.webp" class="main_page__order-item-infocustom-img" alt="">
+                                            <h5 class="main_page__order-username">Nhatle11</h5>
+                                        </div>
+                                   
+
+                                    <div class="main_page__order-pay">2.000.000đ</div>
+                                
+                            </li>
+                            <li class="main_page__order-item">
+                                <div class="main_page__order-item-info">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="main_page__order-img">
+                                   
+                                        <h5 class="main_page__order-item-name">Robot tự động</h5>
+                                        
+                                    </div>
+                                    
+                                        <div class="main_page__order-item-infocustom-user">
+                                            <img src="assets/img/logoshop.webp" class="main_page__order-item-infocustom-img" alt="">
+                                            <h5 class="main_page__order-username">Nhatle11</h5>
+                                        </div>
+                                   
+
+                                    <div class="main_page__order-pay">2.000.000đ</div>
+                                
+                            </li>
+                           
+                        
+                        </ul>
+                       </div>
                     </div>
-                    <button class="btn-product-search">Tìm</button>
                 </div>
-                <div class="num_of_product"><span class="count_product">X</span> Sản phẩm</div>
-                <table class="table-product">
-                    <thead>
-                        <tr>
-                            <th class="col_product">Sản phẩm</th>
-                            <th class="col_revenue">Doanh thu</th>
-                            <th class="col_price">Giá</th>
-                            <th class="col_stock">Kho hàng</th>
-                            <th class="col_category">Danh mục</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col_product_value">
-                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                <div class="col_product_name">cccccc</div>
-                            </td>
-                            <td class="col_revenue_value">50.000.000</td>
-                            <td class="col_price_value">25.000.000</td>
-                            <td class="col_stock_value">10</td>
-                            <td class="col_category_value">Điện thoại</td>
-                        </tr>
-                        <tr>
-                            <td class="col_product_value">
-                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                <div class="col_product_name">Samsung Galaxy S23</div>
-                            </td>
-                            <td class="col_revenue_value">30.000.000</td>
-                            <td class="col_price_value">15.000.000</td>
-                            <td class="col_stock_value">5</td>
-                            <td class="col_category_value">Điện thoại</td>
-                        </tr>
-                        <tr>
-                            <td class="col_product_value">
-                                <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                                <div class="col_product_name">MacBook Air M2</div>
-                            </td>
-                            <td class="col_revenue_value">100.000.000</td>
-                            <td class="col_price_value">30.000.000</td>
-                            <td class="col_stock_value">8</td>
-                            <td class="col_category_value">Laptop</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            
+
+         
+                          
+            
+
+
+
+
+                    </div>
+                </div>
+             </div>
         </div>
-    </div>
-    <script src="seller_script.js"></script>
+     </div>
+     <script src="seller_script.js"></script>
 </body>
 </html>

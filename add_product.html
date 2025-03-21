@@ -36,7 +36,7 @@
                         </a>
                         
                     </div>
-                <div class="seller-left-text">Quản lý sản phẩm</div>
+                <div class="seller-left-text"><a href="product_manager.html">Quản lý sản phẩm</a></div>
             </div>
             <div class="seller-right">
                 <li class="header__navbar-item header__navbar-user">
@@ -70,11 +70,11 @@
         </div>
         <div class="add_product_conttent">
             <div class="add_product_conttent_header">
-                <div class="basic_info_lable">Thông tin cơ bản</div>
-                <div class="sell_info_lable">Thông tin bán hàng</div>
+                <a href="#basic_info" class="basic_info_lable add_active">Thông tin cơ bản</a>
+                <a href="#sell_info" class="sell_info_lable">Thông tin bán hàng</a>
             </div>
 
-            <div class="basic_info_conttent">
+            <div id="basic_info" class="basic_info_conttent">
                 <p class="basic_info_conttent_header">Thông tin cơ bản</p>
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Hình ảnh sản phẩm</div>
@@ -82,7 +82,6 @@
                         <input type="file" id="file" accept="image/*" hidden>
                         <div class="img-area" data-img="">
                             <i class='bx bxs-cloud-upload icon'></i>
-                            <h3>Upload Image</h3>
                         </div>
                         <button class="select-image">Select Image</button>
                     </div>
@@ -91,8 +90,8 @@
                     <div class="basic_conttent_lable">Tên sản phẩm</div>
                     <input type="text" class="basic_name_input" placeholder="Tên sản phẩm">
                 </div>
-                <div class="basic_conttent">
-                    <div class="basic_conttent_lable">Ngành hàng</div>
+                <div class="basic_conttent category_list_item">
+                    <div class="basic_conttent_lable category_list_item_lable">Ngành hàng<i class='bx bxs-chevron-down'></i></div>
                     <div class="category_list">
                         <div class="category_item">giày dép</div>
                         <div class="category_item">Áo</div>
@@ -104,7 +103,19 @@
                 </div>
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Mô tả sản phẩm</div>
-                    <input type="text" class="basic_name_input">
+                    <textarea class="basic_description_input" id="message" rows="4" cols="50" placeholder="Nhập mô tả"></textarea>
+                </div>
+            </div>
+
+            <div id="sell_info" class="sell_info_conttent basic_info_conttent">
+                <p class="basic_info_conttent_header">Thông tin bán hàng</p>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Giá sản phẩm</div>
+                    <input type="text" class="sell_price_input" placeholder="Giá">
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Số lượng trong kho</div>
+                    <input type="text" class="stock_input" placeholder="kho hàng">
                 </div>
             </div>
         </div>

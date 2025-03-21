@@ -9,13 +9,54 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="./assets/css/main.css">
     <link rel="stylesheet" href="./assets/css/base.css">
-    <link rel="stylesheet" href="./assets/css/pay.css">
+    <link rel="stylesheet" href="./assets/css/cart.css">
     <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.7.2-web/css/all.min.css">
     <!-- link font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.7.2-web/">
+    <style>
+        .counter {
+          display: flex;
+          align-items: center;
+          border-radius: 3px;
+         
+        }
+        .counter button{
+          width: 32px;
+          height: 32px;
+          
+          font-weight: 300;
+          border: none;
+          background-color: #ffffff;
+          color: var(--black-color);
+          border: 1px solid var(--border-color);
+          cursor: pointer;
+          
+        }
+        .plus {
+            font-size: 20px;
+            border-top-right-radius: 3px; 
+          border-bottom-right-radius: 3px;  
+        }
+        .minus{
+            font-size: 25px;
+            border-top-left-radius: 3px; 
+            border-bottom-left-radius: 3px; 
+        }
+        .counter input {
+          width: 50px;
+          height: 32px;
+          border: 1px  solid var(--border-color);
+         
+          text-align: center;
+          
+          font-size: 18px;
+        }
+       
+    </style>
+      
 </head>
 <body>  
     <!-- Block__Element--Modifier -->
@@ -127,7 +168,7 @@
                                     </svg>
                                 </a>
                                 </div>
-                                <a href="index.html"class="header__bar-text">Thanh Toán</a>
+                                <a href="index.html"class="header__bar-text">Giỏ Hàng</a>
                         </div>
                     </div>
                     
@@ -142,124 +183,188 @@
 
     <div class="container">
         <div class="grid">
-            <div class="DiaChi-NhanHang">
-                <div class="DiaChi-NhanHang-bar">
-                    
-                </div>
-                <div class="DiaChi-NhanHang-heading" >
-                    <i class="DiaChi-NhanHan-icon fa-solid fa-location-dot"></i>
-                    <p class="DiaChi-NhanHang-heading-text">Địa Chỉ Nhận Hàng</p>
-                </div>
-                <div class="DiaChi-NhanHang-item">
-                <div class="DiaChi-NhanHang__info">Lê Minh Nhật (+84)587311958</div>
-                <div class="DiaChi-NhanHang__info-address">K47, Đường Sư Vạn Hạnh, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng</div>
-
-                </div>
-
-            </div>
-            <div class="ProductPurchase">
-                <div class="ProductPurchase-head">
-                    <h3 class="ProductPurchase-head__name">Sản phẩm</h3>
-                    <div class="ProductPurchase-head__price-item">
-                        <span class="ProductPurchase-head__price">Đơn giá</span>
-                        <span class="ProductPurchase-head__qnt">Số lượng</span>
-                        <span class="ProductPurchase-head__cost">Thành tiền</span>
-                    </div>
-                </div>
-                <div class="ProductPurchase__extra">
-                    <button class="ProductPurchase__extra-favouri">Yêu thích</button>
-                    <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
-                </div>
-                <div class="ProductPurchase-body">
-                    <div class="ProductPurchase-body__info">
-                        <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" alt="" class="ProductPurchase-body__img">
-                    <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
-                    </div>
-                    
-                    <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
-                    <div class="ProductPurchase-body__price-item">
-                        <span class="ProductPurchase-body__price">55.000đ</span>
-                        <span class="ProductPurchase-body__qnt">1</span>
-                        <span class="ProductPurchase-body__cost">55.000đ</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ProductPurchase-footer">
-                <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
-                <span class="ProductPurchase-footer-price-total">55.000đ</span>
-            </div>
+          
             
-            <div class="ProductPurchase">
-             
-                <div class="ProductPurchase__extra">
-                    <button class="ProductPurchase__extra-favouri">Yêu thích</button>
-                    <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
-                </div>
-                <div class="ProductPurchase-body">
-                    <div class="ProductPurchase-body__info">
-                        <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" alt="" class="ProductPurchase-body__img">
-                    <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
-                    </div>
-                    
-                    <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
-                    <div class="ProductPurchase-body__price-item">
-                        <span class="ProductPurchase-body__price">55.000đ</span>
-                        <span class="ProductPurchase-body__qnt">1</span>
-                        <span class="ProductPurchase-body__cost">55.000đ</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ProductPurchase-footer">
-                <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
-                <span class="ProductPurchase-footer-price-total">55.000đ</span>
-            </div>
             
-            <div class="ProductPurchase">
+            <div class="CartProduct">
+                <div class="CartProduct-head">
+                    <div class="CartProduct-head__left">
+                        <input type="checkbox" id="selectAll" class="CartProduct__select">
+                    <h3 class="CartProduct-head__name">Sản phẩm</h3>
+                    </div>
+                    <div class="CartProduct-head__price-item">
+                        <span class="CartProduct-head__price">Đơn giá</span>
+                        <span class="CartProduct-head__qnt">Số lượng</span>
+                        <span class="CartProduct-head__cost">Số tiền</span>
+                        <span class="CartProduct-head__opera">Thao tác</span>
+                    </div>
+                </div>
+                <div class="CartProduct__extra">
+                    <input type="checkbox" class="CartProduct__select shop-checkbox">
+                    <button class="CartProduct__extra-favouri">Yêu thích</button>
+                    <p class="CartProduct__extra-nameShop">MuonCoBo</p>
+                </div>
+                <div class="CartProduct-body">
+                    <div class="CartProduct-body__left">
+                        <input type="checkbox" class="CartProduct__select product-checkbox">
+                        <div class="CartProduct-body__info">
+                           
+                           <a href="index.html">
+                            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" 
+                            alt="Tai nghe" class="CartProduct-body__img">
+                           </a>      
+                            <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
+                            <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
+                        </div>
+                    </div>
+                    <div class="CartProduct-body__price-item">
+                        <span class="CartProduct-body__price">55.000đ</span>
+                        
+                        <div class="CartProduct-body__qnt">
+                            <div class="counter">
+                                <button class="minus">-</button>
+                                <input type="text" value="1" readonly>
+                                <button class="plus">+</button>
+                            </div>
+                        </div>
+                        
+                       
                 
-                <div class="ProductPurchase__extra">
-                    <button class="ProductPurchase__extra-favouri">Yêu thích</button>
-                    <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
-                </div>
-                <div class="ProductPurchase-body">
-                    <div class="ProductPurchase-body__info">
-                        <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" alt="" class="ProductPurchase-body__img">
-                    <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
-                    </div>
-                    
-                    <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
-                    <div class="ProductPurchase-body__price-item">
-                        <span class="ProductPurchase-body__price">55.000đ</span>
-                        <span class="ProductPurchase-body__qnt">1</span>
-                        <span class="ProductPurchase-body__cost">55.000đ</span>
+                        <span class="CartProduct-body__cost">55.000đ</span>
+                        <span class="CartProduct-body__opera">Xóa</span>
                     </div>
                 </div>
-            </div>
-            <div class="ProductPurchase-footer">
-                <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
-                <span class="ProductPurchase-footer-price-total">55.000đ</span>
-            </div>
-            
-            <div class="ProductPurchase-total">
-                <div class="ProductPurchase-total__method">
-                    <h3 class="ProductPurchase-total__method-text">Phương thức thanh toán</h3>
-                   
-                    <h4 class="ProductPurchase-total__method-way">Thanh toán khi nhận hàng</h4>
-                  
-                  
+                <div class="CartProduct-body">
+                    <div class="CartProduct-body__left">
+                        <input type="checkbox" class="CartProduct__select product-checkbox">
+                        <div class="CartProduct-body__info">
+                           
+                           <a href="index.html">
+                            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" 
+                            alt="Tai nghe" class="CartProduct-body__img">
+                           </a>      
+                            <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
+                            <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
+                        </div>
+                    </div>
+                    <div class="CartProduct-body__price-item">
+                        <span class="CartProduct-body__price">55.000đ</span>
+                        
+                        <div class="CartProduct-body__qnt">
+                            <div class="counter">
+                                <button class="minus">-</button>
+                                <input type="text" value="1" readonly>
+                                <button class="plus">+</button>
+                            </div>
+                        </div>
+                        
+                        
+                        <span class="CartProduct-body__cost">55.000đ</span>
+                        <span class="CartProduct-body__opera">Xóa</span>
+                    </div>
                 </div>
-                <div class="ProductPurchase-total-price">
-                    <h3 class="ProductPurchase-total__price-text">Tổng thanh toán</h3>
-                    <span class="ProductPurchase-total__price-total">165.000đ</span>
-                </div>
-                <div class="ProductPurchase-total__pay">
-                    <button class="btn btn--primary ProductPurchase-total__pay-btn" onclick="hienPopup()">Đặt hàng</button>
-                </div>
-                <div class="overlay" id="overlay" onclick="anPopup()"></div>
+                
 
-                 <!-- Popup -->
-                <div class="popup" id="popup">
-                    <h3>Đã đặt hàng thành công! 🎉</h3>
-                    <button class="close-btn" onclick="anPopup()">Đóng</button>
+                <div class="CartProduct__extra">
+                    <input type="checkbox" class="CartProduct__select shop-checkbox">
+                    <button class="CartProduct__extra-favouri">Yêu thích</button>
+                    <p class="CartProduct__extra-nameShop">Songtrongtungphutgiay</p>
+                </div>
+                <div class="CartProduct-body">
+                    <div class="CartProduct-body__left">
+                        <input type="checkbox" class="CartProduct__select product-checkbox">
+                        <div class="CartProduct-body__info">
+                           
+                           <a href="index.html">
+                            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" 
+                            alt="Tai nghe" class="CartProduct-body__img">
+                           </a>      
+                            <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
+                            <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
+                        </div>
+                    </div>
+                    <div class="CartProduct-body__price-item">
+                        <span class="CartProduct-body__price">55.000đ</span>
+                        <div class="CartProduct-body__qnt">
+                            <div class="counter">
+                                <button class="minus">-</button>
+                                <input type="text" value="1" readonly>
+                                <button class="plus">+</button>
+                            </div>
+                        </div>
+                        
+                      
+                        
+                        
+                
+                        <span class="CartProduct-body__cost">55.000đ</span>
+                        <span class="CartProduct-body__opera">Xóa</span>
+                    </div>
+                </div>
+                <div class="CartProduct-body">
+                    <div class="CartProduct-body__left">
+                        <input type="checkbox" class="CartProduct__select product-checkbox">
+                        <div class="CartProduct-body__info">
+                           
+                           <a href="index.html">
+                            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" 
+                            alt="Tai nghe" class="CartProduct-body__img">
+                           </a>      
+                            <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
+                            <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
+                        </div>
+                    </div>
+                    <div class="CartProduct-body__price-item">
+                        <span class="CartProduct-body__price">55.000đ</span>
+                        
+                        <div class="CartProduct-body__qnt">
+                            <div class="counter">
+                                <button class="minus">-</button>
+                                <input type="text" value="1" readonly>
+                                <button class="plus">+</button>
+                            </div>
+                        </div>
+                        
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                document.querySelectorAll(".counter").forEach(counter => {
+                                    let input = counter.querySelector("input");
+                                    let plusBtn = counter.querySelector(".plus");
+                                    let minusBtn = counter.querySelector(".minus");
+                        
+                                    plusBtn.addEventListener("click", function () {
+                                        input.value = parseInt(input.value) + 1;
+                                    });
+                        
+                                    minusBtn.addEventListener("click", function () {
+                                        if (parseInt(input.value) > 1) {
+                                            input.value = parseInt(input.value) - 1;
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+                        <span class="CartProduct-body__cost">55.000đ</span>
+                        <span class="CartProduct-body__opera">Xóa</span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="CartProduct-buyproduct">
+                <div class="CartProduct-buyproduct-voucher">
+                    <i class="fa-solid fa-ticket CartProduct-buyproduct-voucher-icon"></i>
+                    <h3 class="CartProduct-buyproduct-voucher-text">Megamart Voucher(nếu có):</h3>
+                   
+                    <input type="text" class="CartProduct-buyproduct-voucher-input" placeholder="Nhập Voucher">
+                </div>
+                <div class="CartProduct-buyproduct-buy">
+
+                    <h3 class="CartProduct-buyproduct-text">Tổng thanh toán( 4 sản phẩm ):</h3>
+                   <div>
+                    <span class="CartProduct-buyproduct-cost">220.000đ</span>
+
+                    <button class="btn btn--primary CartProduct-buyproduct-buy-btn">Mua Hàng</button>
+                   </div>
                 </div>
             </div>
         </div>
@@ -357,7 +462,56 @@
 
          
     </div>
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chọn tất cả checkbox của sản phẩm
+            const productCheckboxes = document.querySelectorAll(".CartProduct-body .CartProduct__select");
+            
+            // Chọn tất cả checkbox của shop
+            const shopCheckboxes = document.querySelectorAll(".CartProduct__extra .CartProduct__select");
+            
+            // Chọn tất cả checkbox tổng
+            const allCheckbox = document.querySelector(".CartProduct-head .CartProduct__select");
+            
+            // Xử lý chọn checkbox của shop
+            shopCheckboxes.forEach(shopCheckbox => {
+                shopCheckbox.addEventListener("change", function () {
+                    let shopContainer = shopCheckbox.closest(".CartProduct__extra").nextElementSibling;
+                    while (shopContainer && shopContainer.classList.contains("CartProduct-body")) {
+                        let productCheckbox = shopContainer.querySelector(".CartProduct__select");
+                        productCheckbox.checked = shopCheckbox.checked;
+                        shopContainer = shopContainer.nextElementSibling;
+                    }
+                    checkAllSelected();
+                });
+            });
+            
+            // Xử lý chọn checkbox của sản phẩm
+            productCheckboxes.forEach(productCheckbox => {
+                productCheckbox.addEventListener("change", function () {
+                    let shopCheckbox = productCheckbox.closest(".CartProduct-body").previousElementSibling.querySelector(".CartProduct__select");
+                    if (shopCheckbox) {
+                        let allChecked = [...productCheckbox.closest(".CartProduct-body").parentNode.querySelectorAll(".CartProduct-body .CartProduct__select")].every(cb => cb.checked);
+                        shopCheckbox.checked = allChecked;
+                    }
+                    checkAllSelected();
+                });
+            });
+            
+            // Xử lý chọn checkbox tổng
+            allCheckbox.addEventListener("change", function () {
+                let isChecked = allCheckbox.checked;
+                shopCheckboxes.forEach(cb => cb.checked = isChecked);
+                productCheckboxes.forEach(cb => cb.checked = isChecked);
+            });
+    
+            function checkAllSelected() {
+                let allSelected = [...shopCheckboxes].every(cb => cb.checked) && [...productCheckboxes].every(cb => cb.checked);
+                allCheckbox.checked = allSelected;
+            }
+        });
+    </script>
+    
 
 </body>
 </html>
