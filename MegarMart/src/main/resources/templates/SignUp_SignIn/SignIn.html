@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" th:href="@{/css/Style_SignIn.css}">
+</head>
+<body>
+<div class="container">
+<h2>Đăng nhập</h2>
+
+<p th:if="${error}" th:text="${error}" style="color: red;"></p>
+<form th:action="@{/login}" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+    <input type="password" name="password" placeholder="Mật khẩu" required>
+    <button type="submit">Đăng nhập</button>
+</form>
+    <a href="/oauth2/authorization/google?prompt=select_account" class="google-login">
+        <img th:src="@{/img/google-logo.png}" alt="Google Logo"> Login with Google
+    </a>
+<hr>
+
+<p>Chưa có tài khoản? <a th:href="@{/signup}">Đăng ký</a></p>
+</div>
+</body>
+</html>

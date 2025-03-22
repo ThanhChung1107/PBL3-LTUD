@@ -1,0 +1,28 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 560987570310-922lscnthmcr873opethtivq9q6ldq1j.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile,email
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/MegaMart
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+      format_sql: true
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

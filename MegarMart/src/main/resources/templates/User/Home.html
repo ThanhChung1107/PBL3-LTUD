@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{css/account-style.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<!--    <link rel="stylesheet" href="@{/assets/fonts/fontawesome-free-6.7.2-web/}">-->
+</head>
+<body>
+<div class="home">
+    <header class="header">
+        <div class="grid">
+            <nav class="header__navbar">
+                <ul class="header__navbar-list">
+                    <a href="seller_registration.html"><li class="header__navbar-item">Trở thành người bán</li></a>
+                    <li class="header__navbar-item header__navbar-item--separate">
+                        <span class="header__navbar-title--no-pointer">Kết nối</span>
+                    </li>
+                    <a href="" class="header__navbar-icon-link">
+                        <i class="header__navbar-icon  fab fa-facebook "></i>
+                    </a>
+                    <a href="" class="header__navbar-icon-link">
+                        <i class="header__navbar-icon  fa-brands fa-instagram   "></i>
+
+                    </a>
+                </ul>
+                <ul class="header__navbar-list">
+                    <li class="header__navbar-item header__navbar-item--has-notify">
+                        <a href="" class="header__navbar-item-link">
+                            <i class="header__navbar-icon fa-solid fa-bell  "></i>
+                            Thông báo
+                        </a>
+
+                        <div class="header__notify">
+                            <header class="header__notify-header">
+                                <h3>Thông báo mới nhận</h3>
+                            </header>
+                            <ul class="header__notify-list">
+                                <li class="header__notify-item header__notify-item--viewed">
+                                    <a href="" class="header__notify-link" >
+                                        <img src="https://storage.googleapis.com/ops-shopee-files-live/live/shopee-blog/2023/10/998b7f4a-1.png" alt="" class="header__notify-img" >
+                                        <div class="header__notify-info">
+                                            <span class="header__notify-name">Giảm sâu sập sàn siêu khuyến mãi hãy trải nghiệm ngay đừng bỏ lỡ !!!!!!!!</span>
+                                            <span class="header__notify-descri">diễn ra từ 12/1 đến 13/2222 22 222222</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="header__notify-item header__notify-item--viewed">
+                                    <a href="" class="header__notify-link">
+                                        <img src="https://storage.googleapis.com/ops-shopee-files-live/live/shopee-blog/2023/10/998b7f4a-1.png" alt="" class="header__notify-img" >
+                                        <div class="header__notify-info">
+                                            <span class="header__notify-name">Giảm sâu sập sàn siêu khuyến mãi hãy trải nghiệm ngay đừng bỏ lỡ !!!!!!!!</span>
+                                            <span class="header__notify-descri">diễn ra từ 12/1 đến 13/2222 22 222</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="header__notify-item header__notify-item--viewed">
+                                    <a href="" class="header__notify-link">
+                                        <img src="https://storage.googleapis.com/ops-shopee-files-live/live/shopee-blog/2023/10/998b7f4a-1.png" alt="" class="header__notify-img" >
+                                        <div class="header__notify-info">
+                                            <span class="header__notify-name">Giảm sâu sập sàn siêu khuyến mãi hãy trải nghiệm ngay đừng bỏ lỡ !!!!!!!!</span>
+                                            <span class="header__notify-descri">diễn ra từ 12/1 đến 13/2222 22 22222222</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <footer class="header__notify-footer">
+                                <a href="" class="header__notify-footer-btn">Xem tất cả</a>
+                            </footer>
+                        </div>
+                    </li>
+                    <li class="header__navbar-item">
+
+                        <a href="" class="header__navbar-item-link">
+                            <i class="header__navbar-icon fa-solid fa-circle-question "></i>
+                            Trợ giúp
+                        </a>
+                    </li>
+                    <ul class="header__navbar">
+                        <!-- Đăng Ký | Đăng Nhập (Hiện khi chưa đăng nhập) -->
+                        <li id="auth-section" class="header__navbar-item header__navbar-user">
+                            <a th:href="@{/signup}">Đăng Ký</a> |
+                            <a th:href="@{/login}">Đăng Nhập</a>
+                        </li>
+
+                        <!-- Thông tin user (Hiện khi đã đăng nhập) -->
+                        <li class="header__navbar-item header__navbar-user" id="user-section" style="display: none;">
+                            <img th:src="user-avatar.jpg" alt="Avatar" class="header__navbar-user-img">
+                            <span class="header__navbar-user-name" id="username">User</span>
+                            <ul class="header__navbar-user-menu">
+                                <li class="header__navbar-user-item">
+                                    <a th:href="account1.html">Tài khoản của tôi</a>
+                                </li>
+                                <li class="header__navbar-user-item">
+                                    <a href="#">Đơn mua</a>
+                                </li>
+                                <li class="header__navbar-user-item header__navbar-user-item--separate">
+                                    <a href="#" id="logout-btn">Đăng xuất</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </ul>
+            </nav>
+            <!-- header with search -->
+            <div class="header-with-search">
+                <div class="header__logo">
+                    <a href="/" class="header__logo-link">
+                        <svg class="header__logo-img" width="457pt" height="50pt" viewBox="0 0 457 50" xmlns="http://www.w3.org/2000/svg">
+                            <g id="fontsvg1741265222034" stroke-linecap="round" fill-rule="evenodd" fill="#fff">
+                                <path
+                                        d="M 36.1 25 L 50.5 0 L 72.15 37.5 L 64.95 50 L 50.5 25 L 43.3 37.5 L 50.5 50 L 36.1 50 L 21.65 25 L 14.45 37.5 L 21.65 50 L 7.2 50 L 0 37.5 L 21.65 0 L 36.1 25 Z M 261.75 25 L 276.15 0 L 297.8 37.5 L 290.6 50 L 276.15 25 L 268.95 37.5 L 276.15 50 L 261.75 50 L 247.3 25 L 240.1 37.5 L 247.3 50 L 232.85 50 L 225.65 37.5 L 247.3 0 L 261.75 25 Z M 386.4 50 L 371.95 25 L 386.4 25 L 393.6 12.5 L 379.15 12.5 L 364.75 37.5 L 371.95 50 L 357.5 50 L 350.3 37.5 L 371.95 0 L 400.8 0 L 408.05 12.5 L 393.6 37.5 L 400.8 50 L 386.4 50 Z M 204 12.5 L 182.35 50 L 175.15 37.5 L 196.8 0 L 225.65 0 L 232.9 12.5 L 211.25 50 L 196.8 50 L 204 37.5 L 196.8 25 L 211.25 25 L 218.45 12.5 L 204 12.5 Z M 328.65 12.5 L 307 50 L 299.8 37.5 L 321.45 0 L 350.3 0 L 357.55 12.5 L 335.9 50 L 321.45 50 L 328.65 37.5 L 321.45 25 L 335.9 25 L 343.1 12.5 L 328.65 12.5 Z M 153.5 37.5 L 146.3 25 L 160.75 25 L 167.95 37.5 L 160.75 50 L 131.85 50 L 124.65 37.5 L 146.3 0 L 175.15 0 L 182.4 12.5 L 153.5 12.5 L 139.1 37.5 L 153.5 37.5 Z M 88.6 37.5 L 103 37.5 L 110.25 50 L 81.35 50 L 74.15 37.5 L 95.8 0 L 124.65 0 L 131.9 12.5 L 103 12.5 L 99.4 18.75 L 113.85 18.75 L 106.6 31.25 L 92.2 31.25 L 88.6 37.5 Z M 413.65 12.5 L 406.45 0 L 449.75 0 L 456.95 12.5 L 442.55 12.5 L 428.15 37.45 L 435.3 50 L 420.9 50 L 413.65 37.5 L 428.1 12.5 L 413.65 12.5 Z"
+                                        vector-effect="non-scaling-stroke"
+                                />
+                            </g>
+                        </svg>
+                    </a>
+
+                </div>
+
+                <div class="header__search">
+                    <div class="header__search-input-wrap">
+                        <input type="text" class="header__search-input" placeholder="Nhập để tìm kiếm sản phẩm">
+                        <div class="header__search-history">
+                            <h3 class="header__search-history-heading">Lịch sử tìm kiếm</h3>
+                            <ul class="header__search-history-list">
+                                <li class="header__search-history-item">
+                                    <a href="">Kem dưỡng da</a>
+                                </li>
+                                <li class="header__search-history-item">
+                                    <a href="">Robot</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header__search-select">
+                        <span class="header__search-select-lable">Trong Shop</span>
+                        <i class="header__search-select-icon fa-solid fa-angle-down"></i>
+
+                        <ul class="header__search-option">
+                            <li class="header__search-option-item header__search-option-item--active">
+                                <span>Trong shop</span>
+                                <i class="fa-solid fa-check"></i>
+                            </li>
+                            <li class="header__search-option-item">
+                                <span>Ngoài shop</span>
+                                <i class="fa-solid fa-check"></i>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <button class="header__search-btn">
+                        <i class="header__search-btn-icon fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                </div>
+
+
+                <!--Cart layout  -->
+                <div class="header__cart">
+
+                    <div class="header__cart-wrap">
+                        <i class="header__cart-icon fa-solid fa-cart-shopping"></i>
+                        <span class="header__cart-notice">3</span>
+
+                        <!-- No cart: header__cart-list--no-cart -->
+                        <div class="header__cart-list ">
+                            <img src="./assets/img/no-cart.png" alt="" class="header__cart-no-cart-img">
+                            <span class="header__cart-list--no-cart-msg">
+                                Chưa có sản phẩm
+                            </span>
+
+                            <h4 class="header__cart-heading">Sản Phẩm Đã Thêm </h4>
+                            <ul class="header__cart-list-item">
+                                <li class="header__cart-item">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="header__cart-img">
+                                    <div class="header__cart-item-info">
+                                        <div class="header__cart-item-head">
+                                            <h5 class="header__cart-item-name">Robot tự động</h5>
+                                            <div class="header__cart-item-price-wrap">
+                                                <span class="header__cart-item-price">2.000.000đ</span>
+                                                <span class="header__cart-item-mul">x</span>
+                                                <span class="header__cart-item-qnt">2</span>
+                                            </div>
+                                        </div>
+                                        <div class="header__cart-item-body">
+                                            <span class="header__cart-item-remove">Xóa</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="header__cart-item">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="header__cart-img">
+                                    <div class="header__cart-item-info">
+                                        <div class="header__cart-item-head">
+                                            <h5 class="header__cart-item-name">Robot tự động</h5>
+                                            <div class="header__cart-item-price-wrap">
+                                                <span class="header__cart-item-price">2.000.000đ</span>
+                                                <span class="header__cart-item-mul">x</span>
+                                                <span class="header__cart-item-qnt">2</span>
+                                            </div>
+                                        </div>
+                                        <div class="header__cart-item-body">
+                                            <span class="header__cart-item-remove">Xóa</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="header__cart-item">
+                                    <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="header__cart-img">
+                                    <div class="header__cart-item-info">
+                                        <div class="header__cart-item-head">
+                                            <h5 class="header__cart-item-name">Robot tự động</h5>
+                                            <div class="header__cart-item-price-wrap">
+                                                <span class="header__cart-item-price">2.000.000đ</span>
+                                                <span class="header__cart-item-mul">x</span>
+                                                <span class="header__cart-item-qnt">2</span>
+                                            </div>
+                                        </div>
+                                        <div class="header__cart-item-body">
+                                            <span class="header__cart-item-remove">Xóa</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="cart.html">
+                                <button class="header__cart-viewcart btn btn--primary">Xem Giỏ Hàng</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </header>
+
+    <div class="home-container">
+        <div class="grid">
+            <div class="home-category">
+                <div class="home-category-name">DANH MỤC</div>
+                <div class="home-category-content">
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                    <div class="home-category-detail">
+                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
+                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    </div>
+                </div>
+            </div>
+            <div class="home-product">
+                <!-- Grid-> row -> column -->
+                <div class="grid">
+                    <div class="goiyhomnay">GỢI Ý HÔM NAY</div>
+                </div>
+                <div class="grid__row">
+                    <div class="grid__column-2-4">
+                        <a href="detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href="detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                    <div class="grid__column-2-4">
+                        <a href=" detail.html" class="home-product-item">
+                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
+                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old">1.200.000d</span>
+                                <span class="home-product-item__price-current">999.000d</span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+                                <!-- Đánh giá sao -->
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold">88 đã bán</span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <ul class="pagination home-product__pagination" >
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">
+                        <i class="pagination-item__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
+                <li class="pagination-item pagination-item-active">
+                    <a href="" class="pagination-item__link">1</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">2</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">3</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">4</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">5</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">...</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">14</a>
+                </li>
+                <li class="pagination-item">
+                    <a href="" class="pagination-item__link">
+                        <i class="pagination-item__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="grid">
+            <div class="grid__row">
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Chăm sóc khách hàng</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Trung tâm trợ giúp</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Hướng dẫn mua hàng</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Về MEGAMART</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Giới thiệu</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Tuyển dụng</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Điều khoản</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Danh mục</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Thể thao</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Thời trang</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">Gia dụng</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Theo dõi chúng tôi</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item">
+
+                            <a href="" class="footer-item__link">
+                                <i class="footer-item-icon  fab fa-facebook "></i>
+                                Facebook</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                                <i class="footer-item-icon  fa-brands fa-instagram   "></i>
+                                Instagram</a>
+                        </li>
+                        <li class="footer-item">
+                            <a href="" class="footer-item__link">
+                                <i class="footer-item-icon fa-brands fa-linkedin"></i>
+                                Linkedin
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">MEGAMART trên ứng dụng(coming soon)</h3>
+                    <div class="footer__download-apps">
+                        <img th:src="@{/img/googleplay.png}" alt="" class="footer__download-apps-googleplay">
+                        <img th:src="@{/img/appstore.png}" alt="" class="footer__download-apps-appstore">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <div class="grid">
+                <p class="footer__bottom-text">Địa chỉ:54 Nguyễn Lương Bằng, Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng ,Việt Nam</p>
+                <p class="footer__bottom-text">Chịu Trách Nhiệm Quản Lý Nội Dung: Lê Thanh Chung,Nguyễn Lê Minh Chiến,Lê Minh Nhật</p>
+                <p class="footer__bottom-text">© 2025 MEGAMART - All Rights Reserved</p>
+            </div>
+        </div>
+
+
+    </footer>
+</div>
+<script src="@{/js/script.js}"></script>
+</body>
+</html>

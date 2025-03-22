@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hoàn tất đăng ký</title>
+    <link rel="stylesheet" th:href="@{/css/Style_SignUpGG.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Hoàn tất đăng ký tài khoản</h2>
+    <form id="signupform" th:action="@{/signupGoogle}" method="post" th:object="${account}">
+        <div class="input-group">
+            <label for="email">Họ và tên</label>
+            <input type="text" id="name" th:field="*{name}" th:value="${name}" readonly>
+        </div>
+
+<!--        <div class="input-group">-->
+<!--            <label for="phone">Số điện thoại</label>-->
+<!--            <input type="text" id="phone" name="phone" placeholder="Số điện thoại" required th:field="*{phone}">-->
+<!--        </div>-->
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" th:value="${emaill}" readonly>
+        </div>
+
+<!--        <div class="input-group">-->
+<!--            <label for="address">Địa chỉ</label>-->
+<!--            <input type="text" id="address" name="address" placeholder="Địa chỉ" required th:field="*{address}">-->
+<!--        </div>-->
+
+        <button type="submit">Hoàn tất</button>
+    </form>
+    <script>
+        document.getElementById("signupform").submit();
+    </script>
+    <p th:if="${error}" th:text="${error}" class="error-message"></p>
+</div>
+</body>
+</html>
+
