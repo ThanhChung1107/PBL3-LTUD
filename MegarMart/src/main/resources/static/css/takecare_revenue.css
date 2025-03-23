@@ -1,0 +1,360 @@
+.main_page {
+    width: 100%;
+    background-color: #e7e7e7;
+    height: 1000px;
+}
+
+.main_page__eval-shop{
+    background-color: var(--white-color);
+    padding: 0 28px 20px;
+    margin: 30px 20px 0px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 0.4rem rgba(0, 0, 0 , 0.5);
+}
+.main_page__eval{
+    display: flex;
+    align-content: center;
+
+}
+.main_page__eval-text{
+    font-size: 1.9rem;
+    font-weight: 350;
+    padding-right: 10px;
+}
+.main_page__eval-val{
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    align-self: center;
+}
+.main_page__eval-max{
+    font-size: 1.7rem;
+    color: #999999;
+    align-self: center;
+}
+.main_page__eval-table{
+    display: flex;
+    align-content: center;
+    border: 1px solid #c3c3c3;
+    border-radius: 3px;
+}
+.main_page__eval-qnt,.main_page__eval-good{
+    flex: 0.5;
+    padding: 0  15px;
+    margin: 10px 0px;
+    
+}
+.main_page__eval--text,.main_page__eval--num{
+    font-size: 1.8rem;
+    font-weight: 350;
+    margin-top: 0;
+}
+.main_page__eval-good{
+    border-left: 1px solid #c3c3c3;
+    
+}
+
+
+
+.main_page__list-eval{
+    background-color: var(--white-color);
+    padding: 10px 28px 20px;
+    margin: 30px 20px 0px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 0.4rem rgba(0, 0, 0 , 0.5);
+}
+.main_page__list-eval-header{
+    font-size: 1.9rem;
+    font-weight: 350;
+}
+.select{
+    height: 16px;
+    width: 16px;
+    margin-left:20px ;
+     margin-right: 8px;
+}
+.main_page__list-eval-select{
+    display: flex;
+    align-content: center;
+}
+.main_page__list-eval-select-text{
+    font-size: 1.2rem;
+    color: #666666;
+}
+.main_page__list-eval-select-star{
+    font-size: 1.3rem;
+    font-weight: 380;
+}
+.main_page__list-eval-search{
+    padding: 10px 0;
+}
+.main_page__list-eval--text{
+    font-size: 1.4rem;
+    font-weight: 350;
+    padding: 0 10px;
+}
+.search{
+    padding-left: 0;
+}
+.find,.date{
+    font-size: 1.1rem;
+    width: 150px;
+    height: 20px;
+}
+.main_page__list-eval-button-search,.main_page__list-eval-button-reset{
+    margin: 10px 20px 0 0;
+    font-size: 1.4rem;
+    min-width: 124px;
+    height: 34px;
+    border: 1px solid #dadada;
+    border-radius: 2px;  
+    padding-top: 3px;
+    cursor: pointer;
+    color: var(--black-color);
+    background-color: #fff;
+}
+.main_page__list-eval-button-reset:hover{
+    background-color: rgba(196, 195, 195,0.1);
+}
+.main_page__list-eval-button-search:hover{
+    background-color: rgba(3, 111, 211,0.1);;
+}
+
+.main_page__list-eval-button-search{
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+
+
+
+/* Đánh giá của sản phẩm */
+.main_page__list-eval-product{
+    
+
+}
+.main_page__list-eval-product-header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #dfdfdf;
+    border-radius: 5px;
+    margin:  20px 0;
+
+}
+.main_page__list-eval-product-header-left{
+    flex: 4;
+}
+
+.main_page__list-eval-product-header__right{
+    flex: 6;
+}
+.main_page__list-eval-product-header__text{
+    justify-self: center;
+     font-size: 1.4rem;
+     padding: 5px;
+     color: #777777;
+}
+
+.main_page__list-eval-product-body{
+  
+   
+}
+.main_page__list-eval-product__no-eval .main_page__list-eval-product__no-eval-img,
+.main_page__list-eval-product__no-eval .main_page__list-eval-product__no-eval-text{
+    display: block;
+}
+.main_page__list-eval-product__no-eval-img{
+    padding-top: 30px;
+    width: 95px;
+    height: 105px;
+    display: none;
+    margin: auto;
+    
+}
+.main_page__list-eval-product__no-eval-text{
+    color: #777777;
+    font-size:1.4rem ;
+    justify-self: center;
+    display: none;
+}
+
+
+
+/* list đánh giá  */
+.main_page__eval-product-list-item{
+    padding-left: 0;
+    margin: 0;
+}
+.main_page__eval-product-item{
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.main_page__eval-product-item-info{
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    flex: 4;
+}
+.main_page__eval-product-img{
+   
+    width: 40px;
+    height: 40px;
+}
+.main_page__eval-product-item-name{
+    font-size: 1.5rem;
+    font-weight: 350;
+    padding-left: 10px;
+}
+
+
+.main_page__eval-product-item-infocustom{
+    border-left: 1px solid  var(--border-color);
+    line-height: 15px;
+    flex: 6;
+    padding: 10px;
+}
+.main_page__eval-product-item-infocustom-user{
+  display: flex;
+  align-items: center;
+}
+.main_page__eval-product-item-infocustom-img{
+    width: 26x;
+    height: 26px;
+    border-radius: 50%;
+}
+.main_page__eval-product-username{
+    margin: 10px 0;
+    padding-left: 10px;
+    font-size: 1.4rem;
+    font-weight: 300;
+}
+.main_page__eval-product-rating{
+    display: block;
+    padding: 5px 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+.main_page__eval-product-comment{
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+/* Trang doanh thu */
+.main_page__total{
+    background-color: var(--white-color);
+    margin: 20px;
+    padding: 10px 20px 20px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 0.4rem rgba(0, 0, 0 , 0.5);
+
+}
+.main_page__total-header{
+    font-size: 1.7rem;
+}
+.main_page__total-wrapper{
+    display: flex;
+    align-items: center;
+
+}
+.main_page__total-rev{
+    padding-right: 60px;
+}
+.main_page__total-text{
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #666666;
+    padding-bottom: 20px;
+}
+.main_page__total-num{
+    font-size: 2rem;
+    font-weight: 500;
+}
+.main_page__total-mon{
+    padding-left: 40px;
+    border-left: 1px solid #bcbcbc;
+}
+
+
+.main_page__order-wrapper{
+    border-radius: 7px;
+    border: 1px solid #666666 ;
+    width: 80%;
+    overflow: hidden;
+}
+.main_page__order-header{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: #f6f6f6;
+}
+.main_page__order-header-product,.main_page__order-header-buyer
+,.main_page__order-header-money{
+    color: #666666;
+    font-size: 1.4rem;
+    font-weight: 350;
+}
+
+
+.main_page__order-header-product{
+    padding: 10px;
+    flex: 5;
+}
+.main_page__order-header-buyer{
+    flex: 2;
+}
+.main_page__order-header-money{
+    flex: 3;
+}
+.main_page__order-list{
+    padding: 0 0 20px;
+}
+
+
+
+
+
+.main_page__order-item{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.main_page__order-item-info{
+    padding: 10px;
+    flex: 5;
+    
+    display: flex;
+    align-items: center;
+}
+.main_page__order-img{
+    width: 50px;
+    height: 50px;
+}
+.main_page__order-item-name{
+    font-size: 1.4rem;
+    font-weight: 350;
+}
+
+.main_page__order-item-infocustom-user{
+    flex: 2;
+    display: flex;
+    align-items: center;
+}
+.main_page__order-item-infocustom-img{
+    width: 26x;
+    height: 26px;
+    border-radius: 50%;
+}
+.main_page__order-username{
+    padding-left: 5px;
+    font-size: 1.4rem;
+    font-weight: 400;
+}
+
+.main_page__order-pay{
+    font-size: 1.4rem;
+    font-weight: 400;
+    flex: 3;
+}

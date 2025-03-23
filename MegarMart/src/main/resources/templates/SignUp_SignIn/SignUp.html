@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" th:href="@{/css/Style_SignUp.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Đăng ký tài khoản</h2>
+
+    <form th:action="@{/signup}" method="post" th:object="${account}">
+
+
+        <div class="input-group">
+            <label for="username">Tên đăng nhập</label>
+            <input type="text" id="username" placeholder="Tên đăng nhập" required th:field="*{username}">
+        </div>
+
+        <div class="input-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" placeholder="Mật khẩu" required th:field="*{password}">
+        </div>
+
+        <div class="input-group">
+            <label for="name">Họ và tên</label>
+            <input type="text" id="name" placeholder="Họ và tên" required th:field="*{name}">
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" required th:field="*{email}">
+        </div>
+
+        <div class="input-group">
+            <label for="phone">Số điện thoại</label>
+            <input type="text" id="phone" placeholder="Số điện thoại" required th:field="*{phone}">
+        </div>
+
+        <div class="input-group">
+            <label for="address">Địa chỉ</label>
+            <input type="text" id="address" placeholder="Địa chỉ" required th:field="*{address}">
+        </div>
+
+        <button type="submit">Đăng ký</button>
+    </form>
+
+    <p th:if="${error}" th:text="${error}" class="error-message"></p>
+
+    <p class="redirect-login">Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+</div>
+</body>
+</html>
+
