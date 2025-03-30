@@ -38,7 +38,8 @@
             <div class="seller-right">
                 <ul class="header__navbar">
                     <li class="header__navbar-item header__navbar-user" id="user-section">
-                        <img th:src="${session.account.imageurl}" alt="Avatar"
+
+                        <img th:src="@{/img/{image}(image=${session.account.imageurl})}" alt="Avatar"
                              class="header__navbar-user-img">
 
                         <span th:text="${session.account.name}" class="header__navbar-user-name" id="username"></span>
@@ -48,7 +49,7 @@
                                 <a th:href="@{/user/accountdetail}">Tài khoản của tôi</a>
                             </li>
                             <li class="header__navbar-user-item">
-                                <a href="#">Đơn mua</a>
+                                <a th:href="@{/user/accountdetail(section='order')}">Đơn mua</a>
                             </li>
                             <li class="header__navbar-user-item header__navbar-user-item--separate">
                                 <form id="logoutForm" th:action="@{/logout}" method="post">
@@ -65,25 +66,39 @@
          <div class="seller-contain">
             <div class="seller-register-text">
                 <div class="register-text">Thông tin Shop</div>
+
+                <div th:if="${pending}">
+                    <h1 style="color:red;font-size:30px;text-align:center;margin-top:30px;">Vui lòng chờ duyệt...</h1>
+                </div>
+
+                <div th:unless="${pending}">
                 <div class="register-info">
+                    <form action="/user/register" method="post" th:object="${shop}" enctype="multipart/form-data">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="account_id" th:value="${session.account.id}">
                     <div class="register-input">
                         <span class="register-lable">Tên shop</span>
-                        <input type="text" class="register-input-type" required>
+                        <input type="text" class="register-input-type" th:field="*{shopname}" required>
                     </div>
                     <div class="register-input">
                         <span class="register-lable">Địa chỉ</span>
-                        <input type="text" class="register-input-type" required>
+                        <input type="text" class="register-input-type" th:field="*{address}" required>
                     </div>
                     <div class="register-input">
                         <span class="register-lable">Số điện thoại</span>
-                        <input type="text" class="register-input-type" required>
+                        <input type="text" class="register-input-type" th:field="*{phone}" required>
                     </div>
                     <div class="register-input">
                         <span class="register-lable">Email</span>
-                        <input type="email" class="register-input-type" required>
+                        <input type="email" class="register-input-type" th:field="*{email}" required>
                     </div>
+                    <div class="my-img">
+                        <input type="file" name="fileImage" accept="image/*">
+                    </div>
+                        <input type="submit" value="Đăng kí">
+                    </form>
                 </div>
-                <a href="seller_manager_home.html" class="btn-save">Hoàn tất</a>
+                </div>
             </div>
          </div>
 

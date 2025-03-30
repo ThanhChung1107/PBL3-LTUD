@@ -13,7 +13,7 @@
 <body>
 <div class="header">
   <div class="left-head">
-    <h3>Quản lí tài khoản</h3>
+    <h3>Quản lí cửa hàng</h3>
   </div>
   <div class="right-head">
     <h3>Xin chào,admin</h3>
@@ -25,33 +25,33 @@
 <div class="content">
   <div class="box">
     <div class="box-header with-border">
-      <h3 class="box-title">Tài khoản</h3>
+      <h3 class="box-title">Shop</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
       <table class="table table-bordered">
         <tbody><tr>
           <th style="width: 10px">ID</th>
-          <th>Họ và tên</th>
-          <th>Email</th>
+          <th>Image</th>
+          <th>Tên cửa hàng</th>
+          <th>Tên chủ sở hữu</th>
           <th>SĐT</th>
           <th>Địa chỉ</th>
-          <th>Role</th>
           <th>Ngày tạo</th>
           <th>Ngày cập nhật</th>
           <th>Chức năng</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>Nguyễn Lê Minh Chiến</td>
-          <td>minhchienvadori@gmail.com</td>
-          <td>0905444999</td>
-          <td>Đà Nẵng</td>
-          <td>User</td>
-          <td>13/03/2025</td>
-          <td>NULL</td>
+        <tr th:each="shop : ${listshop}">
+          <td th:text="${shop.getId()}">1</td>
+          <td><img th:src="@{/img/{image}(image=${shop.imageurl})}" alt="" style="width:100px;height:auto;border-radius:5px;object-fit:cover;"></td>
+          <td th:text="${shop.shopname}"></td>
+          <td th:text="${shop.account.name}"></td>
+          <td th:text="${shop.phone}"></td>
+          <td th:text="${shop.address}"></td>
+          <td th:text="${shop.createdAt}"></td>
+          <td th:text="${shop.updatedAt}"></td>
           <td>
-            <button class="btn btn-edit"><a href="order.html" style="color:#fff">Xem</a></button>
+            <button class="btn btn-edit">Xem</button>
             <button class="btn btn-delete">Xóa</button>
           </td>
         </tr>
