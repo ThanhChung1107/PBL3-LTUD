@@ -1,31 +1,26 @@
 package com.ProjectPBL3.MegarMart.Entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Shop {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    String shopname;
-    String email;
-    String phone;
-    String address;
-    String imageurl;
-    Boolean status;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id",referencedColumnName = "id")
-    Account account;
 
-    @OneToMany(mappedBy = "shop")
+    String name;
+    String imageurl;
+
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 
     @Column(nullable = false, updatable = false)

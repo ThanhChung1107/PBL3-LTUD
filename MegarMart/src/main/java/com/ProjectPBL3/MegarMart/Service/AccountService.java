@@ -12,12 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
+
+    public List<Account> findAll() {return accountRepository.findAll();}
 
     public boolean checkExistedUsername(String username) {
         return accountRepository.existsByUsername(username);
@@ -57,7 +60,9 @@ public class AccountService {
         );
     }
 
-
+    public Account findByEmail(String email) {
+        return accountRepository.findByEmail(email);
+    }
 
 
 //    private final PasswordEncoder passwordEncoder;

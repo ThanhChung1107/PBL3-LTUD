@@ -2,7 +2,12 @@
     <div class="grid">
         <nav class="header__navbar">
             <ul class="header__navbar-list">
+                <div th:if="${session.account.role.id == 0}">
                 <a th:href="@{/user/register}"><li class="header__navbar-item">Trở thành người bán</li></a>
+                </div>
+                <div th:if="${session.account.role.id == 1}">
+                    <a th:href="@{/seller/home}"><li class="header__navbar-item">Truy cập shop</li></a>
+                </div>
                 <li class="header__navbar-item header__navbar-item--separate">
                     <span class="header__navbar-title--no-pointer">Kết nối</span>
                 </li>

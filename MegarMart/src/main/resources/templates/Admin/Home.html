@@ -41,15 +41,15 @@
           <th>Ngày cập nhật</th>
           <th>Chức năng</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>Nguyễn Lê Minh Chiến</td>
-          <td>minhchienvadori@gmail.com</td>
-          <td>0905444999</td>
-          <td>Đà Nẵng</td>
-          <td>User</td>
-          <td>13/03/2025</td>
-          <td>NULL</td>
+        <tr th:each="acc : ${listacc}">
+          <td th:text="${acc.id}"></td>
+          <td th:text="${acc.name}"></td>
+          <td th:text="${acc.email}"></td>
+          <td th:text="${acc.phone}"></td>
+          <td th:text="${acc.address}"></td>
+          <td th:text="${acc.role.roleName}"></td>
+          <td th:text="${#temporals.format(acc.createdAt, 'dd/MM/yyyy')}"></td>
+          <td th:text="${#temporals.format(acc.updatedAt, 'dd/MM/yyyy')}"></td>
           <td>
             <button class="btn btn-edit"><a href="order.html" style="color:#fff">Xem</a></button>
             <button class="btn btn-delete">Xóa</button>

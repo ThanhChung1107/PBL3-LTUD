@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+    <div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+    <!-- container -->
+     <div class="seller_home_contain">
+        <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+
+        <div class="order-manager">
+            <div class="order-manager-all">
+                <div class="order-manager-all-title">Tất Cả</div>
+                <div class="order-manager-all-conttent">
+                    <div class="order-manager-all-search">
+                        <select id="filter" class="order-manager-all-select">
+                            <option value="order_id">Mã đơn hàng</option>
+                            <option value="buyer_name">Tên người mua</option>
+                            <option value="product">Sản phẩm</option>
+                        </select>
+                    </div>
+                    <div class="search-result"><span class="count">1</span> Kết quả tìm thấy</div>
+                    <table class="table-order">
+                        <thead>
+                            <tr>
+                                <th class="col_product">Sản phẩm</th>
+                                <th class="col_category">Danh mục</th>
+                                <th class="col_sum_product">Tổng đơn hàng</th>
+                                <th class="col_revenue">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col_product_value">
+                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                    <div class="col_product_name">Product name</div>
+                                </td>
+                                <td class="col_category_value">Dien thoai</td>
+                                <td class="col_sum_product_value">150</td>
+                                <td class="col_revenue_value">2.000.000</td>
+                            </tr>
+                            <tr>
+                                <td class="col_product_value">
+                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                    <div class="col_product_name">Product name</div>
+                                </td>
+                                <td class="col_category_value">Dien thoai</td>
+                                <td class="col_sum_product_value">150</td>
+                                <td class="col_revenue_value">2.000.000</td>
+                            </tr>
+                            <tr>
+                                <td class="col_product_value">
+                                    <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
+                                    <div class="col_product_name">Product name</div>
+                                </td>
+                                <td class="col_category_value">Dien thoai</td>
+                                <td class="col_sum_product_value">150</td>
+                                <td class="col_revenue_value">2.000.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+     </div>
+     <script th:src="@{/js/seller_script.js}"></script>
+</body>
+</html>

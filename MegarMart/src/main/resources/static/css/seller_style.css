@@ -556,59 +556,43 @@
 	--dark-blue: #005DD1;
 	--grey: #f2f2f2;
 }
-/* .container {
-	display: flex;
-    flex-direction: column;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-}
-.img-area {
-    width: 100%;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-} */
+
+
 .container {
     width: 100px; /* Độ rộng */
     height: 100px; /* Độ cao (bằng với độ rộng để tạo hình tròn) */
-    border-radius: 50%; /* Làm tròn */
     background-color: #f3f3f3; /* Màu nền */
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
     position: relative;
+    border-radius: 4px;
     overflow: hidden;
 }
 
-/* Hình ảnh hoặc icon bên trong */
 .img-area {
-    text-align: center;
-    font-size: 30px;
-}
-
-/* Button */
-.select-image {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
     width: 100%;
-    transform: translateX(-50%);
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    height: 24px;
+    height: 100%;
+    display: flex; /* Quan trọng để căn giữa icon */
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 .img-area .icon {
-	font-size: 50px;
+    font-size: 40px; /* Tùy chỉnh kích thước icon */
+    color: #555;
 }
+
+.img-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Giúp ảnh fill full không méo */
+    border-radius: 4px;
+    display: block;
+}
+
 .img-area h3 {
 	font-size: 20px;
 	font-weight: 500;

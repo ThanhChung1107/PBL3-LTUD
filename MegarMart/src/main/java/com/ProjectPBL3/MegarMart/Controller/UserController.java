@@ -3,6 +3,7 @@ package com.ProjectPBL3.MegarMart.Controller;
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
 import com.ProjectPBL3.MegarMart.Service.AccountService;
+import com.ProjectPBL3.MegarMart.Service.CategoryService;
 import com.ProjectPBL3.MegarMart.Service.FileSystemStorageService;
 import com.ProjectPBL3.MegarMart.Service.ShopService;
 import jakarta.servlet.http.HttpSession;
@@ -19,12 +20,14 @@ import java.time.LocalDate;
 @RequestMapping("/user")
 public class UserController {
     private final ShopService shopService;
+    private final CategoryService categoryService;
     private final AccountService accountService;
     private final FileSystemStorageService storageService;
 
     @GetMapping("/home")
-    public String userhome()
+    public String userhome(Model model)
     {
+        model.addAttribute("listcate",categoryService.findAll());
         return "User/Home";
     }
 

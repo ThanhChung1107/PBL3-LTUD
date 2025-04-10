@@ -24,9 +24,9 @@
             <div class="home-category">
                 <div class="home-category-name">DANH MỤC</div>
                 <div class="home-category-content">
-                    <div class="home-category-detail">
-                        <img th:src="@{/img/category.webp}" alt="" class="home-category-img">
-                        <div class="home-category-detail-name">Thể Thao & Du Lịch</div>
+                    <div th:each="cate : ${listcate}" class="home-category-detail">
+                        <img th:src="@{'/img/' + ${cate.imageurl}}" alt="" class="home-category-img">
+                        <div th:text="${cate.name}" class="home-category-detail-name"></div>
                     </div>
                 </div>
             </div>

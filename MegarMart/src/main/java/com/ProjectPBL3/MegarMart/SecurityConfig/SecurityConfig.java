@@ -53,7 +53,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/createAdmin","/", "/login", "/signup", "/signupGoogle", "/logout","/error","/css/**","/img/**","/js/**").permitAll()
-                        .requestMatchers("/user/**").hasAuthority("ROLE_USER")
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER","ROLE_SELLER")
+                        .requestMatchers("/seller/**").hasAuthority("ROLE_SELLER")
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )

@@ -3,6 +3,7 @@ package com.ProjectPBL3.MegarMart.Service;
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Entity.Role;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
+import com.ProjectPBL3.MegarMart.Repository.RoleRepository;
 import com.ProjectPBL3.MegarMart.Repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ShopService {
     private final ShopRepository shopRepository;
+    private final RoleRepository roleRepository;
     private final FileSystemStorageService storageService;
 
     public Boolean save(Shop shop, MultipartFile file) {
@@ -51,6 +53,11 @@ public class ShopService {
     public void approveShop(int shopId){
         Shop shop = shopRepository.findById(shopId).orElseThrow(() -> new RuntimeException("Shop not found"));
         shop.setStatus(true);
+
+        Account account = shop.getAccount();
+        Role seller = roleRepository.findById(1).orElseThrow(() -> new RuntimeException("Shop not found"));
+        account.setRole(seller);
+
         shopRepository.save(shop);
     }
 

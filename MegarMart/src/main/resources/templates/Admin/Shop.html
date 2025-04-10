@@ -48,8 +48,8 @@
           <td th:text="${shop.account.name}"></td>
           <td th:text="${shop.phone}"></td>
           <td th:text="${shop.address}"></td>
-          <td th:text="${shop.createdAt}"></td>
-          <td th:text="${shop.updatedAt}"></td>
+          <td th:text="${#temporals.format(shop.createdAt, 'dd/MM/yyyy')}"></td>
+          <td th:text="${#temporals.format(shop.updatedAt, 'dd/MM/yyyy')}"></td>
           <td>
             <button class="btn btn-edit">Xem</button>
             <button class="btn btn-delete">Xóa</button>

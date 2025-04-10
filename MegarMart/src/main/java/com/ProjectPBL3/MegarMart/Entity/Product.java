@@ -1,32 +1,45 @@
 package com.ProjectPBL3.MegarMart.Entity;
 
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Shop {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    String shopname;
-    String email;
-    String phone;
-    String address;
-    String imageurl;
-    Boolean status;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id",referencedColumnName = "id")
-    Account account;
 
-    @OneToMany(mappedBy = "shop")
-    private List<Product> products;
+    String name;
+    String description;
+    String imageurl;
+
+    @Column(precision = 13, scale = 2)
+    BigDecimal price;
+
+    @Column(precision = 13, scale = 2)
+    BigDecimal revenue;
+
+    int stock;
+    int status;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id",referencedColumnName = "id")
+    Shop shop;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    Category category;
+
 
     @Column(nullable = false, updatable = false)
     LocalDate createdAt;
@@ -41,6 +54,7 @@ public class Shop {
         createdAt = LocalDate.now();
         updatedAt = LocalDate.now();
     }
+
     // Tự động cập nhật ngày sửa trước khi update
     @PreUpdate
     protected void onUpdate() {
