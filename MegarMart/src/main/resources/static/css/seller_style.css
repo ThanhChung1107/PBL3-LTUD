@@ -193,24 +193,37 @@
     font-size: 1.8rem;
 }
 .dropdown-menu {
+    display:none;
     list-style: none;
     padding: 0 10px;
     margin-top: 10px;
     gap: 10px;
 }
+
+.dropdown-menu.active {
+  display: block;
+}
+
 .dropdown-item {
     margin-top: 10px;
 }
+
+.dropdown-item a:hover{
+    color:blue;
+}
+
 .dropdown-item a{
     text-decoration: none;
     font-size: 1.4rem;
     color: var(--text-color);
 }
 
+/*
 .dropdown-item a.active {
     color: var(--primary-color);
     font-weight: 700;
 }
+*/
 
 /* container */
 .order-manager {
@@ -559,8 +572,8 @@
 
 
 .container {
-    width: 100px; /* Độ rộng */
-    height: 100px; /* Độ cao (bằng với độ rộng để tạo hình tròn) */
+    width: 250px; /* Độ rộng */
+    height: 250px; /* Độ cao (bằng với độ rộng để tạo hình tròn) */
     background-color: #f3f3f3; /* Màu nền */
     display: flex;
     justify-content: center;
@@ -588,7 +601,7 @@
 .img-area img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Giúp ảnh fill full không méo */
+/*    object-fit: cover; */
     border-radius: 4px;
     display: block;
 }

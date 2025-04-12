@@ -1,7 +1,46 @@
-document.querySelectorAll(".sidebar-item").forEach(item => {
-    item.addEventListener("click", function () {
-        this.classList.toggle("active"); // Toggle class active
+document.addEventListener("DOMContentLoaded", function () {
+  const headers = document.querySelectorAll(".sidebar-item-header");
+
+  headers.forEach(header => {
+    header.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation(); // Ngăn sự kiện lan truyền (nếu có)
+
+      const currentDropdown = this.nextElementSibling;
+      const icon = this.querySelector(".item-icon");
+
+      // Đóng tất cả dropdown khác (trừ dropdown hiện tại)
+      document.querySelectorAll(".dropdown-menu").forEach(menu => {
+        if (menu !== currentDropdown) {
+          menu.classList.remove("active");
+          // Reset icon của các dropdown khác
+          const otherIcon = menu.previousElementSibling.querySelector(".item-icon");
+          otherIcon.classList.replace("bx-chevron-down", "bx-chevron-up");
+        }
+      });
+
+      // Toggle dropdown hiện tại
+      currentDropdown.classList.toggle("active");
+
+      // Toggle icon (đổi giữa up/down)
+      if (currentDropdown.classList.contains("active")) {
+        icon.classList.replace("bx-chevron-up", "bx-chevron-down");
+      } else {
+        icon.classList.replace("bx-chevron-down", "bx-chevron-up");
+      }
     });
+  });
+
+  // Đóng dropdown khi click ra ngoài
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".sidebar-item-header")) {
+      document.querySelectorAll(".dropdown-menu").forEach(menu => {
+        menu.classList.remove("active");
+        const icon = menu.previousElementSibling.querySelector(".item-icon");
+        icon.classList.replace("bx-chevron-down", "bx-chevron-up");
+      });
+    }
+  });
 });
 
 document.querySelectorAll(".all-product-item").forEach(item => {

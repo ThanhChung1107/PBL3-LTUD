@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -23,14 +22,13 @@ public class Product {
     String description;
     String imageurl;
 
-    @Column(precision = 13, scale = 2)
-    BigDecimal price;
+    int price;
 
-    @Column(precision = 13, scale = 2)
-    BigDecimal revenue;
+    int revenue;
 
     int stock;
     int status;
+    int sold;
 
     @ManyToOne
     @JoinColumn(name = "shop_id",referencedColumnName = "id")

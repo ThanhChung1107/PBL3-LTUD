@@ -2,10 +2,7 @@ package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
-import com.ProjectPBL3.MegarMart.Service.AccountService;
-import com.ProjectPBL3.MegarMart.Service.CategoryService;
-import com.ProjectPBL3.MegarMart.Service.FileSystemStorageService;
-import com.ProjectPBL3.MegarMart.Service.ShopService;
+import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,11 +20,13 @@ public class UserController {
     private final CategoryService categoryService;
     private final AccountService accountService;
     private final FileSystemStorageService storageService;
+    private final ProductService productService;
 
     @GetMapping("/home")
     public String userhome(Model model)
     {
         model.addAttribute("listcate",categoryService.findAll());
+        model.addAttribute("listpro",productService.findByStatus(1));
         return "User/Home";
     }
 

@@ -16,16 +16,16 @@
         </div>
         <div class="all-product-list">
             <div class="all-product-item item-active" onclick="showSection('all-product')">Tất cả</div>
-            <div class="all-product-item" onclick="showSection('is-active-product')">Đang hoạt Động(<span class="is-active">0</span>)</div>
-            <div class="all-product-item" onclick="showSection('violate-product')">Vi phạm(<span class="violate">0</span>)</div>
-            <div class="all-product-item" onclick="showSection('pending-product')">chờ duyệt bởi Admin(<span class="Pending-approval">0</span>)</div>
+            <div class="all-product-item" onclick="showSection('is-active-product')">Đang hoạt Động(<span class="is-active"  th:text="${#lists.size(listproshop.?[status == 1])}"></span>)</div>
+            <div class="all-product-item" onclick="showSection('violate-product')">Vi phạm(<span class="violate"  th:text="${#lists.size(listproshop.?[status == 2])}"></span>)</div>
+            <div class="all-product-item" onclick="showSection('pending-product')">Đang chờ duyệt(<span class="Pending-approval"  th:text="${#lists.size(listproshop.?[status == 0])}"></span>)</div>
         </div>
 
         <div id="all-product" class="all-product-conttent section active">
             <div class="all-product-search">
                 <div class="category-search">
                     <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
                 </div>
                 <button class="btn-product-search">Tìm</button>
             </div>
@@ -41,16 +41,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="pro : ${listproshop}">
                     <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">iPhone 15 Pro</div>
+                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
+                        <div class="col_product_name" th:text="${pro.name}"></div>
                     </td>
-                    <td class="col_revenue_value">50.000.000</td>
-                    <td class="col_price_value">25.000.000</td>
-                    <td class="col_stock_value">10</td>
-                    <td class="col_category_value">Điện thoại</td>
-                    <td class="col_status_value">Đang hoạt động</td>
+                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
+                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
+                    <td class="col_stock_value" th:text="${pro.stock}"></td>
+                    <td class="col_category_value" th:text="${pro.category.name}"></td>
+                    <td class="col_status_value" th:switch="${pro.status}">
+                        <span th:case="0">Đang chờ duyệt</span>
+                        <span th:case="1">Đang hoạt động</span>
+                        <span th:case="2">Vi phạm</span>
+                    </td>
 <!--                    <td>-->
 <!--                        <button class="btn btn-edit"><a th:href="@{/seller/product/edit/{id}(id=${pro.id})}" style="color:white">Sửa</a></button>-->
 <!--                        <form th:action="@{/seller/product/delete/{id}(id=${pro.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">-->
@@ -60,15 +64,13 @@
                 </tr>
                 </tbody>
             </table>
-
-
         </div>
 
         <div id="is-active-product" class="all-product-conttent section">
             <div class="all-product-search">
                 <div class="category-search">
                     <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
                 </div>
                 <button class="btn-product-search">Tìm</button>
             </div>
@@ -83,35 +85,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="pro : ${listpro}" th:if="${pro.status == 1}">
                     <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">cccccc</div>
+                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
+                        <div class="col_product_name" th:text="${pro.name}"></div>
                     </td>
-                    <td class="col_revenue_value">50.000.000</td>
-                    <td class="col_price_value">25.000.000</td>
-                    <td class="col_stock_value">10</td>
-                    <td class="col_category_value">Điện thoại</td>
-                </tr>
-                <tr>
-                    <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">Samsung Galaxy S23</div>
-                    </td>
-                    <td class="col_revenue_value">30.000.000</td>
-                    <td class="col_price_value">15.000.000</td>
-                    <td class="col_stock_value">5</td>
-                    <td class="col_category_value">Điện thoại</td>
-                </tr>
-                <tr>
-                    <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">MacBook Air M2</div>
-                    </td>
-                    <td class="col_revenue_value">100.000.000</td>
-                    <td class="col_price_value">30.000.000</td>
-                    <td class="col_stock_value">8</td>
-                    <td class="col_category_value">Laptop</td>
+                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
+                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
+                    <td class="col_stock_value" th:text="${pro.stock}"></td>
+                    <td class="col_category_value" th:text="${pro.category.name}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -121,7 +103,7 @@
             <div class="all-product-search">
                 <div class="category-search">
                     <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
                 </div>
                 <button class="btn-product-search">Tìm</button>
             </div>
@@ -136,35 +118,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="pro : ${listpro}" th:if="${pro.status == 2}">
                     <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">cccccc</div>
+                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
+                        <div class="col_product_name" th:text="${pro.name}"></div>
                     </td>
-                    <td class="col_revenue_value">50.000.000</td>
-                    <td class="col_price_value">25.000.000</td>
-                    <td class="col_stock_value">10</td>
-                    <td class="col_category_value">Điện thoại</td>
-                </tr>
-                <tr>
-                    <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">Samsung Galaxy S23</div>
-                    </td>
-                    <td class="col_revenue_value">30.000.000</td>
-                    <td class="col_price_value">15.000.000</td>
-                    <td class="col_stock_value">5</td>
-                    <td class="col_category_value">Điện thoại</td>
-                </tr>
-                <tr>
-                    <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">MacBook Air M2</div>
-                    </td>
-                    <td class="col_revenue_value">100.000.000</td>
-                    <td class="col_price_value">30.000.000</td>
-                    <td class="col_stock_value">8</td>
-                    <td class="col_category_value">Laptop</td>
+                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
+                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
+                    <td class="col_stock_value" th:text="${pro.stock}"></td>
+                    <td class="col_category_value" th:text="${pro.category.name}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -174,7 +136,7 @@
             <div class="all-product-search">
                 <div class="category-search">
                     <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm, Mã sản phẩm">
+                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
                 </div>
                 <button class="btn-product-search">Tìm</button>
             </div>
@@ -189,35 +151,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
+                <tr th:each="pro : ${listpro}" th:if="${pro.status == 0}">
                     <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">cccccc</div>
+                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
+                        <div class="col_product_name" th:text="${pro.name}"></div>
                     </td>
-                    <td class="col_revenue_value">50.000.000</td>
-                    <td class="col_price_value">25.000.000</td>
-                    <td class="col_stock_value">10</td>
-                    <td class="col_category_value">Điện thoại</td>
-                </tr>
-                <tr>
-                    <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">Samsung Galaxy S23</div>
-                    </td>
-                    <td class="col_revenue_value">30.000.000</td>
-                    <td class="col_price_value">15.000.000</td>
-                    <td class="col_stock_value">5</td>
-                    <td class="col_category_value">Điện thoại</td>
-                </tr>
-                <tr>
-                    <td class="col_product_value">
-                        <img src="assets/img/logoshop.webp" alt="" class="col_product_img">
-                        <div class="col_product_name">MacBook Air M2</div>
-                    </td>
-                    <td class="col_revenue_value">100.000.000</td>
-                    <td class="col_price_value">30.000.000</td>
-                    <td class="col_stock_value">8</td>
-                    <td class="col_category_value">Laptop</td>
+                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
+                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
+                    <td class="col_stock_value" th:text="${pro.stock}"></td>
+                    <td class="col_category_value" th:text="${pro.category.name}"></td>
                 </tr>
                 </tbody>
             </table>

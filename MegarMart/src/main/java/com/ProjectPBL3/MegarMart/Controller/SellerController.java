@@ -42,13 +42,17 @@ public class SellerController {
         Shop shop = shopService.findByAccount(account);
         product.setShop(shop);
         product.setStatus(0);
-        product.setRevenue(BigDecimal.valueOf(0));
+        product.setRevenue(0);
+        product.setSold(0);
         productService.save(product,file);
         return "redirect:/seller/product-manager";
     }
 
     @GetMapping("/product-manager")
-    public String productmanager(){
+    public String productmanager(Model model,HttpSession session){
+        Account account = (Account) session.getAttribute("account");
+        Shop shop = shopService.findByAccount(account);
+        model.addAttribute("listproshop",productService.findByShop(shop));
         return "Seller/product_manager";
     }
 }

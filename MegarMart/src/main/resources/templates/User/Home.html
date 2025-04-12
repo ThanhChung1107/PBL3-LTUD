@@ -36,23 +36,27 @@
                     <div class="goiyhomnay">GỢI Ý HÔM NAY</div>
                 </div>
                 <div class="grid__row">
-                    <div class="grid__column-2-4">
+                    <div class="grid__column-2-4" th:each="pro : ${listpro}">
                         <a href="detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
+                            <div class="home-product-item__img"
+                                 th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">
+                            </div>
 
+                            <h4 class="home-product-item__name" th:text="${pro.name}"></h4>
                             <div class="home-product-item__price">
                                 <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
+                                <span class="home-product-item__price-current"  th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></span>
                             </div>
 
                             <div class="home-product-item__action">
                                 <!-- Nút Like -->
+
                                 <span class="home-product-item__like" onclick="toggleLike(event, this)">
                                         <i class='bx bx-heart'></i>
                                     </span>
 
-                                <!-- Đánh giá sao -->
+<!--                                 Đánh giá sao -->
+
                                 <div class="home-product-item__rating">
                                     <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
                                     <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
@@ -61,358 +65,7 @@
                                     <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
                                 </div>
 
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href="detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
-                            </div>
-
-                            <div class="home-product-item__origin">
-                                <span class="home-product-item__brand">whoo</span>
-                                <span class="home-product-item__origin-name">Nhật Bản</span>
-                            </div>
-
-                            <div class="home-product-item__favourite">
-                                <i class='bx bx-check' ></i>
-                                yêu thích
-                            </div>
-                        </a>
-                    </div>
-                    <div class="grid__column-2-4">
-                        <a href=" detail.html" class="home-product-item">
-                            <div class="home-product-item__img" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr9_MU8KgkBP1_kG_pYnLySLW2FADjlIeUxA&s);"></div>
-                            <h4 class="home-product-item__name">Bộ ga giường thun lạnh Lidaco 4 món bo thun sẵn kích thước nệm</h4>
-
-                            <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current">999.000d</span>
-                            </div>
-
-                            <div class="home-product-item__action">
-                                <!-- Nút Like -->
-                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                <!-- Đánh giá sao -->
-                                <div class="home-product-item__rating">
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
-                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
-                                </div>
-
-                                <span class="home-product-item__sold">88 đã bán</span>
+                                <span class="home-product-item__sold" th:text="${pro.sold}+' đã bán'"></span>
                             </div>
 
                             <div class="home-product-item__origin">
@@ -467,6 +120,6 @@
     <!-- footer -->
     <div th:replace="fragments/footer.html :: footer"></div>
 </div>
-<script src="@{/js/script.js}"></script>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

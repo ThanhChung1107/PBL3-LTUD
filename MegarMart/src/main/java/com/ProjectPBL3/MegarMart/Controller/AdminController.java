@@ -2,10 +2,7 @@ package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.Category;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
-import com.ProjectPBL3.MegarMart.Service.AccountService;
-import com.ProjectPBL3.MegarMart.Service.CategoryService;
-import com.ProjectPBL3.MegarMart.Service.FileSystemStorageService;
-import com.ProjectPBL3.MegarMart.Service.ShopService;
+import com.ProjectPBL3.MegarMart.Service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,82 +19,105 @@ public class AdminController {
     private final AccountService accountService;
     private final CategoryService categoryService;
     private final FileSystemStorageService storageService;
+    private final ProductService productService;
 
     @GetMapping("/home")
-    public String adminhome(Model model)
-    {
-        model.addAttribute("listacc",accountService.findAll());
+    public String adminhome(Model model) {
+        model.addAttribute("listacc", accountService.findAll());
         return "Admin/Home";
     }
 
     @GetMapping("/shop")
-    public String adminshop(Model model)
-    {
-        model.addAttribute("listshop",shopService.getApproveShops());
+    public String adminshop(Model model) {
+        model.addAttribute("listshop", shopService.getApproveShops());
         return "Admin/Shop";
     }
 
     @GetMapping("/addshop")
-    public String adminaddshop(Model model)
-    {
+    public String adminaddshop(Model model) {
         List<Shop> pendingshop = shopService.getPendingShops();
-        if(pendingshop.isEmpty()) {
+        if (pendingshop.isEmpty()) {
             model.addAttribute("isempty", true);
-        }
-        else {
+        } else {
             model.addAttribute("pendingshop", pendingshop);
             model.addAttribute("isempty", false);
         }
         return "Admin/Add_Shop";
     }
+
     @PostMapping("/shop/approve/{id}")
-    public String approveShop(@PathVariable int id) {shopService.approveShop(id); return "redirect:/admin/shop";}
+    public String approveShop(@PathVariable int id) {
+        shopService.approveShop(id);
+        return "redirect:/admin/shop";
+    }
 
     @PostMapping("/shop/reject/{id}")
-    public String rejectShop(@PathVariable int id) {shopService.rejectShop(id); return"redirect:/admin/addshop";}
+    public String rejectShop(@PathVariable int id) {
+        shopService.rejectShop(id);
+        return "redirect:/admin/addshop";
+    }
 
     @GetMapping("/addcategory")
-    public String addcategory(Model model){
-        model.addAttribute("category",new Category());
+    public String addcategory(Model model) {
+        model.addAttribute("category", new Category());
         return "Admin/add_category";
     }
 
     @PostMapping("/addcategory")
-    public String addcategoryy(@ModelAttribute Category category,@RequestParam(value = "fileImage", required = false) MultipartFile file){
-        if(categoryService.create(category,file)){
+    public String addcategoryy(@ModelAttribute Category category, @RequestParam(value = "fileImage", required = false) MultipartFile file) {
+        if (categoryService.create(category, file)) {
             return "redirect:/admin/category";
-        }
-        else return "Admin/add_category";
+        } else return "Admin/add_category";
     }
 
     @GetMapping("/category")
-    public String category(Model model){
-        model.addAttribute("listcate",categoryService.findAll());
+    public String category(Model model) {
+        model.addAttribute("listcate", categoryService.findAll());
         return "Admin/category";
     }
 
     @GetMapping("/category/edit/{id}")
-    public String editcategory(Model model,@PathVariable Integer id){
+    public String editcategory(Model model, @PathVariable Integer id) {
         Category category = categoryService.findById(id);
-        model.addAttribute("category",category);
+        model.addAttribute("category", category);
         return "Admin/edit_category";
     }
 
     @PostMapping("/editcategory")
-    public String editt(@ModelAttribute Category category,@RequestParam(value = "fileImage",required = false) MultipartFile file){
-        if(file!=null && !file.isEmpty()){
+    public String editt(@ModelAttribute Category category, @RequestParam(value = "fileImage", required = false) MultipartFile file) {
+        if (file != null && !file.isEmpty()) {
             storageService.store(file);
             String filename = file.getOriginalFilename();
             category.setImageurl(filename);
-        }
-        else{
+        } else {
             Category oldcate = categoryService.findById(category.getId());
             category.setImageurl(oldcate.getImageurl());
         }
-        if(categoryService.update(category)) return "redirect:/admin/category";
+        if (categoryService.update(category)) return "redirect:/admin/category";
         else return "redirect:/admin/category";
     }
 
     @PostMapping("/category/delete/{id}")
-    public String deletecategory(@PathVariable int id) {categoryService.deleteById(id);return "redirect:/admin/category";}
+    public String deletecategory(@PathVariable int id) {
+        categoryService.deleteById(id);
+        return "redirect:/admin/category";
+    }
+
+    @GetMapping("/product")
+    public String product(Model model) {
+        model.addAttribute("listpro", productService.findAll());
+        return "Admin/product";
+    }
+
+    @PostMapping("/product/approve/{id}")
+    public String approveProduct(@PathVariable int id) {
+        productService.approveProduct(id);
+        return "redirect:/admin/product";
+    }
+
+    @PostMapping("/product/reject/{id}")
+    public String rejectProduct(@PathVariable int id) {
+        productService.rejectProduct(id);
+        return "redirect:/admin/product";
+    }
 }

@@ -41,7 +41,7 @@
           <th>Ngày cập nhật</th>
           <th>Chức năng</th>
         </tr>
-        <tr th:each="acc : ${listacc}">
+        <tr th:each="acc : ${listacc}"  th:if="${acc.name != 'ADMIN'}">
           <td th:text="${acc.id}"></td>
           <td th:text="${acc.name}"></td>
           <td th:text="${acc.email}"></td>

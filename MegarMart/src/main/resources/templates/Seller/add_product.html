@@ -23,7 +23,7 @@
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Hình ảnh sản phẩm</div>
                     <div class="container">
-                        <input type="file" name="fileImage" id="file" accept="image/*" style="display:none" required>
+                        <input type="file" name="fileImage" id="file" accept="image/*"  style="opacity: 0; position: absolute; z-index: -1;">
                         <label for="file" class="img-area" id="imgArea">
                             <i class='bx bxs-cloud-upload icon'></i>
                         </label>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Tên sản phẩm</div>
-                    <input type="text" class="basic_name_input" placeholder="Tên sản phẩm" th:field="*{name}">
+                    <input type="text" class="basic_name_input" placeholder="Tên sản phẩm" th:field="*{name}" required>
                 </div>
                 <div class="form-group">
                     <label for="category" class="basic_conttent_lable">Danh mục</label>
@@ -53,13 +53,14 @@
                 <p class="basic_info_conttent_header">Thông tin bán hàng</p>
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Giá sản phẩm</div>
-                    <input type="text" class="sell_price_input" placeholder="Giá" th:field="*{price}">
+                    <input type="text" class="sell_price_input" placeholder="Giá" th:field="*{price}" required>
                 </div>
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Số lượng trong kho</div>
-                    <input type="text" class="stock_input" placeholder="kho hàng" th:field="*{stock}">
+                    <input type="text" class="stock_input" placeholder="kho hàng" th:field="*{stock}" required>
                 </div>
-                <input type="submit" value="Thêm sản phẩm">
+                <input type="submit" value="Thêm sản phẩm"
+                       style="background-color: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;margin-bottom:10px;">
             </div>
             </form>
         </div>
