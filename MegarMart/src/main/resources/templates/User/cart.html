@@ -1,306 +1,267 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <!-- link cài đặt các  thành phần theo một phần nhất định-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-  <link rel="stylesheet" th:href="@{/css/main.css}">
-  <link rel="stylesheet" th:href="@{/css/base.css}">
-  <link rel="stylesheet" th:href="@{/css/cart.css}">
-  <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
-  <!-- link font chữ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <style>
-    .counter {
-      display: flex;
-      align-items: center;
-      border-radius: 3px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- link cài đặt các  thành phần theo một phần nhất định-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <!-- link font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <style>
+        .counter {
+          display: flex;
+          align-items: center;
+          border-radius: 3px;
 
-    }
-    .counter button{
-      width: 32px;
-      height: 32px;
+        }
+        .counter button{
+          width: 32px;
+          height: 32px;
 
-      font-weight: 300;
-      border: none;
-      background-color: #ffffff;
-      color: var(--black-color);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
+          font-weight: 300;
+          border: none;
+          background-color: #ffffff;
+          color: var(--black-color);
+          border: 1px solid var(--border-color);
+          cursor: pointer;
 
-    }
-    .plus {
-        font-size: 20px;
-        border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-    }
-    .minus{
-        font-size: 25px;
-        border-top-left-radius: 3px;
-        border-bottom-left-radius: 3px;
-    }
-    .counter input {
-      width: 50px;
-      height: 32px;
-      border: 1px  solid var(--border-color);
+        }
+        .plus {
+            font-size: 20px;
+            border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+        }
+        .minus{
+            font-size: 25px;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+        .counter input {
+          width: 50px;
+          height: 32px;
+          border: 1px  solid var(--border-color);
 
-      text-align: center;
+          text-align: center;
 
-      font-size: 18px;
-    }
+          font-size: 18px;
+        }
 
-  </style>
+    </style>
 
 </head>
 <body>
 <!-- Block__Element--Modifier -->
 <div class="app">
-  <div th:replace="fragments/user_header.html :: user_header"></div>
+    <div th:replace="fragments/user_header.html :: user_header"></div>
 
-  <div class="container">
-    <div class="grid">
-      <div class="CartProduct">
-        <div class="CartProduct-head">
-          <div class="CartProduct-head__left">
-            <input type="checkbox" id="selectAll" class="CartProduct__select">
-            <h3 class="CartProduct-head__name">Sản phẩm</h3>
-          </div>
-          <div class="CartProduct-head__price-item">
-            <span class="CartProduct-head__price">Đơn giá</span>
-            <span class="CartProduct-head__qnt">Số lượng</span>
-            <span class="CartProduct-head__cost">Số tiền</span>
-            <span class="CartProduct-head__opera">Thao tác</span>
-          </div>
-        </div>
-        <div class="CartProduct__extra">
-          <input type="checkbox" class="CartProduct__select shop-checkbox">
-          <button class="CartProduct__extra-favouri">Yêu thích</button>
-          <p class="CartProduct__extra-nameShop">MuonCoBo</p>
-        </div>
-        <div class="CartProduct-body">
-          <div class="CartProduct-body__left">
-            <input type="checkbox" class="CartProduct__select product-checkbox">
-            <div class="CartProduct-body__info">
+    <div class="container">
+        <div class="grid">
+            <div class="CartProduct">
+                <div class="CartProduct-head">
+                    <div class="CartProduct-head__left">
+                        <input type="checkbox" id="selectAll" class="CartProduct__select">
+                        <h3 class="CartProduct-head__name">Sản phẩm</h3>
+                    </div>
+                    <div class="CartProduct-head__price-item">
+                        <span class="CartProduct-head__price">Đơn giá</span>
+                        <span class="CartProduct-head__qnt">Số lượng</span>
+                        <span class="CartProduct-head__cost">Số tiền</span>
+                        <span class="CartProduct-head__opera">Thao tác</span>
+                    </div>
+                </div>
 
-              <a href="index.html">
-                <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                     alt="Tai nghe" class="CartProduct-body__img">
-              </a>
-              <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
-              <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
+                <div th:each="cart : ${groupcart}">
+                <div class="CartProduct__extra">
+                    <input type="checkbox" class="CartProduct__select shop-checkbox">
+                    <button class="CartProduct__extra-favouri">Yêu thích</button>
+                    <a th:href="@{/user/shop/{id}(id=${cart.key.id})}" class="CartProduct__extra-nameShop" th:text="${cart.key.shopname}" style="text-decoration:none;color:black;"></a>
+                </div>
+                <div class="CartProduct-body" th:each="product : ${cart.value}">
+                    <div class="CartProduct-body__left">
+                        <input type="checkbox" class="CartProduct__select product-checkbox"  th:attr="checked=${product.id == buynowId}">
+                        <div class="CartProduct-body__info">
+                            <a th:href="@{/user/productdetail/{id}(id=${product.id})}">
+                                <img th:src="@{/img/{imgfile}(imgfile=${product.imageurl})}" alt="Ảnh sản phẩm" class="CartProduct-body__img">
+                            </a>
+                            <a th:href="@{/user/productdetail/{id}(id=${product.id})}" class="CartProduct-body__name truncate" th:text="${product.name}"></a>
+<!--                            <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>-->
+                        </div>
+                    </div>
+                    <div class="CartProduct-body__price-item">
+                        <span class="CartProduct-body__price" th:text="${#numbers.formatInteger(product.price, 1, 'POINT')+'đ'}"></span>
+
+                        <div class="CartProduct-body__qnt">
+                            <div class="counter">
+                                <button class="minus">-</button>
+                                <input type="text" value="1" class="quantity" readonly>
+                                <button class="plus">+</button>
+                            </div>
+                        </div>
+                        <span class="CartProduct-body__cost total-price"
+                              th:attr="data-price=${product.price}"
+                              th:text="${#numbers.formatInteger(product.price, 1, 'POINT') + 'đ'}">
+                        </span>
+                        <form th:action="@{/user/deletecart/{id}(id=${product.id})}" method="post">
+                            <input type="submit" value="Xóa" style="font-size:1.5rem;margin:37px;border:none;background:white;padding:6px;cursor:pointer">
+                        </form>
+                    </div>
+                </div>
+                </div>
+
+
             </div>
-          </div>
-          <div class="CartProduct-body__price-item">
-            <span class="CartProduct-body__price">55.000đ</span>
+            <div class="CartProduct-buyproduct">
+                <div class="CartProduct-buyproduct-voucher">
+                    <i class="fa-solid fa-ticket CartProduct-buyproduct-voucher-icon"></i>
+                    <h3 class="CartProduct-buyproduct-voucher-text">Megamart Voucher(nếu có):</h3>
 
-            <div class="CartProduct-body__qnt">
-              <div class="counter">
-                <button class="minus">-</button>
-                <input type="text" value="1" readonly>
-                <button class="plus">+</button>
-              </div>
+                    <input type="text" class="CartProduct-buyproduct-voucher-input" placeholder="Nhập Voucher">
+                </div>
+                <div class="CartProduct-buyproduct-buy">
+
+                    <h3 class="CartProduct-buyproduct-text">
+                        Tổng thanh toán(<span id="selected-count">0</span> sản phẩm):
+                    </h3>
+                    <div>
+                        <span class="CartProduct-buyproduct-cost" id="selected-total">0đ</span>
+                        <button class="btn btn--primary CartProduct-buyproduct-buy-btn">Mua Hàng</button>
+                    </div>
+                </div>
             </div>
-
-
-
-            <span class="CartProduct-body__cost">55.000đ</span>
-            <span class="CartProduct-body__opera">Xóa</span>
-          </div>
         </div>
-        <div class="CartProduct-body">
-          <div class="CartProduct-body__left">
-            <input type="checkbox" class="CartProduct__select product-checkbox">
-            <div class="CartProduct-body__info">
-
-              <a href="index.html">
-                <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                     alt="Tai nghe" class="CartProduct-body__img">
-              </a>
-              <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
-              <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
-            </div>
-          </div>
-          <div class="CartProduct-body__price-item">
-            <span class="CartProduct-body__price">55.000đ</span>
-
-            <div class="CartProduct-body__qnt">
-              <div class="counter">
-                <button class="minus">-</button>
-                <input type="text" value="1" readonly>
-                <button class="plus">+</button>
-              </div>
-            </div>
-
-
-            <span class="CartProduct-body__cost">55.000đ</span>
-            <span class="CartProduct-body__opera">Xóa</span>
-          </div>
-        </div>
-
-
-        <div class="CartProduct__extra">
-          <input type="checkbox" class="CartProduct__select shop-checkbox">
-          <button class="CartProduct__extra-favouri">Yêu thích</button>
-          <p class="CartProduct__extra-nameShop">Songtrongtungphutgiay</p>
-        </div>
-        <div class="CartProduct-body">
-          <div class="CartProduct-body__left">
-            <input type="checkbox" class="CartProduct__select product-checkbox">
-            <div class="CartProduct-body__info">
-
-              <a href="index.html">
-                <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                     alt="Tai nghe" class="CartProduct-body__img">
-              </a>
-              <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
-              <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
-            </div>
-          </div>
-          <div class="CartProduct-body__price-item">
-            <span class="CartProduct-body__price">55.000đ</span>
-            <div class="CartProduct-body__qnt">
-              <div class="counter">
-                <button class="minus">-</button>
-                <input type="text" value="1" readonly>
-                <button class="plus">+</button>
-              </div>
-            </div>
-
-
-
-
-
-            <span class="CartProduct-body__cost">55.000đ</span>
-            <span class="CartProduct-body__opera">Xóa</span>
-          </div>
-        </div>
-        <div class="CartProduct-body">
-          <div class="CartProduct-body__left">
-            <input type="checkbox" class="CartProduct__select product-checkbox">
-            <div class="CartProduct-body__info">
-
-              <a href="index.html">
-                <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                     alt="Tai nghe" class="CartProduct-body__img">
-              </a>
-              <a  href="index.html" class="CartProduct-body__name truncate">Tai nghe nhét tai sdasdjbas osda asfaffass sád</a>
-              <span class="CartProduct-body__type">Loại: Đen Full nâng cấp</span>
-            </div>
-          </div>
-          <div class="CartProduct-body__price-item">
-            <span class="CartProduct-body__price">55.000đ</span>
-
-            <div class="CartProduct-body__qnt">
-              <div class="counter">
-                <button class="minus">-</button>
-                <input type="text" value="1" readonly>
-                <button class="plus">+</button>
-              </div>
-            </div>
-
-            <script>
-              document.addEventListener("DOMContentLoaded", function () {
-                  document.querySelectorAll(".counter").forEach(counter => {
-                      let input = counter.querySelector("input");
-                      let plusBtn = counter.querySelector(".plus");
-                      let minusBtn = counter.querySelector(".minus");
-
-                      plusBtn.addEventListener("click", function () {
-                          input.value = parseInt(input.value) + 1;
-                      });
-
-                      minusBtn.addEventListener("click", function () {
-                          if (parseInt(input.value) > 1) {
-                              input.value = parseInt(input.value) - 1;
-                          }
-                      });
-                  });
-              });
-            </script>
-            <span class="CartProduct-body__cost">55.000đ</span>
-            <span class="CartProduct-body__opera">Xóa</span>
-          </div>
-        </div>
-
-      </div>
-      <div class="CartProduct-buyproduct">
-        <div class="CartProduct-buyproduct-voucher">
-          <i class="fa-solid fa-ticket CartProduct-buyproduct-voucher-icon"></i>
-          <h3 class="CartProduct-buyproduct-voucher-text">Megamart Voucher(nếu có):</h3>
-
-          <input type="text" class="CartProduct-buyproduct-voucher-input" placeholder="Nhập Voucher">
-        </div>
-        <div class="CartProduct-buyproduct-buy">
-
-          <h3 class="CartProduct-buyproduct-text">Tổng thanh toán( 4 sản phẩm ):</h3>
-          <div>
-            <span class="CartProduct-buyproduct-cost">220.000đ</span>
-
-            <button class="btn btn--primary CartProduct-buyproduct-buy-btn">Mua Hàng</button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
     <div th:replace="fragments/footer.html :: footer"></div>
 
 </div>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-      // Chọn tất cả checkbox của sản phẩm
-      const productCheckboxes = document.querySelectorAll(".CartProduct-body .CartProduct__select");
+    document.addEventListener("DOMContentLoaded", function () {
+        const productCheckboxes = document.querySelectorAll(".CartProduct-body .CartProduct__select");
+        const shopCheckboxes = document.querySelectorAll(".CartProduct__extra .CartProduct__select");
+        const allCheckbox = document.querySelector(".CartProduct-head .CartProduct__select");
 
-      // Chọn tất cả checkbox của shop
-      const shopCheckboxes = document.querySelectorAll(".CartProduct__extra .CartProduct__select");
+        const selectedCount = document.getElementById("selected-count");
+        const selectedTotal = document.getElementById("selected-total");
 
-      // Chọn tất cả checkbox tổng
-      const allCheckbox = document.querySelector(".CartProduct-head .CartProduct__select");
+        // Cập nhật tổng sản phẩm và tiền
+        function updateSummary() {
+            let count = 0;
+            let total = 0;
 
-      // Xử lý chọn checkbox của shop
-      shopCheckboxes.forEach(shopCheckbox => {
-          shopCheckbox.addEventListener("change", function () {
-              let shopContainer = shopCheckbox.closest(".CartProduct__extra").nextElementSibling;
-              while (shopContainer && shopContainer.classList.contains("CartProduct-body")) {
-                  let productCheckbox = shopContainer.querySelector(".CartProduct__select");
-                  productCheckbox.checked = shopCheckbox.checked;
-                  shopContainer = shopContainer.nextElementSibling;
-              }
-              checkAllSelected();
-          });
-      });
+            productCheckboxes.forEach(cb => {
+                if (cb.checked) {
+                    const cartBody = cb.closest(".CartProduct-body");
+                    const costEl = cartBody.querySelector(".total-price");
+                    const qtyInput = cartBody.querySelector(".quantity");
 
-      // Xử lý chọn checkbox của sản phẩm
-      productCheckboxes.forEach(productCheckbox => {
-          productCheckbox.addEventListener("change", function () {
-              let shopCheckbox = productCheckbox.closest(".CartProduct-body").previousElementSibling.querySelector(".CartProduct__select");
-              if (shopCheckbox) {
-                  let allChecked = [...productCheckbox.closest(".CartProduct-body").parentNode.querySelectorAll(".CartProduct-body .CartProduct__select")].every(cb => cb.checked);
-                  shopCheckbox.checked = allChecked;
-              }
-              checkAllSelected();
-          });
-      });
+                    const price = parseInt(costEl.dataset.price);
+                    const qty = parseInt(qtyInput.value);
 
-      // Xử lý chọn checkbox tổng
-      allCheckbox.addEventListener("change", function () {
-          let isChecked = allCheckbox.checked;
-          shopCheckboxes.forEach(cb => cb.checked = isChecked);
-          productCheckboxes.forEach(cb => cb.checked = isChecked);
-      });
+                    total += price * qty;
+                    count++;
+                }
+            });
 
-      function checkAllSelected() {
-          let allSelected = [...shopCheckboxes].every(cb => cb.checked) && [...productCheckboxes].every(cb => cb.checked);
-          allCheckbox.checked = allSelected;
-      }
-  });
+            selectedCount.textContent = count;
+            selectedTotal.textContent = total.toLocaleString("vi-VN") + "đ";
+        }
+
+        // Sự kiện thay đổi checkbox shop
+        shopCheckboxes.forEach(shopCheckbox => {
+            shopCheckbox.addEventListener("change", function () {
+                let shopContainer = shopCheckbox.closest(".CartProduct__extra").nextElementSibling;
+                while (shopContainer && shopContainer.classList.contains("CartProduct-body")) {
+                    let productCheckbox = shopContainer.querySelector(".CartProduct__select");
+                    productCheckbox.checked = shopCheckbox.checked;
+                    shopContainer = shopContainer.nextElementSibling;
+                }
+                checkAllSelected();
+                updateSummary();
+            });
+        });
+
+        // Sự kiện thay đổi checkbox sản phẩm
+        productCheckboxes.forEach(productCheckbox => {
+            productCheckbox.addEventListener("change", function () {
+                const shopCheckbox = productCheckbox.closest(".CartProduct-body").previousElementSibling.querySelector(".CartProduct__select");
+                if (shopCheckbox) {
+                    const allChecked = [...productCheckbox.closest(".CartProduct-body").parentNode.querySelectorAll(".CartProduct-body .CartProduct__select")].every(cb => cb.checked);
+                    shopCheckbox.checked = allChecked;
+                }
+                checkAllSelected();
+                updateSummary();
+            });
+        });
+
+        // Sự kiện thay đổi checkbox tổng
+        allCheckbox.addEventListener("change", function () {
+            const isChecked = allCheckbox.checked;
+            shopCheckboxes.forEach(cb => cb.checked = isChecked);
+            productCheckboxes.forEach(cb => cb.checked = isChecked);
+            updateSummary();
+        });
+
+        // Check nếu tất cả đã tick thì tick vào tổng
+        function checkAllSelected() {
+            const allSelected = [...shopCheckboxes].every(cb => cb.checked) && [...productCheckboxes].every(cb => cb.checked);
+            allCheckbox.checked = allSelected;
+        }
+
+        // Thêm sự kiện khi tăng/giảm số lượng thì update lại tiền
+        document.querySelectorAll(".plus, .minus").forEach(btn => {
+            btn.addEventListener("click", () => {
+                setTimeout(updateSummary, 0); // chờ số lượng cập nhật rồi mới tính
+            });
+        });
+
+        // Gọi lần đầu khi load
+        updateSummary();
+    });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const counters = document.querySelectorAll(".counter");
+
+        counters.forEach(counter => {
+            const minusBtn = counter.querySelector(".minus");
+            const plusBtn = counter.querySelector(".plus");
+            const quantityInput = counter.querySelector(".quantity");
+            const totalPriceEl = counter.closest(".CartProduct-body")
+                                        .querySelector(".total-price");
+
+            const price = parseInt(totalPriceEl.dataset.price);
+
+            function updateTotal(qty) {
+                const total = qty * price;
+                totalPriceEl.textContent = total.toLocaleString("vi-VN") + "đ";
+            }
+
+            minusBtn.addEventListener("click", () => {
+                let qty = parseInt(quantityInput.value);
+                if (qty > 1) qty--;
+                quantityInput.value = qty;
+                updateTotal(qty);
+            });
+
+            plusBtn.addEventListener("click", () => {
+                let qty = parseInt(quantityInput.value);
+                qty++;
+                quantityInput.value = qty;
+                updateTotal(qty);
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

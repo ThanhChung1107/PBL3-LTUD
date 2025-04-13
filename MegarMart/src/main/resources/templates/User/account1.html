@@ -19,6 +19,7 @@
     <div class="account">
         <div th:replace="fragments/user_header.html :: user_header"></div>
 
+
         <div class="account-container">
             <div class="account-sidebar">
                 <div class="your-info">
@@ -79,6 +80,7 @@
                         <div class="my-account-text">
                             <h4>Hồ Sơ Của Tôi</h4>
                             <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                            <p th:if="${fillfull}" th:text="${fillfull}" style="color: red;"></p>
                         </div>
                         <div class="my-account-edit">
                             <i class='bx bxs-edit'></i>

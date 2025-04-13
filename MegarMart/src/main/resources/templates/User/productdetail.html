@@ -90,9 +90,15 @@
 <!--                    <p class="product-cosan" th:text="${pro.stock}+' sản phẩm có sẵn'"></p>-->
                 </div>
               <div style="display:ruby">
+<!--                      <div class="product-buy">-->
+<!--                          <a th:href="@{/user/cart/{proid}(proid = ${pro.id})}">Mua ngay</a>-->
+<!--                      </div>-->
+                  <form th:action="@{/user/cart}" method="get">
                       <div class="product-buy">
-                          <a th:href="@{/user/buy/{proid}(proid = ${pro.id})}">Mua ngay</a>
+                      <input type="hidden" name="buynow" th:value="${pro.id}" />
+                      <input type="submit" value="Mua Ngay">
                       </div>
+                  </form>
                   <form th:action="@{/user/addcart/{productId}(productId=${pro.id})}" method="post">
                       <div class="product-buy">
                       <input type="submit" value="Thêm vào giỏ hàng">

@@ -1,9 +1,6 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
-import com.ProjectPBL3.MegarMart.Entity.Account;
-import com.ProjectPBL3.MegarMart.Entity.Category;
-import com.ProjectPBL3.MegarMart.Entity.Product;
-import com.ProjectPBL3.MegarMart.Entity.Shop;
+import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.LinkedHashSet;
 
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -138,13 +138,54 @@ public class UserController {
         return "redirect:/user/productdetail/" + id;
     }
 
+    @PostMapping("/deletecart/{id}")
+    public String deletecart(@PathVariable int id,HttpSession session){
+        Account acc = (Account) session.getAttribute("account");
+        cartService.deleteProductFromCart(acc,id);
+        return "redirect:/user/cart";
+    }
+
     @GetMapping("/cart")
-    public String cart(HttpSession session){
+    public String cart(@RequestParam(name = "buynow", required = false) Integer buynowProductId,Model model,HttpSession session){
+        Account acc = (Account) session.getAttribute("account");
+        Cart cart = cartService.findByAccount(acc);// hàm này trả về Cart
+
+
+        // Nếu có tham số buynow
+        if (buynowProductId != null) {
+            Product product = productService.findById(buynowProductId);
+            if (product != null && !cart.getProducts().contains(product)) {
+                cartService.addProductToCart(acc, product);  // Bạn tự định nghĩa hàm này
+            }
+        }
+
+
+        List<Product> productList = cart.getProducts();   // lấy sản phẩm từ giỏ hàng
+
+        // Nhóm sản phẩm theo Shop
+        Map<Shop, List<Product>> groupedCart = productList.stream()
+                .collect(Collectors.groupingBy(Product::getShop));
+
+        model.addAttribute("groupcart", groupedCart);
+
+        // Truyền ID sản phẩm cần auto-tick (nếu có)
+        if (buynowProductId != null) {
+            model.addAttribute("buynowId", buynowProductId);
+        }
+
         return "User/cart";
     }
 
     @GetMapping("/buy/{id}")
-    public String buy(@PathVariable int id){
+    public String buy(@PathVariable int id, RedirectAttributes redirectAttributes, HttpSession session){
+        Account acc = (Account) session.getAttribute("account");
+
+        if (acc.getName() == null || acc.getName().isEmpty() ||
+                acc.getPhone() == null || acc.getPhone().isEmpty() ||
+                acc.getAddress() == null || acc.getAddress().isEmpty()) {
+            redirectAttributes.addFlashAttribute("fillfull","Vui lòng điền đẩy đủ thông tin để mua hàng");
+            return "redirect:/user/accountdetail";
+        }
         return "User/pay";
     }
 }

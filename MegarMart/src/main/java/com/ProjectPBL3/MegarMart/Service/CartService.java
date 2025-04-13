@@ -17,6 +17,8 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
+    public Cart findByAccount(Account account) {return cartRepository.findByAccount(account).get();}
+
     public void addProductToCart(Account account,Product product){
         Cart cart = cartRepository.findByAccount(account)
                 .orElseGet(() -> {
@@ -37,5 +39,16 @@ public class CartService {
             return cart.getProducts();
         }
         return new ArrayList<>(); // Trả về danh sách rỗng nếu không có cart
+    }
+
+    public void deleteProductFromCart(Account account, int productId) {
+        Cart cart = cartRepository.findByAccount(account).orElse(null);
+        if (cart != null) {
+            Product product = productRepository.findById(productId).orElse(null);
+            if (product != null && cart.getProducts().contains(product)) {
+                cart.getProducts().remove(product); // Xóa khỏi list
+                cartRepository.save(cart); // Lưu lại
+            }
+        }
     }
 }
