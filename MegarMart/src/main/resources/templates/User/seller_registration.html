@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account-style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/seller_style.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+</head>
+<body>
+    <div class="seller">
+        <header class="seller-header">
+            <div class="seller-left">
+                <div class="header__logo">
+                        <a th:href="@{/user/home}" class="header__logo-link">
+                            <svg class="header__logo-img" width="457pt" height="50pt" viewBox="0 0 457 50" xmlns="http://www.w3.org/2000/svg">
+                                <g id="fontsvg1741265222034" stroke-linecap="round" fill-rule="evenodd" fill="#fff">
+                                    <path
+                                        d="M 36.1 25 L 50.5 0 L 72.15 37.5 L 64.95 50 L 50.5 25 L 43.3 37.5 L 50.5 50 L 36.1 50 L 21.65 25 L 14.45 37.5 L 21.65 50 L 7.2 50 L 0 37.5 L 21.65 0 L 36.1 25 Z M 261.75 25 L 276.15 0 L 297.8 37.5 L 290.6 50 L 276.15 25 L 268.95 37.5 L 276.15 50 L 261.75 50 L 247.3 25 L 240.1 37.5 L 247.3 50 L 232.85 50 L 225.65 37.5 L 247.3 0 L 261.75 25 Z M 386.4 50 L 371.95 25 L 386.4 25 L 393.6 12.5 L 379.15 12.5 L 364.75 37.5 L 371.95 50 L 357.5 50 L 350.3 37.5 L 371.95 0 L 400.8 0 L 408.05 12.5 L 393.6 37.5 L 400.8 50 L 386.4 50 Z M 204 12.5 L 182.35 50 L 175.15 37.5 L 196.8 0 L 225.65 0 L 232.9 12.5 L 211.25 50 L 196.8 50 L 204 37.5 L 196.8 25 L 211.25 25 L 218.45 12.5 L 204 12.5 Z M 328.65 12.5 L 307 50 L 299.8 37.5 L 321.45 0 L 350.3 0 L 357.55 12.5 L 335.9 50 L 321.45 50 L 328.65 37.5 L 321.45 25 L 335.9 25 L 343.1 12.5 L 328.65 12.5 Z M 153.5 37.5 L 146.3 25 L 160.75 25 L 167.95 37.5 L 160.75 50 L 131.85 50 L 124.65 37.5 L 146.3 0 L 175.15 0 L 182.4 12.5 L 153.5 12.5 L 139.1 37.5 L 153.5 37.5 Z M 88.6 37.5 L 103 37.5 L 110.25 50 L 81.35 50 L 74.15 37.5 L 95.8 0 L 124.65 0 L 131.9 12.5 L 103 12.5 L 99.4 18.75 L 113.85 18.75 L 106.6 31.25 L 92.2 31.25 L 88.6 37.5 Z M 413.65 12.5 L 406.45 0 L 449.75 0 L 456.95 12.5 L 442.55 12.5 L 428.15 37.45 L 435.3 50 L 420.9 50 L 413.65 37.5 L 428.1 12.5 L 413.65 12.5 Z"
+                                        vector-effect="non-scaling-stroke"
+                                    />
+                                </g>
+                            </svg>
+                        </a>
+                        
+                    </div>
+                <div class="seller-left-text">Đăng ký trở thành người bán</div>
+            </div>
+            <div class="seller-right">
+                <ul class="header__navbar">
+                    <li class="header__navbar-item header__navbar-user" id="user-section">
+
+                        <img th:src="@{/img/{image}(image=${session.account.imageurl})}" alt="Avatar"
+                             class="header__navbar-user-img">
+
+                        <span th:text="${session.account.name}" class="header__navbar-user-name" id="username"></span>
+
+                        <ul class="header__navbar-user-menu">
+                            <li class="header__navbar-user-item">
+                                <a th:href="@{/user/accountdetail}">Tài khoản của tôi</a>
+                            </li>
+                            <li class="header__navbar-user-item">
+                                <a th:href="@{/user/accountdetail(section='order')}">Đơn mua</a>
+                            </li>
+                            <li class="header__navbar-user-item header__navbar-user-item--separate">
+                                <form id="logoutForm" th:action="@{/logout}" method="post">
+                                    <button type="submit">Đăng xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- contain -->
+         <div class="seller-contain">
+            <div class="seller-register-text">
+                <div class="register-text">Thông tin Shop</div>
+
+                <div th:if="${pending}">
+                    <h1 style="color:red;font-size:30px;text-align:center;margin-top:30px;">Vui lòng chờ duyệt...</h1>
+                </div>
+
+                <div th:unless="${pending}">
+                <div class="register-info">
+                    <form action="/user/register" method="post" th:object="${shop}" enctype="multipart/form-data">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="account_id" th:value="${session.account.id}">
+                    <div class="register-input">
+                        <span class="register-lable">Tên shop</span>
+                        <input type="text" class="register-input-type" th:field="*{shopname}" required>
+                    </div>
+                    <div class="register-input">
+                        <span class="register-lable">Địa chỉ</span>
+                        <input type="text" class="register-input-type" th:field="*{address}" required>
+                    </div>
+                    <div class="register-input">
+                        <span class="register-lable">Số điện thoại</span>
+                        <input type="text" class="register-input-type" th:field="*{phone}" required>
+                    </div>
+                    <div class="register-input">
+                        <span class="register-lable">Email</span>
+                        <input type="email" class="register-input-type" th:field="*{email}" required>
+                    </div>
+                    <div class="my-img">
+                        <input type="file" name="fileImage" accept="image/*">
+                    </div>
+                        <input type="submit" value="Đăng kí">
+                    </form>
+                </div>
+                </div>
+            </div>
+         </div>
+
+         <!-- footer -->
+        <div th:replace="fragments/footer.html :: footer"></div>
+    </div>
+    <script src="add_product.js"></script>
+</body>
+</html>
