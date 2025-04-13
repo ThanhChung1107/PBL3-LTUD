@@ -26,6 +26,10 @@ public class ProductService {
 
     public List<Product> findByShop(Shop shop) {return productRepository.findByShop(shop);}
 
+    public List<Product> findByShopAndStatus(Shop shop) {
+        return productRepository.findByShopAndStatus(shop, 1); // status = 1
+    }
+
     public List<Product> findByStatus(int status) {return productRepository.findByStatus(status);}
 
     public void approveProduct(int productId){
@@ -39,4 +43,8 @@ public class ProductService {
         product.setStatus(2);
         productRepository.save(product);
     }
+
+    public Product findById(int id) {return productRepository.findById(id).get();}
+
+    public int countByShopId(int id) {return productRepository.countByShopId(id);}
 }

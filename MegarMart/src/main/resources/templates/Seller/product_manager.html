@@ -85,7 +85,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pro : ${listpro}" th:if="${pro.status == 1}">
+                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 1}">
                     <td class="col_product_value">
                         <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
                         <div class="col_product_name" th:text="${pro.name}"></div>
@@ -118,7 +118,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pro : ${listpro}" th:if="${pro.status == 2}">
+                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 2}">
                     <td class="col_product_value">
                         <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
                         <div class="col_product_name" th:text="${pro.name}"></div>
@@ -151,7 +151,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pro : ${listpro}" th:if="${pro.status == 0}">
+                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 0}">
                     <td class="col_product_value">
                         <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
                         <div class="col_product_name" th:text="${pro.name}"></div>

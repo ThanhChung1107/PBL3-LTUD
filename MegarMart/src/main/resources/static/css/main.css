@@ -1238,10 +1238,7 @@ margin-left: 10px;
     color: var(--text-color);
 }
 .product-buy {
-    display: block;
-    align-items: center;
-    justify-self: center;
-    margin-top: 20px;
+    display: flex;
 }
 .product-buy a {
     text-decoration: none;

@@ -1,6 +1,8 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.Account;
+import com.ProjectPBL3.MegarMart.Entity.Category;
+import com.ProjectPBL3.MegarMart.Entity.Product;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
 import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpSession;
@@ -9,8 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.LinkedHashSet;
+
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -87,5 +94,35 @@ public class UserController {
         shop.setAccount(account);
         shopService.save(shop, file);  // Gửi cả file ảnh
         return "redirect:/user/home";
+    }
+
+    @GetMapping("/productdetail/{id}")
+    public String productdetail(@PathVariable int id,Model model){
+        Product product = productService.findById(id);
+        model.addAttribute("pro",product);
+
+        int productCount = productService.countByShopId(product.getShop().getId());
+        model.addAttribute("productcount", productCount);
+        return "User/productdetail";
+    }
+
+    @GetMapping("/shop/{id}")
+    public String shopindex(@PathVariable int id,Model model){
+        Shop shop= shopService.findById(id);
+        model.addAttribute("shop",shop);
+
+        int productCount = productService.countByShopId(id);
+        model.addAttribute("productcount", productCount);
+
+        List<Product> productshop = productService.findByShopAndStatus(shop);
+        model.addAttribute("listproshop",productshop);
+
+        Set<Category> uniqueCategories = productshop.stream()
+                .map(Product::getCategory)
+                .collect(Collectors.toCollection(LinkedHashSet::new)); // giữ thứ tự xuất hiện
+
+        model.addAttribute("cateshop", uniqueCategories);
+
+        return "User/shopindex";
     }
 }

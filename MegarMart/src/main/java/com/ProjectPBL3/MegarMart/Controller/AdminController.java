@@ -1,6 +1,7 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.Category;
+import com.ProjectPBL3.MegarMart.Entity.Product;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
 import com.ProjectPBL3.MegarMart.Service.*;
 import lombok.RequiredArgsConstructor;
@@ -105,7 +106,7 @@ public class AdminController {
 
     @GetMapping("/product")
     public String product(Model model) {
-        model.addAttribute("listpro", productService.findAll());
+        model.addAttribute("listpro",productService.findAll());
         return "Admin/product";
     }
 

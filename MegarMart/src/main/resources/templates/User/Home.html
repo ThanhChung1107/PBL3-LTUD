@@ -37,15 +37,15 @@
                 </div>
                 <div class="grid__row">
                     <div class="grid__column-2-4" th:each="pro : ${listpro}">
-                        <a href="detail.html" class="home-product-item">
+                        <a th:href="@{/user/productdetail/{proid}(proid = ${pro.id})}" class="home-product-item">
                             <div class="home-product-item__img"
                                  th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">
                             </div>
 
                             <h4 class="home-product-item__name" th:text="${pro.name}"></h4>
                             <div class="home-product-item__price">
-                                <span class="home-product-item__price-old">1.200.000d</span>
-                                <span class="home-product-item__price-current"  th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></span>
+                                <span class="home-product-item__price-old" th:text="${#numbers.formatInteger(pro.price+250000, 1, 'POINT')+'đ'}"></span>
+                                <span class="home-product-item__price-current"  th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')+'đ'}"></span>
                             </div>
 
                             <div class="home-product-item__action">

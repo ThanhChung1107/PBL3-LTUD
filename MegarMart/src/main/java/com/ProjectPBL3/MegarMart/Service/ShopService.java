@@ -62,4 +62,6 @@ public class ShopService {
     }
 
     public void rejectShop(int shopId) {shopRepository.deleteById(shopId);}
+
+    public Shop findById(int id) {return shopRepository.findById(id).get();}
 }
