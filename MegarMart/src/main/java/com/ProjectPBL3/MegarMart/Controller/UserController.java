@@ -176,16 +176,29 @@ public class UserController {
         return "User/cart";
     }
 
-    @GetMapping("/buy/{id}")
-    public String buy(@PathVariable int id, RedirectAttributes redirectAttributes, HttpSession session){
-        Account acc = (Account) session.getAttribute("account");
 
+    @GetMapping("/pay")
+    public String pay(@RequestParam List<Integer> selectedIds,@RequestParam List<Integer> quantities,RedirectAttributes redirectAttributes ,Model model, HttpSession session) {
+        Account acc = (Account) session.getAttribute("account");
         if (acc.getName() == null || acc.getName().isEmpty() ||
                 acc.getPhone() == null || acc.getPhone().isEmpty() ||
                 acc.getAddress() == null || acc.getAddress().isEmpty()) {
             redirectAttributes.addFlashAttribute("fillfull","Vui lòng điền đẩy đủ thông tin để mua hàng");
             return "redirect:/user/accountdetail";
         }
+
+        List<Product> selectedProducts = cartService.getProductsInCartByIds(acc, selectedIds);
+
+        int totalPrice = 0;
+        for (int i = 0; i < selectedProducts.size(); i++) {
+            Product product = selectedProducts.get(i);
+            int quantity = quantities.get(i);
+            totalPrice += product.getPrice() * quantity;
+        }
+
+        model.addAttribute("selectedProducts", selectedProducts);
+        model.addAttribute("quantities", quantities);
+        model.addAttribute("totalPrice", totalPrice);
         return "User/pay";
     }
 }

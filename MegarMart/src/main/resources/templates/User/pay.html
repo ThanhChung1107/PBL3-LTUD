@@ -39,7 +39,7 @@
                 </div>
 
             </div>
-            <div class="ProductPurchase">
+            <div class="ProductPurchase" th:each="product,iterStat : ${selectedProducts}">
                 <div class="ProductPurchase-head">
                     <h3 class="ProductPurchase-head__name">Sản phẩm</h3>
                     <div class="ProductPurchase-head__price-item">
@@ -50,91 +50,41 @@
                 </div>
                 <div class="ProductPurchase__extra">
                     <button class="ProductPurchase__extra-favouri">Yêu thích</button>
-                    <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
+                    <p class="ProductPurchase__extra-nameShop" th:text="${product.shop.shopname}"></p>
                 </div>
                 <div class="ProductPurchase-body">
                     <div class="ProductPurchase-body__info">
-                        <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                             alt="" class="ProductPurchase-body__img">
-                        <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
+                        <img th:src="@{/img/{img}(img=${product.imageurl})}"
+                             alt="SanPham" class="ProductPurchase-body__img">
+                        <h3 class="ProductPurchase-body__name" th:text="${product.name}"></h3>
                     </div>
 
-                    <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
                     <div class="ProductPurchase-body__price-item">
-                        <span class="ProductPurchase-body__price">55.000đ</span>
-                        <span class="ProductPurchase-body__qnt">1</span>
-                        <span class="ProductPurchase-body__cost">55.000đ</span>
+                        <span class="ProductPurchase-body__price" th:text="${#numbers.formatInteger(product.price, 1, 'POINT') + 'đ'}"></span>
+                        <span class="ProductPurchase-body__qnt" th:text="${quantities[iterStat.index]}"></span>
+                        <span class="ProductPurchase-body__cost"  th:text="${#numbers.formatInteger(product.price * quantities[iterStat.index], 1, 'POINT') + 'đ'}"></span>
                     </div>
                 </div>
             </div>
             <div class="ProductPurchase-footer">
-                <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
-                <span class="ProductPurchase-footer-price-total">55.000đ</span>
+                <h3 class="ProductPurchase-footer-price-text" style="font-size:2.4rem;font-weight:bold;">Tổng tiền :</h3>
+                <span class="ProductPurchase-footer-price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
             </div>
 
-            <div class="ProductPurchase">
-
-                <div class="ProductPurchase__extra">
-                    <button class="ProductPurchase__extra-favouri">Yêu thích</button>
-                    <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
-                </div>
-                <div class="ProductPurchase-body">
-                    <div class="ProductPurchase-body__info">
-                        <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                             alt="" class="ProductPurchase-body__img">
-                        <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
-                    </div>
-
-                    <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
-                    <div class="ProductPurchase-body__price-item">
-                        <span class="ProductPurchase-body__price">55.000đ</span>
-                        <span class="ProductPurchase-body__qnt">1</span>
-                        <span class="ProductPurchase-body__cost">55.000đ</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ProductPurchase-footer">
-                <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
-                <span class="ProductPurchase-footer-price-total">55.000đ</span>
-            </div>
-
-            <div class="ProductPurchase">
-
-                <div class="ProductPurchase__extra">
-                    <button class="ProductPurchase__extra-favouri">Yêu thích</button>
-                    <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
-                </div>
-                <div class="ProductPurchase-body">
-                    <div class="ProductPurchase-body__info">
-                        <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp"
-                             alt="" class="ProductPurchase-body__img">
-                        <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
-                    </div>
-
-                    <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
-                    <div class="ProductPurchase-body__price-item">
-                        <span class="ProductPurchase-body__price">55.000đ</span>
-                        <span class="ProductPurchase-body__qnt">1</span>
-                        <span class="ProductPurchase-body__cost">55.000đ</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ProductPurchase-footer">
-                <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
-                <span class="ProductPurchase-footer-price-total">55.000đ</span>
-            </div>
 
             <div class="ProductPurchase-total">
                 <div class="ProductPurchase-total__method">
                     <h3 class="ProductPurchase-total__method-text">Phương thức thanh toán</h3>
 
-                    <h4 class="ProductPurchase-total__method-way">Thanh toán khi nhận hàng</h4>
+                    <h4 class="ProductPurchase-total__method-way">Thanh toán online</h4>
 
 
                 </div>
                 <div class="ProductPurchase-total-price">
-                    <h3 class="ProductPurchase-total__price-text">Tổng thanh toán</h3>
-                    <span class="ProductPurchase-total__price-total">165.000đ</span>
+                    <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Khuyến mãi : </h3>
+                    <span class="ProductPurchase-total__price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
+                    <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Tổng thanh toán</h3>
+                    <span class="ProductPurchase-total__price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
                 </div>
                 <div class="ProductPurchase-total__pay">
                     <button class="btn btn--primary ProductPurchase-total__pay-btn" onclick="hienPopup()">Đặt hàng

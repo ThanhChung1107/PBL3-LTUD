@@ -87,7 +87,7 @@
                 </div>
                 <div class="CartProduct-body" th:each="product : ${cart.value}">
                     <div class="CartProduct-body__left">
-                        <input type="checkbox" class="CartProduct__select product-checkbox"  th:attr="checked=${product.id == buynowId}">
+                        <input type="checkbox" class="CartProduct__select product-checkbox" th:value="${product.id}" th:attr="checked=${product.id == buynowId}">
                         <div class="CartProduct-body__info">
                             <a th:href="@{/user/productdetail/{id}(id=${product.id})}">
                                 <img th:src="@{/img/{imgfile}(imgfile=${product.imageurl})}" alt="Ảnh sản phẩm" class="CartProduct-body__img">
@@ -133,7 +133,10 @@
                     </h3>
                     <div>
                         <span class="CartProduct-buyproduct-cost" id="selected-total">0đ</span>
-                        <button class="btn btn--primary CartProduct-buyproduct-buy-btn">Mua Hàng</button>
+                        <form id="buyForm" method="get" action="/user/pay">
+                            <input type="hidden" id="selectedIds" name="selectedIds" > <!-- sẽ cập nhật bằng JS -->
+                            <button type="submit" class="btn btn--primary CartProduct-buyproduct-buy-btn">Mua Hàng</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -262,6 +265,57 @@
         });
     });
 </script>
+<!--<script>-->
+<!--    document.querySelector("#buyForm").addEventListener("submit", function (e) {-->
+<!--        e.preventDefault(); // chặn gửi mặc định-->
 
+<!--        const selectedCheckboxes = document.querySelectorAll(".product-checkbox:checked");-->
+<!--        const ids = Array.from(selectedCheckboxes).map(cb => cb.value);-->
+<!--        if (ids.length === 0) {-->
+<!--            alert("Vui lòng chọn ít nhất một sản phẩm!");-->
+<!--            return;-->
+<!--        }-->
+
+<!--        // chuyển sang URL dạng: /user/pay?selectedIds=1&selectedIds=2&...-->
+<!--        const queryString = ids.map(id => "selectedIds=" + encodeURIComponent(id)).join("&");-->
+<!--        window.location.href = `/user/pay?${queryString}`;-->
+<!--    });-->
+<!--</script>-->
+<script>
+    document.querySelector("#buyForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Chặn gửi mặc định của form
+
+        const selectedCheckboxes = document.querySelectorAll(".product-checkbox:checked");
+        if (selectedCheckboxes.length === 0) {
+            alert("Vui lòng chọn ít nhất một sản phẩm!");
+            return;
+        }
+
+        const queryParts = [];
+        const quantities = [];
+
+        // Lặp qua tất cả các checkbox đã chọn
+        selectedCheckboxes.forEach(cb => {
+            const productId = cb.value; // Lấy id sản phẩm
+            const qtyInput = cb.closest(".CartProduct-body").querySelector(".quantity"); // Lấy trường số lượng
+            const quantity = qtyInput ? parseInt(qtyInput.value) : 1; // Lấy số lượng, mặc định là 1 nếu không có
+
+            // Thêm productId và quantity vào query string
+            queryParts.push("selectedIds=" + encodeURIComponent(productId));
+            quantities.push(quantity); // Lưu số lượng vào mảng quantities
+        });
+
+        // Thêm danh sách quantities vào query string
+        quantities.forEach(qty => {
+            queryParts.push("quantities=" + encodeURIComponent(qty));
+        });
+
+        // Kết nối các tham số query thành một chuỗi
+        const queryString = queryParts.join("&");
+
+        // Chuyển hướng người dùng đến URL /user/pay với query string
+        window.location.href = `/user/pay?${queryString}`;
+    });
+</script>
 </body>
 </html>

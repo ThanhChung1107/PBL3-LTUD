@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +51,16 @@ public class CartService {
                 cartRepository.save(cart); // Lưu lại
             }
         }
+    }
+
+    public List<Product> getProductsInCartByIds(Account acc, List<Integer> selectedIds) {
+        Cart cart = findByAccount(acc); // Lấy giỏ hàng của user
+        if (cart == null || cart.getProducts() == null) {
+            return new ArrayList<>();
+        }
+
+        return cart.getProducts().stream()
+                .filter(p -> selectedIds.contains(p.getId()))
+                .collect(Collectors.toList());
     }
 }

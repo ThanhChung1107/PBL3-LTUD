@@ -16,8 +16,8 @@ public class FileSystemStorageService {
     private final Path rootLocation;
 
     public FileSystemStorageService() {
-        rootLocation = Paths.get("C:\\Users\\Admin\\Desktop\\OneDrive - The University of Technology\\HistoryPBL3\\MegamartXONGLOGINFINAL\\MegarMart\\src\\main\\resources\\static\\img");
-//        rootLocation = Paths.get("C:\\Users\\minhc\\OneDrive - The University of Technology\\HistoryPBL3\\MegamartXONGLOGINFINAL\\MegarMart\\src\\main\\resources\\static\\img");
+//        rootLocation = Paths.get("C:\\Users\\Admin\\Desktop\\OneDrive - The University of Technology\\HistoryPBL3\\MegamartXONGLOGINFINAL\\MegarMart\\src\\main\\resources\\static\\img");
+        rootLocation = Paths.get("C:\\Users\\minhc\\OneDrive - The University of Technology\\HistoryPBL3\\MegamartXONGLOGINFINAL\\MegarMart\\src\\main\\resources\\static\\img");
     }
 
     public void store(MultipartFile file) {
