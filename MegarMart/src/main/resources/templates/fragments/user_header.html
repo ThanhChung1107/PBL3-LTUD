@@ -129,69 +129,35 @@
 
                 <div class="header__cart-wrap">
                     <i class="header__cart-icon fa-solid fa-cart-shopping"></i>
-                    <span class="header__cart-notice">3</span>
+                    <span class="header__cart-notice" th:text="${session.listcart.size()}"></span>
 
-                    <!-- No cart: header__cart-list--no-cart -->
                     <div class="header__cart-list ">
-                        <img src="./assets/img/no-cart.png" alt="" class="header__cart-no-cart-img">
-                        <span class="header__cart-list--no-cart-msg">
-                                Chưa có sản phẩm
-                            </span>
+                        <div  th:if="${#lists.isEmpty(session.listcart)}">
+                            <div style="padding:30px 0;font-size:26px">Chưa có sản phẩm nào</div>
+                        </div>
 
+                        <div th:if="${not #lists.isEmpty(session.listcart)}">
                         <h4 class="header__cart-heading">Sản Phẩm Đã Thêm </h4>
                         <ul class="header__cart-list-item">
-                            <li class="header__cart-item">
-                                <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="header__cart-img">
+                            <li class="header__cart-item" th:each="product : ${session.listcart}">
+                                <img th:src="@{/img/{imgfile}(imgfile=${product.imageurl})}" alt="No ava" class="header__cart-img">
                                 <div class="header__cart-item-info">
                                     <div class="header__cart-item-head">
-                                        <h5 class="header__cart-item-name">Robot tự động</h5>
+                                        <h5 class="header__cart-item-name" th:text="${product.name}"></h5>
                                         <div class="header__cart-item-price-wrap">
-                                            <span class="header__cart-item-price">2.000.000đ</span>
-                                            <span class="header__cart-item-mul">x</span>
-                                            <span class="header__cart-item-qnt">2</span>
+                                            <span class="header__cart-item-price" th:text="${#numbers.formatInteger(product.price, 1, 'POINT')+'đ'}"></span>
                                         </div>
                                     </div>
-                                    <div class="header__cart-item-body">
-                                        <span class="header__cart-item-remove">Xóa</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="header__cart-item">
-                                <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="header__cart-img">
-                                <div class="header__cart-item-info">
-                                    <div class="header__cart-item-head">
-                                        <h5 class="header__cart-item-name">Robot tự động</h5>
-                                        <div class="header__cart-item-price-wrap">
-                                            <span class="header__cart-item-price">2.000.000đ</span>
-                                            <span class="header__cart-item-mul">x</span>
-                                            <span class="header__cart-item-qnt">2</span>
-                                        </div>
-                                    </div>
-                                    <div class="header__cart-item-body">
-                                        <span class="header__cart-item-remove">Xóa</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="header__cart-item">
-                                <img src="https://cncvina.com.vn/uploads/2559/robot-dan-gioang-seal.jpg" alt="" class="header__cart-img">
-                                <div class="header__cart-item-info">
-                                    <div class="header__cart-item-head">
-                                        <h5 class="header__cart-item-name">Robot tự động</h5>
-                                        <div class="header__cart-item-price-wrap">
-                                            <span class="header__cart-item-price">2.000.000đ</span>
-                                            <span class="header__cart-item-mul">x</span>
-                                            <span class="header__cart-item-qnt">2</span>
-                                        </div>
-                                    </div>
-                                    <div class="header__cart-item-body">
-                                        <span class="header__cart-item-remove">Xóa</span>
-                                    </div>
+<!--                                    <div class="header__cart-item-body">-->
+<!--                                        <span class="header__cart-item-remove">Xóa</span>-->
+<!--                                    </div>-->
                                 </div>
                             </li>
                         </ul>
-                        <a href="cart.html">
+                        <a th:href="@{/user/cart}">
                             <button class="header__cart-viewcart btn btn--primary">Xem Giỏ Hàng</button>
                         </a>
+                        </div>
                     </div>
                 </div>
             </div>

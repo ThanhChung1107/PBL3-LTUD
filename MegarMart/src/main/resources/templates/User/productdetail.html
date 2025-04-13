@@ -80,17 +80,24 @@
                     </div>
                 </div>
                 <div class="product-info-count">
-                    <p class="product-info-lable product-info-count-text">Số Lượng</p>
-                    <div class="product-info-select-count">
-                        <span class="product-info-sub">-</span>
-                        <span class="product-info-numcount">1</span>
-                        <span class="product-info-add">+</span>
-                    </div>
-                    <p class="product-cosan" th:text="${pro.stock}+' sản phẩm có sẵn'"></p>
+                    <p class="product-info-lable product-info-count-text">Còn lại</p>
+                    <span style="font-size:20px" th:text="${pro.stock}+' sản phẩm'"></span>
+<!--                    <div class="product-info-select-count">-->
+<!--                        <span class="product-info-sub">-</span>-->
+<!--                        <span class="product-info-numcount">1</span>-->
+<!--                        <span class="product-info-add">+</span>-->
+<!--                    </div>-->
+<!--                    <p class="product-cosan" th:text="${pro.stock}+' sản phẩm có sẵn'"></p>-->
                 </div>
               <div style="display:ruby">
-                <div class="product-buy"><a href="pay.html">Mua Ngay</a></div>
-                <div class="product-buy"><a href="pay.html">Thêm vào giỏ hàng</a></div>
+                      <div class="product-buy">
+                          <a th:href="@{/user/buy/{proid}(proid = ${pro.id})}">Mua ngay</a>
+                      </div>
+                  <form th:action="@{/user/addcart/{productId}(productId=${pro.id})}" method="post">
+                      <div class="product-buy">
+                      <input type="submit" value="Thêm vào giỏ hàng">
+                      </div>
+                  </form>
               </div>
 
             </div>

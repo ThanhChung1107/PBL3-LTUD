@@ -28,10 +28,12 @@ public class UserController {
     private final AccountService accountService;
     private final FileSystemStorageService storageService;
     private final ProductService productService;
+    private final CartService cartService;
 
     @GetMapping("/home")
-    public String userhome(Model model)
+    public String userhome(Model model,HttpSession session)
     {
+        session.setAttribute("listcart",cartService.getAllCartByAccount((Account) session.getAttribute("account")));
         model.addAttribute("listcate",categoryService.findAll());
         model.addAttribute("listpro",productService.findByStatus(1));
         return "User/Home";
@@ -124,5 +126,25 @@ public class UserController {
         model.addAttribute("cateshop", uniqueCategories);
 
         return "User/shopindex";
+    }
+
+
+    @PostMapping("/addcart/{id}")
+    public String addcart(@PathVariable int id,HttpSession session){
+        Account account = (Account) session.getAttribute("account");
+        Product product = productService.findById(id);
+        cartService.addProductToCart(account,product);
+        session.setAttribute("listcart",cartService.getAllCartByAccount(account));
+        return "redirect:/user/productdetail/" + id;
+    }
+
+    @GetMapping("/cart")
+    public String cart(HttpSession session){
+        return "User/cart";
+    }
+
+    @GetMapping("/buy/{id}")
+    public String buy(@PathVariable int id){
+        return "User/pay";
     }
 }

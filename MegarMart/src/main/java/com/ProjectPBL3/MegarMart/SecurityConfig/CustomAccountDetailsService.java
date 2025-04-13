@@ -2,6 +2,8 @@ package com.ProjectPBL3.MegarMart.SecurityConfig;
 
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Repository.AccountRepository;
+import com.ProjectPBL3.MegarMart.Repository.CartRepository;
+import com.ProjectPBL3.MegarMart.Service.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomAccountDetailsService implements UserDetailsService {
     private final AccountRepository accountRepository;
+    private final CartService cartService;
     private final HttpSession session;
 
     @Override

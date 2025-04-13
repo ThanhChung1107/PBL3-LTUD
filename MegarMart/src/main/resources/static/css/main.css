@@ -1240,7 +1240,19 @@ margin-left: 10px;
 .product-buy {
     display: flex;
 }
+.product-buy input {
+    cursor:pointer;
+    border:none;
+    text-decoration: none;
+    color: var(--white-color);
+    padding: 10px 40px;
+    background-color: var(--primary-color);
+    font-size: 1.4rem;
+    border-radius: 2px solid;
+}
 .product-buy a {
+    cursor:pointer;
+    border:none;
     text-decoration: none;
     color: var(--white-color);
     padding: 10px 40px;

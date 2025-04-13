@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- link cài đặt các  thành phần theo một phần nhất định-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/pay.css}">
+  <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+  <!-- link font chữ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Block__Element--Modifier -->
+<div class="app">
+  <div th:replace="fragments/user_header.html :: user_header"></div>
+
+  <div class="container">
+    <div class="grid">
+      <div class="DiaChi-NhanHang">
+        <div class="DiaChi-NhanHang-bar">
+
+        </div>
+        <div class="DiaChi-NhanHang-heading" >
+          <i class="DiaChi-NhanHan-icon fa-solid fa-location-dot"></i>
+          <p class="DiaChi-NhanHang-heading-text">Địa Chỉ Nhận Hàng</p>
+        </div>
+        <div class="DiaChi-NhanHang-item">
+          <div class="DiaChi-NhanHang__info">Lê Minh Nhật (+84)587311958</div>
+          <div class="DiaChi-NhanHang__info-address">K47, Đường Sư Vạn Hạnh, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng</div>
+
+        </div>
+
+      </div>
+      <div class="ProductPurchase">
+        <div class="ProductPurchase-head">
+          <h3 class="ProductPurchase-head__name">Sản phẩm</h3>
+          <div class="ProductPurchase-head__price-item">
+            <span class="ProductPurchase-head__price">Đơn giá</span>
+            <span class="ProductPurchase-head__qnt">Số lượng</span>
+            <span class="ProductPurchase-head__cost">Thành tiền</span>
+          </div>
+        </div>
+        <div class="ProductPurchase__extra">
+          <button class="ProductPurchase__extra-favouri">Yêu thích</button>
+          <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
+        </div>
+        <div class="ProductPurchase-body">
+          <div class="ProductPurchase-body__info">
+            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" alt="" class="ProductPurchase-body__img">
+            <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
+          </div>
+
+          <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
+          <div class="ProductPurchase-body__price-item">
+            <span class="ProductPurchase-body__price">55.000đ</span>
+            <span class="ProductPurchase-body__qnt">1</span>
+            <span class="ProductPurchase-body__cost">55.000đ</span>
+          </div>
+        </div>
+      </div>
+      <div class="ProductPurchase-footer">
+        <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
+        <span class="ProductPurchase-footer-price-total">55.000đ</span>
+      </div>
+
+      <div class="ProductPurchase">
+
+        <div class="ProductPurchase__extra">
+          <button class="ProductPurchase__extra-favouri">Yêu thích</button>
+          <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
+        </div>
+        <div class="ProductPurchase-body">
+          <div class="ProductPurchase-body__info">
+            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" alt="" class="ProductPurchase-body__img">
+            <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
+          </div>
+
+          <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
+          <div class="ProductPurchase-body__price-item">
+            <span class="ProductPurchase-body__price">55.000đ</span>
+            <span class="ProductPurchase-body__qnt">1</span>
+            <span class="ProductPurchase-body__cost">55.000đ</span>
+          </div>
+        </div>
+      </div>
+      <div class="ProductPurchase-footer">
+        <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
+        <span class="ProductPurchase-footer-price-total">55.000đ</span>
+      </div>
+
+      <div class="ProductPurchase">
+
+        <div class="ProductPurchase__extra">
+          <button class="ProductPurchase__extra-favouri">Yêu thích</button>
+          <p class="ProductPurchase__extra-nameShop">MuonCoBo</p>
+        </div>
+        <div class="ProductPurchase-body">
+          <div class="ProductPurchase-body__info">
+            <img src="https://down-vn.img.susercontent.com/file/a7ce89acb762d0a030b29901beae3391@resize_w80_nl.webp" alt="" class="ProductPurchase-body__img">
+            <h3 class="ProductPurchase-body__name">Tai nghe nhét tai</h3>
+          </div>
+
+          <span class="ProductPurchase-body__type">Loại: Đen Full nâng cấp</span>
+          <div class="ProductPurchase-body__price-item">
+            <span class="ProductPurchase-body__price">55.000đ</span>
+            <span class="ProductPurchase-body__qnt">1</span>
+            <span class="ProductPurchase-body__cost">55.000đ</span>
+          </div>
+        </div>
+      </div>
+      <div class="ProductPurchase-footer">
+        <h3 class="ProductPurchase-footer-price-text">Tổng tiền của (1 sản phẩm):</h3>
+        <span class="ProductPurchase-footer-price-total">55.000đ</span>
+      </div>
+
+      <div class="ProductPurchase-total">
+        <div class="ProductPurchase-total__method">
+          <h3 class="ProductPurchase-total__method-text">Phương thức thanh toán</h3>
+
+          <h4 class="ProductPurchase-total__method-way">Thanh toán khi nhận hàng</h4>
+
+
+        </div>
+        <div class="ProductPurchase-total-price">
+          <h3 class="ProductPurchase-total__price-text">Tổng thanh toán</h3>
+          <span class="ProductPurchase-total__price-total">165.000đ</span>
+        </div>
+        <div class="ProductPurchase-total__pay">
+          <button class="btn btn--primary ProductPurchase-total__pay-btn" onclick="hienPopup()">Đặt hàng</button>
+        </div>
+        <div class="overlay" id="overlay" onclick="anPopup()"></div>
+
+        <!-- Popup -->
+        <div class="popup" id="popup">
+          <h3>Đã đặt hàng thành công! 🎉</h3>
+          <button class="close-btn" onclick="anPopup()">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="fragments/footer.html :: footer"></div>
+
+
+</div>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

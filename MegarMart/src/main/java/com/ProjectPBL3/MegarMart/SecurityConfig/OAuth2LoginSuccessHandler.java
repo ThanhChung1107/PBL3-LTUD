@@ -2,6 +2,7 @@ package com.ProjectPBL3.MegarMart.SecurityConfig;
 
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Service.AccountService;
+import com.ProjectPBL3.MegarMart.Service.CartService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,9 +25,11 @@ import java.util.List;
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final AccountService accountService;
+    private final CartService cartService;
 
-    public OAuth2LoginSuccessHandler(AccountService accountService) {
+    public OAuth2LoginSuccessHandler(AccountService accountService, CartService cartService) {
         this.accountService = accountService;
+        this.cartService = cartService;
     }
 
 
