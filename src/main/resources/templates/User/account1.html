@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account-style.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="account">
+        <div th:replace="fragments/user_header.html :: user_header"></div>
+
+        <div class="account-container">
+            <div class="account-sidebar">
+                <div class="your-info">
+
+                    <img th:src="@{/img/{image}(image=${session.account.imageurl})}" class="header__navbar-user-img">
+
+                    <div class="your-name">
+                        <span th:text="${session.account.name}" class="your-name-text"></span>
+                    </div>
+                </div>
+                <div class="your-info-function">
+                    
+                    <div class="function function-acc" onclick="showSection('my-account')">
+                        <i class='bx bxs-user-account' ></i>
+                        <span class="name-func">Tài Khoản Của Tôi</span>
+                    </div>
+                    <div class="function function-order" onclick="showSection('order')">
+                        <i class='bx bx-food-menu'></i>
+                        <span class="name-func">Đơn mua</span>
+                    </div>
+                </div>
+            </div>
+            <div class="account-content">
+                <div id="order" class="section">
+                    <div class="oder1">
+                        <div class="order-shop">
+                            <div class="order-shop-info">
+                                <span class="order-shop-name">Shop Name</span>
+                                <div class="btn-view-shop">
+                                    <i class='view-shop-icon bx bx-store-alt'></i>
+                                    <a href="#" class="view-shop">Xem Shop</a>
+                                </div>
+                            </div>
+                            <span class="order-completed">Đã Đặt Hàng</span>
+                        </div>
+                        <div class="product-shop">
+                            <div class="product-shop-info">
+                                <img th:src="@{/img/logoshop.webp}" alt="" class="product-shop-img">
+                                <div class="product-shop-info-detail">
+                                    <p class="product-shop-info-name"><span class="shop-name">Shop Name</span>Tên Sản Phẩm</p>
+                                    <span class="product-shop-info-count">x1</span>
+                                </div>
+                            </div>
+                            <div class="product-shop-price">
+                                <span class="product-shop-price">123.456đ</span>
+                            </div>
+                        </div>
+                        <div class="product-shop-thanhtien">
+                            <p>Thành Tiền: <span>120.000đ</span></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- tài khoản của tôi -->
+                <form th:action="@{/user/accountdetail}" th:object="${session.account}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" th:value="${session.account.id}">
+                    <div id="my-account" class="section my-account active">
+                    <div class="my-account-header">
+                        <div class="my-account-text">
+                            <h4>Hồ Sơ Của Tôi</h4>
+                            <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                        </div>
+                        <div class="my-account-edit">
+                            <i class='bx bxs-edit'></i>
+                            <input type="submit" value="Lưu" style="background-color:rgb(3, 111, 211);border:none;color:white">
+                        </div>
+                    </div>
+
+                    
+                    <div class="my-account-info">
+                            <table class="my-account-info-table">
+                                <tr>
+                                    <td class="my-account-table-lable">Tên</td>
+                                    <td class="my-account-table-content">
+                                        <input type="text" name="name" th:value="${session.account.name}"  required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="my-account-table-lable">Email</td>
+                                    <td class="my-account-table-content">
+                                        <input type="email" name="email" th:value="${session.account.email}" disabled>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="my-account-table-lable">Số điện thoại</td>
+                                    <td class="my-account-table-content">
+                                        <input type="text" name="phone" th:value="${session.account.phone}"  placeholder="Chưa cập nhật">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="my-account-table-lable">Địa chỉ</td>
+                                    <td class="my-account-table-content">
+                                        <input type="text" name="address" th:value="${session.account.address}"   placeholder="Chưa cập nhật">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="my-account-table-lable">Ngày tạo</td>
+                                    <td class="my-account-table-content">
+                                        <input type="text" th:value="${session.account.createdAt}" disabled>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="my-account-table-lable">Ngày sửa</td>
+                                    <td class="my-account-table-content">
+                                        <input type="text" th:value="${session.account.updatedAt}"readonly>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="my-img">
+                                <img  th:src="@{/img/{image}(image=${session.account.imageurl})}" class="my-img-url">
+
+
+                                <input type="file" name="fileImage" accept="image/*">
+                            </div>
+                        </div>
+                 </div>
+                </form>
+            </div>
+        <script th:src="@{/js/script.js}"></script>
+        </div>
+        
+
+        <!-- footer -->
+        <div th:replace="fragments/footer.html :: footer"></div>
+    </div>
+</body>
+<script>
+    document.querySelector('.my-account-edit').addEventListener('click', function() {
+        document.querySelector('.my-account-edit input').click();
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy tham số từ URL
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get("section");
+
+        if (section) {
+            showSection(section); // Gọi hàm hiển thị section tương ứng
+        }
+    });
+
+    function showSection(sectionId) {
+        // Ẩn tất cả các section trước khi hiển thị section cần chọn
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Hiển thị section được chọn
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        }
+    }
+</script>
+
+</html>

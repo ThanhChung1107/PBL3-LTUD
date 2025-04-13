@@ -1,0 +1,10 @@
+package com.ProjectPBL3.MegarMart.Repository;
+
+import com.ProjectPBL3.MegarMart.Entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product,Integer> {
+
+}

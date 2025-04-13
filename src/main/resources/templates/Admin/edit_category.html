@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin/head_side.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/add_view.css}">
+    <script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="left-head">
+            <h3>Sửa danh mục</h3>
+        </div>
+        <div class="right-head">
+            <h3>Xin chào,admin</h3>
+        </div>
+    </div>
+
+
+    <div th:replace="fragments/sidebar_admin.html :: sidebaradmin"></div>
+
+    <div class="content">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Sửa danh mục</h3>
+            </div>
+            <form th:action="@{/admin/editcategory}" method="post" th:object="${category}" enctype="multipart/form-data">
+              <div class="box-body">
+                  <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                  <input type="hidden" th:field="*{id}">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Tên danh mục</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Nhập tên danh mục" th:field="*{name}" required>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputFile">Ảnh</label>
+                    <div>
+                        <img th:if="${category.imageurl != null}" th:src="@{/img/{filename}(filename=${category.imageurl})}" alt="Current Category Image" width="100">
+                        <p th:if="${category.imageurl == null}">No image available</p>
+                    </div>
+                  <input type="file" name="fileImage" id="exampleInputFile">
+                </div>
+                </div>
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Update</button>
+              </div>
+            </form>
+          </div>
+    </div>
+    
+</body>
+</html>
