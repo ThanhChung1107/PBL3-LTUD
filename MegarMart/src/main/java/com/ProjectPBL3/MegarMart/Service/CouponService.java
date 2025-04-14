@@ -53,4 +53,6 @@ public class CouponService {
     public List<Coupon> findAll(){return couponRepository.findAll();}
 
     public Coupon findById(int id) {return couponRepository.findById(id).orElse(null);}
+
+    public Coupon findByCode(String voucher) {return couponRepository.findByCode(voucher);}
 }

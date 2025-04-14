@@ -82,9 +82,25 @@
                 </div>
                 <div class="ProductPurchase-total-price">
                     <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Khuyến mãi : </h3>
-                    <span class="ProductPurchase-total__price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon != null and coupondiscount !=0}"
+                          th:text="${#numbers.formatInteger(coupondiscount, 1, 'POINT')}">
+                    </span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon == null or coupondiscount == 0}"
+                          th:text="${error}" style="color:red;font-size:1.5rem">
+                    </span>
+
                     <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Tổng thanh toán</h3>
-                    <span class="ProductPurchase-total__price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon!=null}"
+                          th:text="${#numbers.formatInteger(totalPrice - coupondiscount, 1, 'POINT') + 'đ'}">
+                    </span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon==null}"
+                          th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}">
+                    </span>
+
                 </div>
                 <div class="ProductPurchase-total__pay">
                     <button class="btn btn--primary ProductPurchase-total__pay-btn" onclick="hienPopup()">Đặt hàng

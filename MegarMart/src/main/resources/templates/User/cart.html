@@ -124,7 +124,7 @@
                     <i class="fa-solid fa-ticket CartProduct-buyproduct-voucher-icon"></i>
                     <h3 class="CartProduct-buyproduct-voucher-text">Megamart Voucher(nếu có):</h3>
 
-                    <input type="text" class="CartProduct-buyproduct-voucher-input" placeholder="Nhập Voucher">
+                    <input type="text" id="voucher" name="voucher" class="CartProduct-buyproduct-voucher-input" placeholder="Nhập Voucher">
                 </div>
                 <div class="CartProduct-buyproduct-buy">
 
@@ -265,22 +265,6 @@
         });
     });
 </script>
-<!--<script>-->
-<!--    document.querySelector("#buyForm").addEventListener("submit", function (e) {-->
-<!--        e.preventDefault(); // chặn gửi mặc định-->
-
-<!--        const selectedCheckboxes = document.querySelectorAll(".product-checkbox:checked");-->
-<!--        const ids = Array.from(selectedCheckboxes).map(cb => cb.value);-->
-<!--        if (ids.length === 0) {-->
-<!--            alert("Vui lòng chọn ít nhất một sản phẩm!");-->
-<!--            return;-->
-<!--        }-->
-
-<!--        // chuyển sang URL dạng: /user/pay?selectedIds=1&selectedIds=2&...-->
-<!--        const queryString = ids.map(id => "selectedIds=" + encodeURIComponent(id)).join("&");-->
-<!--        window.location.href = `/user/pay?${queryString}`;-->
-<!--    });-->
-<!--</script>-->
 <script>
     document.querySelector("#buyForm").addEventListener("submit", function (e) {
         e.preventDefault(); // Chặn gửi mặc định của form
@@ -293,6 +277,9 @@
 
         const queryParts = [];
         const quantities = [];
+
+        const voucherInput = document.querySelector(".CartProduct-buyproduct-voucher-input");
+        const voucher = voucherInput ? voucherInput.value.trim() : "";
 
         // Lặp qua tất cả các checkbox đã chọn
         selectedCheckboxes.forEach(cb => {
@@ -309,6 +296,10 @@
         quantities.forEach(qty => {
             queryParts.push("quantities=" + encodeURIComponent(qty));
         });
+
+         if (voucher !== "") {
+            queryParts.push("voucher=" + encodeURIComponent(voucher));
+        }
 
         // Kết nối các tham số query thành một chuỗi
         const queryString = queryParts.join("&");

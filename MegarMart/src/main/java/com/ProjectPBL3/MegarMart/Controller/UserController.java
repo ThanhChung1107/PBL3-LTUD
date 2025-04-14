@@ -29,6 +29,7 @@ public class UserController {
     private final FileSystemStorageService storageService;
     private final ProductService productService;
     private final CartService cartService;
+    private final CouponService couponService;
 
     @GetMapping("/home")
     public String userhome(Model model,HttpSession session)
@@ -184,7 +185,7 @@ public class UserController {
 
 
     @GetMapping("/pay")
-    public String pay(@RequestParam List<Integer> selectedIds,@RequestParam List<Integer> quantities,RedirectAttributes redirectAttributes ,Model model, HttpSession session) {
+    public String pay(@RequestParam List<Integer> selectedIds,@RequestParam List<Integer> quantities,@RequestParam(required = false) String voucher,RedirectAttributes redirectAttributes ,Model model, HttpSession session) {
         Account acc = (Account) session.getAttribute("account");
         if (acc.getName() == null || acc.getName().isEmpty() ||
                 acc.getPhone() == null || acc.getPhone().isEmpty() ||
@@ -202,9 +203,26 @@ public class UserController {
             totalPrice += product.getPrice() * quantity;
         }
 
+        Coupon coupon = null;
+        int coupondiscount = 0;
+        if (voucher != null && !voucher.isEmpty()) {
+            coupon = couponService.findByCode(voucher);
+            if (coupon != null) {
+                if (coupon.getStatus() == 0 || coupon.getCount() >= coupon.getUsagelimit()) {
+                    model.addAttribute("error", "Mã không khả dụng hoặc đã hết lượt dùng!!");
+                } else {
+                    coupondiscount = (int) ((coupon.getDiscount() / 100.0) * totalPrice);
+                }
+            } else {
+                model.addAttribute("error", "Mã giảm giá không hợp lệ!");
+            }
+        }
+
         model.addAttribute("selectedProducts", selectedProducts);
         model.addAttribute("quantities", quantities);
         model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("coupondiscount",coupondiscount);
+        model.addAttribute("coupon",coupon);
         return "User/pay";
     }
 }
