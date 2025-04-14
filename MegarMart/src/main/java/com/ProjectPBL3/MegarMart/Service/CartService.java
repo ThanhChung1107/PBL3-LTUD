@@ -18,7 +18,9 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    public Cart findByAccount(Account account) {return cartRepository.findByAccount(account).get();}
+    public Cart save(Cart cart) {return cartRepository.save(cart);}
+
+    public Cart findByAccount(Account account) {return cartRepository.findByAccount(account).orElse(null);}
 
     public void addProductToCart(Account account,Product product){
         Cart cart = cartRepository.findByAccount(account)

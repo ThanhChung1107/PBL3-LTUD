@@ -1,6 +1,7 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.Category;
+import com.ProjectPBL3.MegarMart.Entity.Coupon;
 import com.ProjectPBL3.MegarMart.Entity.Product;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
 import com.ProjectPBL3.MegarMart.Service.*;
@@ -21,6 +22,7 @@ public class AdminController {
     private final CategoryService categoryService;
     private final FileSystemStorageService storageService;
     private final ProductService productService;
+    private final CouponService couponService;
 
     @GetMapping("/home")
     public String adminhome(Model model) {
@@ -120,5 +122,49 @@ public class AdminController {
     public String rejectProduct(@PathVariable int id) {
         productService.rejectProduct(id);
         return "redirect:/admin/product";
+    }
+
+    @GetMapping("/addcoupon")
+    public String addcoupon(Model model){
+        model.addAttribute("coupon",new Coupon());
+        return "Admin/add_coupon";
+    }
+
+    @PostMapping("/addcoupon")
+    public String addcou(@ModelAttribute Coupon coupon,Model model){
+        if(couponService.save(coupon)) return "redirect:/admin/coupon";
+        else {
+            model.addAttribute("error", "CODE đã tồn tại");
+            return "Admin/add_coupon";
+        }
+    }
+
+    @GetMapping("/coupon")
+    public String coupon(Model model){
+        model.addAttribute("listcoupon",couponService.findAll());
+        return "Admin/coupon";
+    }
+
+
+    @PostMapping("/coupon/toggle-status")
+    public String toggleCouponStatus(@RequestParam("couponId") int couponId) {
+        Coupon coupon = couponService.findById(couponId);
+        if (coupon != null) {
+            coupon.setStatus(coupon.getStatus() == 1 ? 0 : 1);
+            if(couponService.save(coupon)) return "redirect:/admin/coupon";
+        }
+        return "redirect:/admin/coupon"; // hoặc trang hiện tại bạn muốn reload lại
+    }
+
+    @GetMapping("/edit-coupon/{id}")
+    public String editcoupon(@PathVariable int id,Model model){
+        model.addAttribute("coupon",couponService.findById(id));
+        return "/Admin/edit_coupon";
+    }
+
+    @PostMapping("/editcoupon")
+    public String editcouponn(@ModelAttribute Coupon coupon){
+        if(couponService.update(coupon)) return "redirect:/admin/coupon";
+        return "redirect:/admin/coupon";
     }
 }

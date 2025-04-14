@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin/head_side.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/add_view.css}">
+</head>
+<body>
+<div class="header">
+    <div class="left-head">
+        <h3>Thêm mã khuyến mãi</h3>
+    </div>
+    <div class="right-head">
+        <h3>Xin chào,admin</h3>
+    </div>
+</div>
+
+
+<div th:replace="fragments/sidebar_admin.html :: sidebaradmin"></div>
+
+<div class="content">
+    <div class="box box-primary">
+        <p th:if="${error}" th:text="${error}" class="error-message" style="color:red;font-size:1.5rem"></p>
+        <div class="box-header with-border">
+            <h3 class="box-title">Mã khuyến mãi</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form th:action="@{/admin/addcoupon}" role="form" th:object="${coupon}" method="post">
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">CODE</label>
+                    <input th:field="*{code}" type="text" class="form-control" id="exampleInputEmail1" placeholder="Nhập mã khuyến mãi">
+                </div>
+                <div class="form-group" style="padding:10px;">
+                    <label>Giảm giá:
+                        <input th:field="*{discount}" type="number" name="discount" min="0" max="100" step="0.01"> %
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Giới hạn sử dụng</label>
+                    <input th:field="*{usagelimit}" type="number" class="form-control" id="exampleInputEmail1" placeholder="100">
+                </div>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let menuItems = document.querySelectorAll(".has-submenu");
+
+        menuItems.forEach(item => {
+            item.addEventListener("click", function (event) {
+                event.stopPropagation();
+
+                let submenu = item.querySelector(".submenu");
+                let arrow = item.querySelector(".arrow");
+
+                let isOpen = item.classList.contains("active");
+
+                // Đóng tất cả submenu khác trước khi mở submenu mới
+                document.querySelectorAll(".has-submenu").forEach(i => {
+                    if (i !== item) {
+                        i.classList.remove("active");
+                        i.querySelector(".submenu").style.maxHeight = "0px";
+                        i.querySelector(".arrow").style.transform = "rotate(0deg)";
+                    }
+                });
+
+                if (!isOpen) {
+                    item.classList.add("active");
+                    submenu.style.maxHeight = submenu.scrollHeight + "px"; // Mở submenu theo chiều cao thực tế
+                    arrow.style.transform = "rotate(90deg)";
+                } else {
+                    item.classList.remove("active");
+                    submenu.style.maxHeight = "0px"; // Đóng submenu
+                    arrow.style.transform = "rotate(0deg)";
+                }
+            });
+        });
+
+        // Đóng submenu khi click ra ngoài
+        document.addEventListener("click", function () {
+            document.querySelectorAll(".has-submenu").forEach(i => {
+                i.classList.remove("active");
+                i.querySelector(".submenu").style.maxHeight = "0px";
+                i.querySelector(".arrow").style.transform = "rotate(0deg)";
+            });
+        });
+    });
+
+</script>
+</html>

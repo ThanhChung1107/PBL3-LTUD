@@ -150,6 +150,12 @@ public class UserController {
         Account acc = (Account) session.getAttribute("account");
         Cart cart = cartService.findByAccount(acc);// hàm này trả về Cart
 
+        if (cart == null) {
+            cart = new Cart();
+            cart.setAccount(acc);
+            cartService.save(cart); // hoặc cartService.createCartForAccount(acc)
+        }
+
 
         // Nếu có tham số buynow
         if (buynowProductId != null) {
