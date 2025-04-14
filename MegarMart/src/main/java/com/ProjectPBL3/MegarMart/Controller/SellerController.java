@@ -55,4 +55,21 @@ public class SellerController {
         model.addAttribute("listproshop",productService.findByShop(shop));
         return "Seller/product_manager";
     }
+
+    @GetMapping("/takecare")
+    public String takecare(){
+        return "Seller/takecare";
+    }
+
+    @GetMapping("/revenue")
+    public String revenue(){
+        return "Seller/revenue";
+    }
+
+
+    @GetMapping("/seller_profile")
+    public String seller_profile(){
+        return "Seller/seller_profile";
+    }
+
 }
