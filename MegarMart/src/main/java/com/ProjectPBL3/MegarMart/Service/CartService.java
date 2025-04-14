@@ -5,6 +5,7 @@ import com.ProjectPBL3.MegarMart.Entity.Cart;
 import com.ProjectPBL3.MegarMart.Entity.Product;
 import com.ProjectPBL3.MegarMart.Repository.CartRepository;
 import com.ProjectPBL3.MegarMart.Repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+
 
     public Cart save(Cart cart) {return cartRepository.save(cart);}
 

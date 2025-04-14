@@ -22,6 +22,8 @@ public class ProductService {
             productRepository.save(product);
     }
 
+    public void update(Product product) {productRepository.save(product);}
+
     public List<Product> findAll() {return productRepository.findAll();}
 
     public List<Product> findByShop(Shop shop) {return productRepository.findByShop(shop);}

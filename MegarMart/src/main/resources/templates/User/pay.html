@@ -24,7 +24,10 @@
 
 
     <div class="container">
-        <div class="grid">
+
+            <p th:if="${errorproduct}" th:text="${errorproduct}" style="color:red;font-size:1.6rem;margin:0 auto;padding:100px"></p>
+
+        <div class="grid" th:unless="${errorproduct}">
             <div class="DiaChi-NhanHang">
                 <div class="DiaChi-NhanHang-bar">
 
@@ -39,7 +42,10 @@
                 </div>
 
             </div>
+            <form th:action="@{/user/pay}" method="post">
+                <input type="hidden" name="couponCode" th:value="${coupon != null ? coupon.code : ''}" />
             <div class="ProductPurchase" th:each="product,iterStat : ${selectedProducts}">
+                <input type="hidden" name="quantities" th:value="${quantities[iterStat.index]}" />
                 <div class="ProductPurchase-head">
                     <h3 class="ProductPurchase-head__name">Sản phẩm</h3>
                     <div class="ProductPurchase-head__price-item">
@@ -66,6 +72,8 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="ProductPurchase-footer">
                 <h3 class="ProductPurchase-footer-price-text" style="font-size:2.4rem;font-weight:bold;">Tổng tiền :</h3>
                 <span class="ProductPurchase-footer-price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
@@ -81,17 +89,21 @@
 
                 </div>
                 <div class="ProductPurchase-total-price">
-                    <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Khuyến mãi : </h3>
+                    <h3 th:if="${coupon != null and coupondiscount !=0}" class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Khuyến mãi : </h3>
                     <span class="ProductPurchase-total__price-total"
                           th:if="${coupon != null and coupondiscount !=0}"
                           th:text="${#numbers.formatInteger(coupondiscount, 1, 'POINT')}">
+                    </span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon != null and coupondiscount !=0}"
+                          th:text="'(' + ${coupon.discount} + '%' + ')'">
                     </span>
                     <span class="ProductPurchase-total__price-total"
                           th:if="${coupon == null or coupondiscount == 0}"
                           th:text="${error}" style="color:red;font-size:1.5rem">
                     </span>
 
-                    <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Tổng thanh toán</h3>
+                    <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Tổng thanh toán:</h3>
                     <span class="ProductPurchase-total__price-total"
                           th:if="${coupon!=null}"
                           th:text="${#numbers.formatInteger(totalPrice - coupondiscount, 1, 'POINT') + 'đ'}">
@@ -103,16 +115,9 @@
 
                 </div>
                 <div class="ProductPurchase-total__pay">
-                    <button class="btn btn--primary ProductPurchase-total__pay-btn" onclick="hienPopup()">Đặt hàng
-                    </button>
+                    <button type="submit" class="btn btn--primary ProductPurchase-total__pay-btn">Đặt hàng</button>
                 </div>
-                <div class="overlay" id="overlay" onclick="anPopup()"></div>
-
-                <!-- Popup -->
-                <div class="popup" id="popup">
-                    <h3>Đã đặt hàng thành công! 🎉</h3>
-                    <button class="close-btn" onclick="anPopup()">Đóng</button>
-                </div>
+            </form>
             </div>
         </div>
     </div>

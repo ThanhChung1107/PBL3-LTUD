@@ -19,6 +19,14 @@
 <div class="home">
     <div th:replace="fragments/user_header.html :: user_header"></div>
 
+
+    <div th:if="${orderSuccess}" class="popup" id="popup">
+        <i class="fa-solid fa-circle-check popup-icon"></i>
+        <h3>Đặt hàng thành công! 🎉</h3>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+    <div th:if="${orderSuccess}" class="overlay" id="popup-overlay" onclick="closePopup()"></div>
+
     <div class="home-container">
         <div class="grid">
             <div class="home-category">
@@ -121,5 +129,31 @@
     <div th:replace="fragments/footer.html :: footer"></div>
 </div>
 <script th:src="@{/js/script.js}"></script>
+<script>
+    // Hiện popup nếu tồn tại
+    window.onload = function() {
+        const popup = document.getElementById("popup");
+        if (popup) {
+            popup.style.display = "block";
+        }
+    }
+</script>
+<script>
+    window.onload = function () {
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("popup-overlay");
+        if (popup && overlay) {
+            popup.style.display = "block";
+            overlay.style.display = "block";
+        }
+    }
+
+    function closePopup() {
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("popup-overlay");
+        if (popup) popup.style.display = "none";
+        if (overlay) overlay.style.display = "none";
+    }
+</script>
 </body>
 </html>

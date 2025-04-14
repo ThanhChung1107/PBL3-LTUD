@@ -10,13 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.LinkedHashSet;
+import java.util.*;
 
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -30,6 +27,7 @@ public class UserController {
     private final ProductService productService;
     private final CartService cartService;
     private final CouponService couponService;
+    private final OrdersService ordersService;
 
     @GetMapping("/home")
     public String userhome(Model model,HttpSession session)
@@ -223,6 +221,77 @@ public class UserController {
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("coupondiscount",coupondiscount);
         model.addAttribute("coupon",coupon);
+        session.setAttribute("selectedProducts",selectedProducts);
         return "User/pay";
     }
+
+    @PostMapping("/pay")
+    public String placeOrder(@RequestParam("quantities") List<Integer> quantities,
+                             @RequestParam("couponCode") String couponCode,
+                             HttpSession session,
+                             RedirectAttributes redirectAttributes,
+                             Model model) {
+
+        Account account = (Account) session.getAttribute("account");
+        List<Product> selectedProducts = (List<Product>) session.getAttribute("selectedProducts");
+
+        Orders order = new Orders();
+        order.setAccount(account);
+        order.setName(account.getName());
+        order.setPhone(account.getPhone());
+        order.setAddress(account.getAddress());
+
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        int totalPrice = 0;
+
+        for (int i = 0; i < selectedProducts.size(); i++) {
+            Product product = selectedProducts.get(i);
+            int quantity = quantities.get(i);
+
+            if (product.getStock() < quantity) {
+                String errorMessage = "Sản phẩm " + product.getName() + " chỉ còn lại " + product.getStock() + " trong kho.";
+                model.addAttribute("errorproduct", errorMessage);
+                return "User/pay";  // Trả về trang pay để hiển thị lỗi
+            }
+
+            product.setSold(product.getSold()+quantity);
+            product.setStock(product.getStock()-quantity);
+            product.setRevenue(product.getRevenue()+product.getPrice()*quantity);
+            productService.update(product);
+
+            OrderDetail detail = new OrderDetail();
+            detail.setOrder(order);
+            detail.setProduct(product);
+            detail.setQuantity(quantity);
+            detail.setPrice(product.getPrice() * quantity);
+            orderDetails.add(detail);
+
+            totalPrice += product.getPrice() * quantity;
+
+            deletecart(product.getId(),session);
+        }
+
+        // Gắn orderDetails vào order
+        order.setOrderDetails(orderDetails);
+
+        // Áp dụng mã giảm giá nếu có
+        if (couponCode != null && !couponCode.isEmpty()) {
+            Coupon coupon = couponService.findByCode(couponCode);
+            if (coupon != null) {
+                order.setCoupon(coupon);
+                coupon.setCount(coupon.getCount() + 1);
+                couponService.save(coupon);
+                totalPrice -= (int) ((coupon.getDiscount() / 100.0) * totalPrice);
+            }
+        }
+
+        order.setTotalprice(totalPrice);
+
+        ordersService.save(order); // Tự động cascade orderDetails
+
+
+        redirectAttributes.addFlashAttribute("orderSuccess", true);
+        return "redirect:/user/home";
+    }
+
 }
