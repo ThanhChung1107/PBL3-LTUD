@@ -4,6 +4,8 @@ import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +32,24 @@ public class UserController {
     private final OrdersService ordersService;
 
     @GetMapping("/home")
-    public String userhome(Model model,HttpSession session)
+    public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
     {
+        Page<Product> list = productService.getAll(page);
+
+        if(keyword != null) {
+            list = productService.searchProduct(keyword,page);
+            model.addAttribute("keyword", keyword);
+        }
+
+        model.addAttribute("totalpage", list.getTotalPages());
+        model.addAttribute("currentpage", page);
+        model.addAttribute("list", list);
+
         session.setAttribute("listcart",cartService.getAllCartByAccount((Account) session.getAttribute("account")));
         model.addAttribute("listcate",categoryService.findAll());
-        model.addAttribute("listpro",productService.findByStatus(1));
+        if (keyword == null || keyword.isEmpty()) {
+            model.addAttribute("listpro", productService.findByStatus(1));
+        }
         return "User/Home";
     }
 

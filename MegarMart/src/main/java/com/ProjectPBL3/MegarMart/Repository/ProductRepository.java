@@ -3,6 +3,8 @@ package com.ProjectPBL3.MegarMart.Repository;
 import com.ProjectPBL3.MegarMart.Entity.Category;
 import com.ProjectPBL3.MegarMart.Entity.Product;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,7 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query("SELECT COUNT(*) FROM Product p WHERE p.shop.id = :shopId")
     int countByShopId(@Param("shopId") int shopid);
+
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %?1%")
+    List<Product> searchProduct(String productname);
 }

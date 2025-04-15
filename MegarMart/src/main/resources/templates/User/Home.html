@@ -48,7 +48,7 @@
                     <div class="goiyhomnay" th:text="${category != null ? category.name : 'GỢI Ý HÔM NAY'}"></div>
                 </div>
                 <div class="grid__row">
-                    <div class="grid__column-2-4" th:each="pro : ${listprocate != null ? listprocate : listpro}">
+                    <div class="grid__column-2-4"   th:each="pro : ${listprocate != null ? listprocate : (list != null ? list.content : listpro)}"  th:if="${pro.status == 1}">
                         <a th:href="@{/user/productdetail/{proid}(proid = ${pro.id})}" class="home-product-item">
                             <div class="home-product-item__img"
                                  th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">
@@ -93,39 +93,32 @@
                     </div>
                 </div>
             </div>
-            <ul class="pagination home-product__pagination" >
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">
+            <ul class="pagination home-product__pagination">
+                <!-- Nút Previous -->
+                <li class="pagination-item" th:if="${currentpage > 1}">
+                    <a class="pagination-item__link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'page=' + ${currentpage - 1}}">
                         <i class="pagination-item__icon bx bxs-chevron-left"></i>
                     </a>
                 </li>
-                <li class="pagination-item pagination-item-active">
-                    <a href="" class="pagination-item__link">1</a>
+
+                <!-- Các trang -->
+                <li class="pagination-item"
+                    th:each="i : ${#numbers.sequence(1, totalpage)}"
+                    th:classappend="${currentpage == i} ? 'pagination-item-active'">
+                    <a class="pagination-item__link"
+                       th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'page=' + ${i}}"
+                       th:text="${i}">
+                    </a>
                 </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">2</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">3</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">4</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">5</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">...</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">14</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="" class="pagination-item__link">
+
+                <!-- Nút Next -->
+                <li class="pagination-item" th:if="${currentpage < totalpage}">
+                    <a class="pagination-item__link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'page=' + ${currentpage + 1}}">
                         <i class="pagination-item__icon bx bxs-chevron-right"></i>
                     </a>
                 </li>
             </ul>
+
         </div>
     </div>
 

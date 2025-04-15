@@ -3,6 +3,10 @@ package com.ProjectPBL3.MegarMart.Service;
 import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,4 +58,23 @@ public class ProductService {
     public Product findById(int id) {return productRepository.findById(id).get();}
 
     public int countByShopId(int id) {return productRepository.countByShopId(id);}
+
+
+    public List<Product> searchProduct(String productname) {
+        return productRepository.searchProduct(productname);
+    }
+
+    public Page<Product> getAll(Integer pageNo) {
+        Pageable pageable = PageRequest.of(pageNo-1,10);
+        return productRepository.findAll(pageable);
+    }
+
+    public Page<Product> searchProduct(String keyword, Integer pageNo) {
+        List<Product> list = searchProduct(keyword);
+        Pageable pageable = PageRequest.of(pageNo-1,10);
+        Integer start = (int) pageable.getOffset();
+        Integer end = (int) ((pageable.getOffset()+pageable.getPageSize()) > list.size() ? list.size() : pageable.getOffset()+pageable.getPageSize());
+        list = list.subList(start,end);
+        return new PageImpl(list,pageable,searchProduct(keyword).size());
+    }
 }
