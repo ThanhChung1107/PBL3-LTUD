@@ -26,4 +26,12 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.name LIKE %?1%")
     List<Product> searchProduct(String productname);
+
+    Page<Product> findByStatusAndCategory(int status, Category category, Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.status = 1 AND p.category = :category AND " +
+            "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Product> searchByKeywordAndCategory(@Param("keyword") String keyword,
+                                             @Param("category") Category category,
+                                             Pageable pageable);
 }

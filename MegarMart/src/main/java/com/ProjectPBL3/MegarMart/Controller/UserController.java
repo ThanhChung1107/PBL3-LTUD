@@ -54,15 +54,34 @@ public class UserController {
     }
 
     @GetMapping("/home/{id}")
-    public String userhomecate(@PathVariable int id,Model model,HttpSession session)
-    {
-        session.setAttribute("listcart",cartService.getAllCartByAccount((Account) session.getAttribute("account")));
-        model.addAttribute("listcate",categoryService.findAll());
+    public String userhomecate(@PathVariable int id,
+                               @Param("keyword") String keyword,
+                               @RequestParam(value = "page", defaultValue = "1") Integer page,
+                               Model model,
+                               HttpSession session) {
+
+        session.setAttribute("listcart", cartService.getAllCartByAccount((Account) session.getAttribute("account")));
+        model.addAttribute("listcate", categoryService.findAll());
+
         Category category = categoryService.findById(id);
-        model.addAttribute("category",category);
-        model.addAttribute("listprocate",productService.findByStatusAndCategory(1,category));
+        model.addAttribute("category", category);
+
+        Page<Product> list;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            list = productService.searchProductByCategory(keyword, category, page); // <-- xử lý tìm kiếm
+            model.addAttribute("keyword", keyword);
+        } else {
+            list = productService.findByStatusAndCategory(1, category, page);
+        }
+
+        model.addAttribute("listprocate", list.getContent());
+        model.addAttribute("totalpage", list.getTotalPages());
+        model.addAttribute("currentpage", page);
+
         return "User/Home";
     }
+
 
     @GetMapping("/register")
     public String showRegisterPage(Model model, HttpSession session) {

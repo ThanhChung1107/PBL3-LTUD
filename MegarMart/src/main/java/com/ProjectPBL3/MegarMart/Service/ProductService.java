@@ -77,4 +77,13 @@ public class ProductService {
         list = list.subList(start,end);
         return new PageImpl(list,pageable,searchProduct(keyword).size());
     }
+
+    public Page<Product> findByStatusAndCategory(int status, Category category, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 8); // 8 sản phẩm mỗi trang (tuỳ bạn)
+        return productRepository.findByStatusAndCategory(status, category, pageable);
+    }
+    public Page<Product> searchProductByCategory(String keyword, Category category, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 8);
+        return productRepository.searchByKeywordAndCategory(keyword, category, pageable);
+    }
 }
