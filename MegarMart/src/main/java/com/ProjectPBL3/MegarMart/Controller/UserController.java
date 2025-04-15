@@ -38,6 +38,17 @@ public class UserController {
         return "User/Home";
     }
 
+    @GetMapping("/home/{id}")
+    public String userhomecate(@PathVariable int id,Model model,HttpSession session)
+    {
+        session.setAttribute("listcart",cartService.getAllCartByAccount((Account) session.getAttribute("account")));
+        model.addAttribute("listcate",categoryService.findAll());
+        Category category = categoryService.findById(id);
+        model.addAttribute("category",category);
+        model.addAttribute("listprocate",productService.findByStatusAndCategory(1,category));
+        return "User/Home";
+    }
+
     @GetMapping("/register")
     public String showRegisterPage(Model model, HttpSession session) {
         Account account = (Account) session.getAttribute("account");
@@ -66,10 +77,11 @@ public class UserController {
                              @RequestParam("address") String address,
                              @RequestParam("phone") String phone,
                              @RequestParam("fileImage") MultipartFile file,
+                             Model model,
                              HttpSession session) {
         // Tìm tài khoản cũ trong database
         Account existingAccount = accountService.findById(id);
-        if (existingAccount != null) {
+        if (existingAccount != null ) {
             existingAccount.setName(name);
             existingAccount.setAddress(address);
             existingAccount.setPhone(phone);

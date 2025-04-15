@@ -20,6 +20,7 @@ public class CouponService {
                 // CODE đã được dùng bởi coupon khác
                 return false;
             }
+            coupon.setCount(coupon.getCount());
             couponRepository.save(coupon);
             return true;
         }catch (Exception e) {
@@ -39,7 +40,6 @@ public class CouponService {
                     // CODE đã được dùng bởi coupon khác
                     return false;
                 }
-
                 couponRepository.save(coupon);
                 return true;
             }

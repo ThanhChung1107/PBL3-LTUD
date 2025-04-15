@@ -31,20 +31,24 @@
         <div class="grid">
             <div class="home-category">
                 <div class="home-category-name">DANH MỤC</div>
+
                 <div class="home-category-content">
-                    <div th:each="cate : ${listcate}" class="home-category-detail">
+                    <a th:href="@{/user/home/{id}(id=${cate.id})}"
+                       class="home-category-detail"
+                       th:each="cate : ${listcate}">
                         <img th:src="@{'/img/' + ${cate.imageurl}}" alt="" class="home-category-img">
                         <div th:text="${cate.name}" class="home-category-detail-name"></div>
-                    </div>
+                    </a>
                 </div>
             </div>
+
             <div class="home-product">
                 <!-- Grid-> row -> column -->
                 <div class="grid">
-                    <div class="goiyhomnay">GỢI Ý HÔM NAY</div>
+                    <div class="goiyhomnay" th:text="${category != null ? category.name : 'GỢI Ý HÔM NAY'}"></div>
                 </div>
                 <div class="grid__row">
-                    <div class="grid__column-2-4" th:each="pro : ${listpro}">
+                    <div class="grid__column-2-4" th:each="pro : ${listprocate != null ? listprocate : listpro}">
                         <a th:href="@{/user/productdetail/{proid}(proid = ${pro.id})}" class="home-product-item">
                             <div class="home-product-item__img"
                                  th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">

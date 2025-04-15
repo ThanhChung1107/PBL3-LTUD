@@ -1,5 +1,6 @@
 package com.ProjectPBL3.MegarMart.Repository;
 
+import com.ProjectPBL3.MegarMart.Entity.Category;
 import com.ProjectPBL3.MegarMart.Entity.Product;
 import com.ProjectPBL3.MegarMart.Entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,9 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findByStatus(int status);
+
+    List<Product> findByStatusAndCategory(int status, Category category);
+
     List<Product> findByShop(Shop shop);
     List<Product> findByShopAndStatus(Shop shop, int status);
 

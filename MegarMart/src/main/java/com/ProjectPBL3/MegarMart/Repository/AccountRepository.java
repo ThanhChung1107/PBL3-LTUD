@@ -24,6 +24,7 @@ public interface AccountRepository extends JpaRepository<Account,Integer> {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
 
+
     @Modifying
     @Transactional
     @Query("UPDATE Account a SET a.name = :name, a.address = :address, a.phone = :phone, a.updatedAt = :updatedAt WHERE a.id = :id")

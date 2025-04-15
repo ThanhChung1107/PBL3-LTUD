@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -163,8 +164,11 @@ public class AdminController {
     }
 
     @PostMapping("/editcoupon")
-    public String editcouponn(@ModelAttribute Coupon coupon){
+    public String editcouponn(@ModelAttribute Coupon coupon,Model model){
         if(couponService.update(coupon)) return "redirect:/admin/coupon";
-        return "redirect:/admin/coupon";
+        else {
+            model.addAttribute("coupontontai","CODE đã tồn tại!");
+            return "Admin/edit_coupon";
+        }
     }
 }

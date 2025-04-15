@@ -34,6 +34,11 @@ public class ProductService {
 
     public List<Product> findByStatus(int status) {return productRepository.findByStatus(status);}
 
+    public List<Product> findByStatusAndCategory(int status,Category category)
+    {
+        return productRepository.findByStatusAndCategory(status,category);
+    }
+
     public void approveProduct(int productId){
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("product not found"));
         product.setStatus(1);
