@@ -20,19 +20,15 @@
 <div class="account">
     <div th:replace="fragments/user_header.html :: user_header"></div>
 
-
     <div class="account-container">
         <div class="account-sidebar">
             <div class="your-info">
-
                 <img th:src="@{/img/{image}(image=${session.account.imageurl})}" class="header__navbar-user-img">
-
                 <div class="your-name">
                     <span th:text="${session.account.name}" class="your-name-text"></span>
                 </div>
             </div>
             <div class="your-info-function">
-
                 <div class="function function-acc" onclick="showSection('my-account')">
                     <i class='bx bxs-user-account'></i>
                     <span class="name-func">Tài Khoản Của Tôi</span>
@@ -45,36 +41,28 @@
         </div>
         <div class="account-content">
             <div id="order" class="section">
-
-                <!-- THÔNG BÁO nếu orders null hoặc empty -->
                 <div th:if="${orders == null or #lists.isEmpty(orders)}" class="no-order">
                     <p style="color: gray; font-style: italic;font-size:5rem">Bạn chưa có đơn hàng nào.</p>
                 </div>
 
-                <!-- HIỂN THỊ ĐƠN HÀNG -->
                 <div th:unless="${orders == null or #lists.isEmpty(orders)}">
                     <div th:each="order,iterStat : ${orders}" class="oder1">
                         <div class="order-shop">
                             <div class="order-shop-info">
                                 <span class="order-shop-name">Mã đơn hàng: <span th:text="${order.id}"></span></span>
                                 <div class="btn-view-shop">
-                                    <i class='view-shop-icon bx bx-store-alt'></i>
-                                    <!-- dùng data-id để JS xác định khu vực cần toggle -->
+                                    <i class='view-shop-icon bx bx-chevron-down'></i>
                                     <span class="view-shop" th:attr="data-order-id=${iterStat.index}"
                                           onclick="toggleDetails(this)">
                                             Xem chi tiết
                                     </span>
-                                    <!--                                        <a href="#" class="view-shop">Xem chi tiết</a>-->
                                 </div>
                             </div>
                             <span class="order-completed"
                                   th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></span>
                         </div>
 
-                        <!-- Nếu cần hiển thị chi tiết đơn hàng -->
-
-                        <div th:each="detail : ${order.orderDetails}" class="product-shop" th:attr="data-detail-id=${iterStat.index}"
-                             style="display: none;">
+                        <div th:each="detail : ${order.orderDetails}" class="product-shop" th:attr="data-detail-id=${iterStat.index}" style="display: none;">
                             <div class="product-shop-info">
                                 <img th:src="@{/img/{imgfile}(imgfile=${detail.product.imageurl})}" alt=""
                                      class="product-shop-img">
@@ -89,7 +77,6 @@
                             </div>
                         </div>
 
-
                         <div class="product-shop-thanhtien">
                             <p>Thành Tiền:
                                 <span th:text="${#numbers.formatInteger(order.totalprice, 1, 'POINT')}"></span>
@@ -99,7 +86,6 @@
                 </div>
             </div>
 
-            <!-- tài khoản của tôi -->
             <form th:action="@{/user/accountdetail}" th:object="${session.account}" method="post"
                   enctype="multipart/form-data">
                 <input type="hidden" name="id" th:value="${session.account.id}">
@@ -116,7 +102,6 @@
                                    style="background-color:rgb(3, 111, 211);border:none;color:white">
                         </div>
                     </div>
-
 
                     <div class="my-account-info">
                         <table class="my-account-info-table">
@@ -162,8 +147,6 @@
 
                         <div class="my-img">
                             <img th:src="@{/img/{image}(image=${session.account.imageurl})}" class="my-img-url">
-
-
                             <input type="file" name="fileImage" accept="image/*">
                         </div>
                     </div>
@@ -173,44 +156,48 @@
         <script th:src="@{/js/script.js}"></script>
     </div>
 
-
-    <!-- footer -->
     <div th:replace="fragments/footer.html :: footer"></div>
 </div>
 </body>
+
 <script>
     function toggleDetails(el) {
         const orderId = el.getAttribute("data-order-id");
         const details = document.querySelectorAll(`[data-detail-id="${orderId}"]`);
+
         details.forEach(detail => {
-            detail.style.display = (detail.style.display === "none" || detail.style.display === "") ? "flex" : "none";
+            if (detail.style.display === "none" || detail.style.display === "") {
+                detail.style.display = "block";
+                el.innerText = "Ẩn chi tiết";
+            } else {
+                detail.style.display = "none";
+                el.innerText = "Xem chi tiết";
+            }
         });
-        el.innerText = el.innerText === "Xem chi tiết" ? "Ẩn chi tiết" : "Xem chi tiết";
     }
 </script>
+
 <script>
     document.querySelector('.my-account-edit').addEventListener('click', function() {
         document.querySelector('.my-account-edit input').click();
     });
 </script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Lấy tham số từ URL
         const params = new URLSearchParams(window.location.search);
         const section = params.get("section");
 
         if (section) {
-            showSection(section); // Gọi hàm hiển thị section tương ứng
+            showSection(section);
         }
     });
 
     function showSection(sectionId) {
-        // Ẩn tất cả các section trước khi hiển thị section cần chọn
         document.querySelectorAll('.section').forEach(section => {
             section.style.display = 'none';
         });
 
-        // Hiển thị section được chọn
         const targetSection = document.getElementById(sectionId);
         if (targetSection) {
             targetSection.style.display = 'block';
