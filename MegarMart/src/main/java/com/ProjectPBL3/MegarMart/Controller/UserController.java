@@ -101,7 +101,10 @@ public class UserController {
     }
 
     @GetMapping("/accountdetail")
-    public String userdetail() {return "User/account1";}
+    public String userdetail(Model model,HttpSession session) {
+        model.addAttribute("orders",ordersService.findByAccount((Account) session.getAttribute("account") ));
+        return "User/account1";
+    }
 
 
 

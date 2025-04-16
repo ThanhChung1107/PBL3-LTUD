@@ -137,10 +137,11 @@
 .product-shop-img {
     border-radius: 2px;
     margin-right: 20px;
+    width:120px;
 }
 .product-shop-info-name {
     margin:0;
-    font-size: 1.4rem;
+    font-size: 2.2rem;
     margin-bottom: 10px;
 }
 .shop-name {
@@ -148,22 +149,23 @@
     font-weight: 400;
 }
 .product-shop-info-count {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
+    color:red;
 }
 .product-shop-price {
     display: flex;
     justify-content: center;
     align-self: center;
-    font-size: 1.4rem;
-    color: var(--primary-color);
+    font-size: 2.4rem;
+    color: dimgrey;
 }
 .product-shop-thanhtien {
     margin-top: 20px;
     text-align: right;
-    font-size: 1.4rem;
+    font-size: 2.4rem;
 }
 .product-shop-thanhtien span {
-    font-size: 1.8rem;
+    font-size: 2.8rem;
     color: var(--primary-color);
 }
 
