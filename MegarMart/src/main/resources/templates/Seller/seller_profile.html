@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<!-- container -->
+<div class="seller_home_contain">
+    <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+
+    <div class="seller_profile_main">
+        <div id="seller_profile" class="seller_profile_main_info section active">
+            <div class="seller_profile_lable">Thông tin cơ bản</div>
+            <div class="seller_profile">
+                <div class="seller_profile_header">
+                    <p class="seller_profile_header_lable">Thông tin cơ bản</p>
+                    <div class="seller_profile_btn">
+                        <a href="index.html" class="view_my_shop">Xem shop của tôi</a>
+                        <div class="seller_profile_edit" onclick="showSection('seller_profile_edit_view')">Chỉnh sửa</div>
+                    </div>
+                </div>
+
+                <div class="seller_profile_conttent">
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Tên shop</div>
+                        <div class="seller_profile_text">leminhnhat0711</div>
+                    </div>
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Logo của shop</div>
+                        <img src="assets/img/logoshop.webp" alt="" class="seller_profile_img">
+                    </div>
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Mô tả shop</div>
+                        <textarea name="" class="seller_profile_description" readonly>Thuộc tính textarea trong HTML có nhiều tính năng giúp tùy chỉnh và kiểm soát cách nhập văn bản. Dưới đây là các thuộc tính quan trọng:</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="seller_profile_edit_view" class="seller_profile_main_info section">
+            <div class="seller_profile_lable">Thông tin cơ bản</div>
+            <div class="seller_profile">
+                <div class="seller_profile_header">
+                    <p class="seller_profile_header_lable">Thông tin cơ bản</p>
+                </div>
+
+                <div class="seller_profile_conttent">
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Tên shop</div>
+                        <input type="text" class="seller_profile_text_edit" placeholder="Nhập tên mới">
+                    </div>
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Logo của shop</div>
+                        <div class="container">
+                            <input type="file" id="file" accept="image/*" hidden>
+                            <div class="img-area" data-img="">
+                                <i class='bx bxs-cloud-upload icon'></i>
+                            </div>
+                            <button class="select-image">Select Image</button>
+                        </div>
+                    </div>
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Mô tả shop</div>
+                        <textarea name="" class="seller_profile_description_edit" placeholder="Cập nhật mô tả"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/seller_script.js}"></script>
+</body>
+</html>

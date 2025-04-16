@@ -25,7 +25,13 @@ public class ProductService {
             product.setImageurl(filename);
             productRepository.save(product);
     }
+    public void save(Product product){
 
+        productRepository.save(product);
+    }
+    public Product findById(Integer id){
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
+    }
     public void update(Product product) {productRepository.save(product);}
 
     public List<Product> findAll() {return productRepository.findAll();}
@@ -75,7 +81,15 @@ public class ProductService {
         Integer start = (int) pageable.getOffset();
         Integer end = (int) ((pageable.getOffset()+pageable.getPageSize()) > list.size() ? list.size() : pageable.getOffset()+pageable.getPageSize());
         list = list.subList(start,end);
-        return new PageImpl(list,pageable,searchProduct(keyword).size());
+        return new PageImpl(list,pageable,searchProduct(keyword).size());}
+    public Boolean delete(Integer id) {
+        try {
+            this.productRepository.delete(findById(id));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        };
+        return false;
     }
 
     public Page<Product> findByStatusAndCategory(int status, Category category, int page) {
