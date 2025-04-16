@@ -289,7 +289,7 @@
     background-color: #e0e0e0;
     padding: 10px 0;
 }
-.col_revenue {
+.col_revenue, .col_button {
     background-color: #e0e0e0;
     padding: 10px 0;
 }
@@ -300,6 +300,9 @@
 }
 .col_product_value {
     display: flex;
+
+}
+.col_button_value{
 
 }
 .col_category_value {

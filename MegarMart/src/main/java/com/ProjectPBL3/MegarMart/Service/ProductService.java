@@ -21,7 +21,13 @@ public class ProductService {
             product.setImageurl(filename);
             productRepository.save(product);
     }
+    public void save(Product product){
 
+        productRepository.save(product);
+    }
+    public Product findById(Integer id){
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
+    }
     public List<Product> findAll() {return productRepository.findAll();}
 
     public List<Product> findByShop(Shop shop) {return productRepository.findByShop(shop);}
@@ -39,4 +45,16 @@ public class ProductService {
         product.setStatus(2);
         productRepository.save(product);
     }
+
+
+    public Boolean delete(Integer id) {
+        try {
+            this.productRepository.delete(findById(id));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        };
+        return false;
+    }
+
 }

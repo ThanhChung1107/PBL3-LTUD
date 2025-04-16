@@ -3,7 +3,7 @@
 <div th:replace="fragments/seller_head.html :: sellerhead"></div>
 <body>
 
-    <div th:replace="fragments/seller_header.html :: sellerheader"></div>
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
 
 <div class="product_manager_contain">
 
@@ -38,6 +38,7 @@
                     <th class="col_stock">Kho hàng</th>
                     <th class="col_category">Danh mục</th>
                     <th class="col_status">Tình trạng</th>
+                    <th class="col_button">Chức năng</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,12 +56,16 @@
                         <span th:case="1">Đang hoạt động</span>
                         <span th:case="2">Vi phạm</span>
                     </td>
-<!--                    <td>-->
-<!--                        <button class="btn btn-edit"><a th:href="@{/seller/product/edit/{id}(id=${pro.id})}" style="color:white">Sửa</a></button>-->
-<!--                        <form th:action="@{/seller/product/delete/{id}(id=${pro.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">-->
-<!--                            <button type="submit" class="btn btn-delete" >Xóa</button>-->
-<!--                        </form>-->
-<!--                    </td>-->
+                    <td class="col_button_value" >
+                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
+                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
+                    </td>
+                    <!--                    <td>-->
+                    <!--                        <button class="btn btn-edit"><a th:href="@{/seller/product/edit/{id}(id=${pro.id})}" style="color:white">Sửa</a></button>-->
+                    <!--                        <form th:action="@{/seller/product/delete/{id}(id=${pro.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">-->
+                    <!--                            <button type="submit" class="btn btn-delete" >Xóa</button>-->
+                    <!--                        </form>-->
+                    <!--                    </td>-->
                 </tr>
                 </tbody>
             </table>
@@ -82,10 +87,11 @@
                     <th class="col_price">Giá</th>
                     <th class="col_stock">Kho hàng</th>
                     <th class="col_category">Danh mục</th>
+                    <th class="col_button">Chức năng</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pro : ${listpro}" th:if="${pro.status == 1}">
+                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 1}">
                     <td class="col_product_value">
                         <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
                         <div class="col_product_name" th:text="${pro.name}"></div>
@@ -94,6 +100,10 @@
                     <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
                     <td class="col_stock_value" th:text="${pro.stock}"></td>
                     <td class="col_category_value" th:text="${pro.category.name}"></td>
+                    <td class="col_button_value" >
+                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
+                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -115,10 +125,11 @@
                     <th class="col_price">Giá</th>
                     <th class="col_stock">Kho hàng</th>
                     <th class="col_category">Danh mục</th>
+                    <th class="col_button">Chức năng</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pro : ${listpro}" th:if="${pro.status == 2}">
+                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 2}">
                     <td class="col_product_value">
                         <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
                         <div class="col_product_name" th:text="${pro.name}"></div>
@@ -127,6 +138,10 @@
                     <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
                     <td class="col_stock_value" th:text="${pro.stock}"></td>
                     <td class="col_category_value" th:text="${pro.category.name}"></td>
+                    <td class="col_button_value" >
+                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
+                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -148,10 +163,11 @@
                     <th class="col_price">Giá</th>
                     <th class="col_stock">Kho hàng</th>
                     <th class="col_category">Danh mục</th>
+                    <th class="col_button">Chức năng</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pro : ${listpro}" th:if="${pro.status == 0}">
+                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 0}">
                     <td class="col_product_value">
                         <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
                         <div class="col_product_name" th:text="${pro.name}"></div>
@@ -160,6 +176,10 @@
                     <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
                     <td class="col_stock_value" th:text="${pro.stock}"></td>
                     <td class="col_category_value" th:text="${pro.category.name}"></td>
+                    <td class="col_button_value" >
+                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
+                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

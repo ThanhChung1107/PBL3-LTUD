@@ -206,3 +206,6 @@ html{
     display: flex;
     flex-direction: column;
 }
+.btn--primary:hover{
+ background-color: #045bac;
+}
