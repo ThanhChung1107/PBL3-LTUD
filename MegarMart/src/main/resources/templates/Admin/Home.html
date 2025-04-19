@@ -166,17 +166,17 @@
           <td th:text="${acc.name}"></td>
           <td>
             <!-- Nút hiển thị modal 👁 -->
-            <button type="button" class="btn btn-primary btn-sm"
+            <button type="button" class="btn btn-primary btn-sm" style="background:steelblue;"
                     data-bs-toggle="modal"
                     th:attr="data-bs-target='#modal__' + ${acc.id}">
-              Xem chi tiết
+              <i class="fa-solid fa-eye"></i>
             </button>
             <!-- Nút hiển thị lịch sử đặt hàng -->
             <a th:href="@{/admin/order-history/{id}(id=${acc.id})}" class="btn btn-success btn-sm">
               Lịch sử đặt hàng
             </a>
             <!-- Nút xóa -->
-            <button class="btn btn-danger btn-sm">Xóa</button>
+            <button class="btn btn-danger btn-sm" style="background:red;">Xóa</button>
           </td>
         </tr>
         </tbody>

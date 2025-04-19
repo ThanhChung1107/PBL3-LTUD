@@ -6,6 +6,13 @@
   <title>Lịch sử đặt hàng</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    body {
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* ví dụ texture */
+    background-color: rgba(0, 123, 255, 0.1); /* overlay màu xanh nhạt */
+    background-blend-mode: overlay;
+    background-repeat: repeat;
+    background-size: auto;
+}
     /* Table Styling */
     .order-history-table {
       border-radius: 10px;
@@ -153,8 +160,8 @@
       <tr th:each="order : ${orders}">
         <td th:text="${order.id}"></td>
         <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></td>
-        <td th:text="${#numbers.formatInteger(order.totalprice, 1, 'POINT') + ' đ'}"></td>
-        <td th:text="${order.isPaid == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}"></td>
+        <td th:text="${#numbers.formatInteger(order.totalprice, 1, 'POINT') + ' đ'}" style="font-weight:bold;"></td>
+        <td th:text="${order.isPaid == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}" th:style="${order.isPaid == 1 ? 'color:green; font-weight:bold;' : 'color:red; font-weight:bold;'}"></td>
         <td>
           <!-- Nút "Xem" để mở modal chi tiết OrderDetail -->
           <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"

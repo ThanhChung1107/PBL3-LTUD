@@ -58,8 +58,8 @@
           </th>
           <td th:text="${#temporals.format(coupon.createdAt, 'dd/MM/yyyy')}"></td>
           <td th:text="${#temporals.format(coupon.updatedAt, 'dd/MM/yyyy')}"></td>
-          <td>
-            <button class="btn btn-edit"><a th:href="@{/admin/edit-coupon/{id}(id=${coupon.id})}" style="color:white">Sửa</a></button>
+          <td style="display:flex;">
+            <button class="btn btn-edit"><a th:href="@{/admin/edit-coupon/{id}(id=${coupon.id})}" style="color:white;text-decoration:none;">Sửa</a></button>
 
             <form th:action="@{/admin/delete-coupon/{id}(id=${coupon.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">
               <button type="submit" class="btn btn-delete" >Xóa</button>
@@ -68,16 +68,6 @@
         </tr>
 
         </tbody></table>
-    </div>
-    <!-- /.box-body -->
-    <div class="box-footer clearfix">
-      <ul class="pagination">
-        <li><a href="#">«</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">»</a></li>
-      </ul>
     </div>
   </div>
 </div>

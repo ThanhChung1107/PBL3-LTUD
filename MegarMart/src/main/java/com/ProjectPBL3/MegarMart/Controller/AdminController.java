@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -107,7 +108,11 @@ public class AdminController {
 
     @GetMapping("/product")
     public String product(Model model) {
-        model.addAttribute("listpro",productService.findAll());
+        List<Product> all = productService.findAll();
+        List<Product> pending = all.stream()
+                .filter(p -> p.getStatus() == 0)
+                .collect(Collectors.toList());
+        model.addAttribute("listpro", pending);
         return "Admin/product";
     }
 
