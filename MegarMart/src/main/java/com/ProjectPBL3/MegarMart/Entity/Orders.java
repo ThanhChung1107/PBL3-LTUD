@@ -18,6 +18,7 @@ public class Orders {
     private String phone;
     private String address;
 
+    private int isPaid;
     private int totalprice;
 
     @ManyToOne

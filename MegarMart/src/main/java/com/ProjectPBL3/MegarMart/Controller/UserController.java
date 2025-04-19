@@ -1,7 +1,9 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.*;
+import com.ProjectPBL3.MegarMart.PaymentConfig.VNPAYService;
 import com.ProjectPBL3.MegarMart.Service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -30,6 +34,7 @@ public class UserController {
     private final CartService cartService;
     private final CouponService couponService;
     private final OrdersService ordersService;
+    private final VNPAYService vnpayService;
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -279,6 +284,7 @@ public class UserController {
                              @RequestParam("couponCode") String couponCode,
                              HttpSession session,
                              RedirectAttributes redirectAttributes,
+                             HttpServletRequest request,
                              Model model) {
 
         Account account = (Account) session.getAttribute("account");
@@ -322,6 +328,7 @@ public class UserController {
 
         // Gắn orderDetails vào order
         order.setOrderDetails(orderDetails);
+        order.setIsPaid(0);
 
         // Áp dụng mã giảm giá nếu có
         if (couponCode != null && !couponCode.isEmpty()) {
@@ -335,12 +342,49 @@ public class UserController {
         }
 
         order.setTotalprice(totalPrice);
-
+        order.setIsPaid(0);
         ordersService.save(order); // Tự động cascade orderDetails
 
 
-        redirectAttributes.addFlashAttribute("orderSuccess", true);
-        return "redirect:/user/home";
+        redirectAttributes.addAttribute("orderId", order.getId());
+        redirectAttributes.addAttribute("amount", order.getTotalprice());
+        return "redirect:/user/submitOrder";
+//        redirectAttributes.addFlashAttribute("orderSuccess", true);
+//        return "redirect:/user/home";
     }
 
+    @GetMapping("/submitOrder")
+    public String submidOrder(@RequestParam("amount") int orderTotal,
+                              @RequestParam("orderId") String orderInfo,
+                              HttpServletRequest request) {
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String vnpayUrl = vnpayService.createOrder(request, orderTotal, orderInfo, baseUrl);
+        return "redirect:" + vnpayUrl;
+
+    }
+    // Sau khi hoàn tất thanh toán, VNPAY sẽ chuyển hướng trình duyệt về URL này
+    @GetMapping("/vnpay-payment-return")
+    public String paymentCompleted(HttpServletRequest request, Model model){
+        int paymentStatus =vnpayService.orderReturn(request);
+
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+
+        String paymentTime = request.getParameter("vnp_PayDate");
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime dateTime = LocalDateTime.parse(paymentTime, inputFormatter);
+
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        String totalPrice = request.getParameter("vnp_Amount");
+
+        Orders orders = ordersService.findById(Integer.parseInt(orderInfo));
+        if(paymentStatus==1)
+        ordersService.updateisPaid(orders);
+
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("totalPrice", Integer.parseInt(totalPrice) / 100);
+        model.addAttribute("paymentTime", dateTime);
+        model.addAttribute("transactionId", transactionId);
+
+        return paymentStatus == 1 ? "Payment/orderSuccess" : "Payment/orderFail";
+    }
 }

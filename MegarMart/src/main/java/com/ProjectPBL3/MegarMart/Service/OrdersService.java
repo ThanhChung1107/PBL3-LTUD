@@ -15,5 +15,9 @@ public class OrdersService {
 
     public void save(Orders orders) {ordersRepository.save(orders);}
 
+    public void updateisPaid(Orders orders) {orders.setIsPaid(1);ordersRepository.save(orders);}
+
+    public Orders findById(int id) {return ordersRepository.findById(id).get();}
+
     public List<Orders> findByAccount(Account account) {return ordersRepository.findByAccount(account);}
 }
