@@ -40,11 +40,13 @@
 
 
 
-a{
-    text-decoration: none;
-    color:#b8c7ce;
+.sidebar a {
+  color: #b8c7ce !important;
+  text-decoration: none !important;
 }
-
+.sidebar ul {
+  padding-left: 0 !important;
+}
 .menu {
     list-style: none;
     padding: 0;

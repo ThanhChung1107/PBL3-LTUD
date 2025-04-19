@@ -262,6 +262,7 @@ public class UserController {
             if (coupon != null) {
                 if (coupon.getStatus() == 0 || coupon.getCount() >= coupon.getUsagelimit()) {
                     model.addAttribute("error", "Mã không khả dụng hoặc đã hết lượt dùng!!");
+                    coupon=null;
                 } else {
                     coupondiscount = (int) ((coupon.getDiscount() / 100.0) * totalPrice);
                 }

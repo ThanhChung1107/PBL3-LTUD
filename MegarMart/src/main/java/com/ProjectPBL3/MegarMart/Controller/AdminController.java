@@ -1,9 +1,6 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
-import com.ProjectPBL3.MegarMart.Entity.Category;
-import com.ProjectPBL3.MegarMart.Entity.Coupon;
-import com.ProjectPBL3.MegarMart.Entity.Product;
-import com.ProjectPBL3.MegarMart.Entity.Shop;
+import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,6 +21,7 @@ public class AdminController {
     private final FileSystemStorageService storageService;
     private final ProductService productService;
     private final CouponService couponService;
+    private final OrdersService ordersService;
 
     @GetMapping("/home")
     public String adminhome(Model model) {
@@ -171,4 +169,15 @@ public class AdminController {
             return "Admin/edit_coupon";
         }
     }
+
+    @GetMapping("/order-history/{id}")
+    public String orderHistory(@PathVariable int id, Model model) {
+        Account acc = accountService.findById(id);
+        List<Orders> orders = ordersService.findByAccount(acc);
+
+        model.addAttribute("account", acc);
+        model.addAttribute("orders", orders);
+        return "Admin/OrderHistory";
+    }
+
 }

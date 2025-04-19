@@ -63,6 +63,7 @@
                         </div>
 
                         <div th:each="detail : ${order.orderDetails}" class="product-shop" th:attr="data-detail-id=${iterStat.index}" style="display: none;">
+                            <div class="product-shop-item">
                             <div class="product-shop-info">
                                 <img th:src="@{/img/{imgfile}(imgfile=${detail.product.imageurl})}" alt=""
                                      class="product-shop-img">
@@ -74,6 +75,7 @@
                             <div class="product-shop-price">
                                 <span class="product-shop-price"
                                       th:text="${#numbers.formatInteger(detail.product.price, 1, 'POINT')}"></span>
+                            </div>
                             </div>
                         </div>
 
