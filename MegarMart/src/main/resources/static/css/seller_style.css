@@ -302,17 +302,19 @@
     display: flex;
 
 }
-.col_button_value{
-
+.col_button_value {
+    white-space: nowrap;       /* Giữ các phần tử trên một dòng */
 }
-.col_category_value {
 
+.col_button_value > *:not(a) {
+    display: inline-block;     /* Chỉ áp dụng cho phần tử không phải button */
+    vertical-align: middle;
+    margin-right: 6px;
 }
-.col_sum_product_value {
 
-}
-.col_revenue_value {
-
+.col_button_value a {
+    vertical-align: middle;    /* Đảm bảo nút nằm cùng hàng */
+    margin-right: 6px;
 }
 .col_product_img {
     width: 50px;
@@ -323,6 +325,16 @@
     margin-left: 6px;
     font-size: 1.4rem;
 }
+.col_category_value {
+
+}
+.col_sum_product_value {
+
+}
+.col_revenue_value {
+
+}
+
 
 /* product manager */
 .product_manager_contain {
@@ -823,3 +835,81 @@
     font-size: 1.4rem;
     padding: 10px;
 }
+/* ----- Popup mặc định ----- */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 1000;
+    width: 390px;
+    font-size: 1.6rem;
+    animation: popupFadeIn 0.3s ease-out forwards;
+}
+
+/* Khi thêm class .show thì hiển thị */
+.popup.show {
+    display: block;
+}
+
+/* ----- Success Popup ----- */
+.popup.success .popup-icon {
+    color: #27ae60; /* Màu xanh thành công */
+}
+
+.popup.success h3 {
+    color: #27ae60;
+}
+
+.popup.success button {
+    background-color: #27ae60;
+}
+
+.popup.success button:hover {
+    background-color: #219150;
+}
+
+/* ----- Error Popup ----- */
+.popup.error .popup-icon {
+    color: #e74c3c; /* Màu đỏ lỗi */
+}
+
+.popup.error h3 {
+    color: #e74c3c;
+}
+
+.popup.error button {
+    background-color: #e74c3c;
+}
+
+.popup.error button:hover {
+    background-color: #c0392b;
+}
+
+/* ----- Animation ----- */
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+ .overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background: rgba(0, 0, 0, 0.4);
+     z-index: 999;
+       pointer-events: none;
+ }

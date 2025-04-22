@@ -6,6 +6,18 @@
 <div th:replace="fragments/seller_header.html :: sellerheader"></div>
 
 <div class="product_manager_contain">
+    <div th:if="${deleteSuccess}" class="popup success show" id="popup-success">
+        <i class="fa-solid fa-circle-check popup-icon"></i>
+        <h3>Xoá sản phẩm thành công! 🎉</h3>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+    <div th:if="${deleteFail}" class="popup error show" id="popup-error">
+        <i class="fa-solid fa-circle-xmark popup-icon"></i>
+        <h3> ⚠️ Không thể xoá sản phẩm vì đã có đơn hàng liên quan.</h3>
+        <p>*Gợi ý: chuyển số lượng về 0</p>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+    <div <div th:if="${deleteSuccess != null or deleteFail != null}" class="overlay" id="popup-overlay" onclick="closePopup()"></div>
 
     <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
 
@@ -20,7 +32,7 @@
             <div class="all-product-item" onclick="showSection('violate-product')">Vi phạm(<span class="violate"  th:text="${#lists.size(listproshop.?[status == 2])}"></span>)</div>
             <div class="all-product-item" onclick="showSection('pending-product')">Đang chờ duyệt(<span class="Pending-approval"  th:text="${#lists.size(listproshop.?[status == 0])}"></span>)</div>
         </div>
-
+        <div th:if="${message}" class="alert alert-info" th:text="${message}"></div>
         <div id="all-product" class="all-product-conttent section active">
             <div class="all-product-search">
                 <div class="category-search">
@@ -58,7 +70,8 @@
                     </td>
                     <td class="col_button_value" >
                         <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
-                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
+                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}"
+                           onclick="return confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')">Xóa</a>
                     </td>
                     <!--                    <td>-->
                     <!--                        <button class="btn btn-edit"><a th:href="@{/seller/product/edit/{id}(id=${pro.id})}" style="color:white">Sửa</a></button>-->
@@ -186,6 +199,26 @@
         </div>
     </div>
 </div>
+<script>
+    window.onload = function () {
+      const popup = document.getElementById("popup-error");
+      const overlay = document.getElementById("popup-overlay");
+      if (popup && overlay) {
+          popup.style.display = "block";
+          overlay.style.display = "block";
+      }
+  }
+
+  function closePopup() {
+      const popup = document.getElementById("popup-error");
+      const pop = document.getElementById("popup-success");
+      const overlay = document.getElementById("popup-overlay");
+
+      if (popup) popup.style.display = "none";
+      if (pop) pop.style.display = "none";
+      if (overlay) overlay.style.display = "none";
+  }
+</script>
 <script th:src="@{/js/seller_script.js}"></script>
 </body>
 </html>

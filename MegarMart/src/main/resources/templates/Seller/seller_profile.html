@@ -51,11 +51,10 @@
                     <div class="seller_profile_info">
                         <div class="seller_profile_conttent_lable">Logo của shop</div>
                         <div class="container">
-                            <input type="file" id="file" accept="image/*" hidden>
-                            <div class="img-area" data-img="">
+                            <input type="file" name="fileImage" id="file" accept="image/*"  style="opacity: 0; position: absolute; z-index: -1;" required>
+                            <label for="file" class="img-area" id="imgArea">
                                 <i class='bx bxs-cloud-upload icon'></i>
-                            </div>
-                            <button class="select-image">Select Image</button>
+                            </label>
                         </div>
                     </div>
                     <div class="seller_profile_info">

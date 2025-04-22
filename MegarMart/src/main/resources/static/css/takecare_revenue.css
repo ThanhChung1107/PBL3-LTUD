@@ -84,16 +84,32 @@
     font-size: 1.3rem;
     font-weight: 380;
 }
-.main_page__list-eval-search{
-    padding: 10px 0;
+.main_page__list-eval-search {
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding:20px 0;
 }
 .main_page__list-eval--text{
-    font-size: 1.4rem;
-    font-weight: 350;
+    font-size: 2rem;
+    font-weight: 400;
     padding: 0 10px;
 }
 .search{
     padding-left: 0;
+}
+.main_page__list-eval-search form {
+  display: flex;
+  flex-wrap: wrap; /* Xuống dòng nếu không đủ chỗ */
+  gap: 10px;
+  align-items: center;
+}
+
+.main_page__list-eval-search input.date {
+  max-width: 200px;
+  width: 100%;
+  box-sizing: border-box;
+  height:30px;
 }
 .find,.date{
     font-size: 1.1rem;

@@ -17,16 +17,13 @@ import java.util.List;
 public class ProductService {
     private final CategoryService categoryService;
     private final FileSystemStorageService storageService;
+    private final OrderDetailService orderDetailService;
     private final ProductRepository productRepository;
 
-    public void save(Product product, MultipartFile file){
-            storageService.store(file);
-            String filename = file.getOriginalFilename();
-            product.setImageurl(filename);
-            productRepository.save(product);
-    }
-    public void save(Product product){
-
+    public void save(Product product, MultipartFile file) {
+        storageService.store(file);
+        String filename = file.getOriginalFilename();
+        product.setImageurl(filename);
         productRepository.save(product);
     }
     public Product findById(Integer id){
@@ -82,16 +79,13 @@ public class ProductService {
         Integer end = (int) ((pageable.getOffset()+pageable.getPageSize()) > list.size() ? list.size() : pageable.getOffset()+pageable.getPageSize());
         list = list.subList(start,end);
         return new PageImpl(list,pageable,searchProduct(keyword).size());}
-    public Boolean delete(Integer id) {
-        try {
-            this.productRepository.delete(findById(id));
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        };
-        return false;
+    public boolean delete(Integer id) {
+        if (orderDetailService.existsByProductId(id)) {
+            return false;
+        }
+        productRepository.deleteById(id);
+        return true;
     }
-
     public Page<Product> findByStatusAndCategory(int status, Category category, int page) {
         Pageable pageable = PageRequest.of(page - 1, 8); // 8 sản phẩm mỗi trang (tuỳ bạn)
         return productRepository.findByStatusAndCategory(status, category, pageable);
