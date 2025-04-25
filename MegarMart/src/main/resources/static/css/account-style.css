@@ -348,9 +348,12 @@ margin:0 auto;
             display: flex;
             border-bottom: 1px solid #ee4d2d;
         }
-        .product-img {
+        .product-img img{
+            width: 60px;
+            height: 60px;
             margin-right: 10px;
         }
+
         .review-product-title {
             font-weight: bold;
             font-size: 16px;

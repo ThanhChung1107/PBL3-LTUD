@@ -1,9 +1,7 @@
 package com.ProjectPBL3.MegarMart.Entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
@@ -11,6 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Setter
+@Getter
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewProduct {
@@ -29,7 +29,8 @@ public class ReviewProduct {
     @JoinColumn(name = "product_id",referencedColumnName = "id", nullable = false)
     private Product product;
     private String sellerReply;
-
+    @OneToOne(mappedBy = "review")
+    private OrderDetail orderDetail;
     @Column(nullable = false, updatable = false)
     LocalDate createdAt;
 

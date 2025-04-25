@@ -16,4 +16,8 @@ public class OrdersService {
     public void save(Orders orders) {ordersRepository.save(orders);}
 
     public List<Orders> findByAccount(Account account) {return ordersRepository.findByAccount(account);}
+
+    public Orders findById(Integer id) {
+        return ordersRepository.findById(id).orElse(null);
+    }
 }
