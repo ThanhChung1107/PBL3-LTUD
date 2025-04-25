@@ -162,6 +162,82 @@
                 </table>
             </div>
         </div>
+        <div class="product-review-detail product-detail">
+            <div class="rating-header">
+                <div class="rating-title">ĐÁNH GIÁ SẢN PHẨM</div>
+                <div class="rating-score">5.0 trên 5</div>
+            </div>
+
+            <div class="rating-stats">
+                <div class="rating-stat">
+                    <div class="rating-stat-label">Tất Cả</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="rating-stat-count">124</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">5 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 98%"></div>
+                    </div>
+                    <div class="rating-stat-count">122</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">4 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 1%"></div>
+                    </div>
+                    <div class="rating-stat-count">1</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">3 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 1%"></div>
+                    </div>
+                    <div class="rating-stat-count">1</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">2 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="rating-stat-count">0</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">1 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="rating-stat-count">0</div>
+                </div>
+            </div>
+
+            <div class="review-summary">
+                <div>Có <span class="reviewcount" th:text="${reviewCount}"></span> Bình Luận </div>
+            </div>
+
+            <div class="review-detail" th:each="review : ${listreview}">
+                <div class="user-img">
+                    <img th:src="@{/img/{image}(image=${review.account.imageurl})}"
+                         th:alt="${review.account.name}">
+                </div>
+                <div class="review-item">
+                    <div class="review-user" th:text="${review.account.name}"></div>
+                    <div class="review-rating" th:text="${review.rating.displayName}"></div>
+                    <div class="review-date"
+                         th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></div>
+                    <div class="review-content" th:text="${review.comment}"></div>
+
+                    <!-- Phản hồi của shop -->
+                    <div class="seller-reply" th:if="${review.sellerReply != null}">
+                        <div class="reply-shop-name">Phản hồi từ shop
+                        </div>
+                        <div class="reply-content" th:text="${review.sellerReply}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script th:src="@{/js/script.js}"></script>
   <!-- footer -->

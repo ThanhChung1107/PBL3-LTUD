@@ -8,10 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -30,6 +33,7 @@ public class UserController {
     private final CartService cartService;
     private final CouponService couponService;
     private final OrdersService ordersService;
+    private final ReviewProductService reviewProductService;
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -101,7 +105,10 @@ public class UserController {
     }
 
     @GetMapping("/accountdetail")
-    public String userdetail() {return "User/account1";}
+    public String userdetail(Model model,HttpSession session) {
+        model.addAttribute("orders",ordersService.findByAccount((Account) session.getAttribute("account") ));
+        return "User/account1";
+    }
 
 
 
@@ -147,7 +154,10 @@ public class UserController {
     public String productdetail(@PathVariable int id,Model model){
         Product product = productService.findById(id);
         model.addAttribute("pro",product);
-
+        List<ReviewProduct> reviews = this.reviewProductService.getAll();
+        model.addAttribute("product",product);
+        model.addAttribute("listreview",reviews);
+        model.addAttribute("reviewCount",reviews.size());
         int productCount = productService.countByShopId(product.getShop().getId());
         model.addAttribute("productcount", productCount);
         return "User/productdetail";
@@ -338,6 +348,46 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("orderSuccess", true);
         return "redirect:/user/home";
+    }
+
+    @GetMapping("/ReviewProduct-add")
+    public String showReviewForm(
+            @RequestParam("productId") Integer productId,
+            HttpSession session,
+            Model model) {
+
+        // Kiểm tra đăng nhập
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) return "redirect:/login";
+
+        // Lấy thông tin sản phẩm
+        Product product = productService.findById(productId);
+
+        // Tạo đối tượng review mới
+        ReviewProduct reviewProduct = new ReviewProduct();
+        reviewProduct.setProduct(product);
+
+        model.addAttribute("reviewProduct", reviewProduct);
+        model.addAttribute("product", product);
+
+        return "redirect:/user/accountdetail"; // Trả về trang account
+    }
+
+    @PostMapping("/ReviewProduct-add")
+    public String submitReview(
+            @ModelAttribute("reviewProduct") ReviewProduct reviewProduct,
+            @RequestParam("productId") Integer productId,
+            BindingResult result,
+            HttpSession session) {
+
+        // Xử lý lưu đánh giá
+        Account account = (Account) session.getAttribute("account");
+        Product product = productService.findById(productId);
+        reviewProduct.setProduct(product);
+        reviewProduct.setAccount(account);
+        reviewProductService.save(reviewProduct);
+
+        return "redirect:/user/accountdetail";
     }
 
 }
