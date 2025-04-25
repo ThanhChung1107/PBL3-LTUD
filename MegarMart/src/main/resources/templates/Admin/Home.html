@@ -16,6 +16,10 @@
   <link rel="stylesheet" th:href="@{/css/admin/form_view.css}">
   <style>
     /* Modal Styling */
+    .modal {
+                background-color: rgba(0, 0, 0, 0.6); /* Nền mờ */
+            backdrop-filter: blur(3px); /* Hiệu ứng mờ */}
+
     .modal-content {
       margin-top:150px;
       border-radius: 8px;
@@ -102,6 +106,8 @@
     .modal.show .modal-dialog {
       transform: scale(1);
     }
+
+
   </style>
 
 </head>
@@ -122,35 +128,6 @@
     <div class="box-header with-border">
       <h3 class="box-title">Tài khoản</h3>
     </div>
-<!--    <div class="box-body">-->
-<!--      <table class="table table-bordered">-->
-<!--        <tbody><tr>-->
-<!--          <th style="width: 10px">ID</th>-->
-<!--          <th>Họ và tên</th>-->
-<!--          <th>Email</th>-->
-<!--          <th>SĐT</th>-->
-<!--          <th>Địa chỉ</th>-->
-<!--          <th>Role</th>-->
-<!--          <th>Ngày tạo</th>-->
-<!--          <th>Ngày cập nhật</th>-->
-<!--          <th>Chức năng</th>-->
-<!--        </tr>-->
-<!--        <tr th:each="acc : ${listacc}"  th:if="${acc.name != 'ADMIN'}">-->
-<!--          <td th:text="${acc.id}"></td>-->
-<!--          <td th:text="${acc.name}"></td>-->
-<!--          <td th:text="${acc.email}"></td>-->
-<!--          <td th:text="${acc.phone}"></td>-->
-<!--          <td th:text="${acc.address}"></td>-->
-<!--          <td th:text="${acc.role.roleName}"></td>-->
-<!--          <td th:text="${#temporals.format(acc.createdAt, 'dd/MM/yyyy')}"></td>-->
-<!--          <td th:text="${#temporals.format(acc.updatedAt, 'dd/MM/yyyy')}"></td>-->
-<!--          <td>-->
-<!--            <button class="btn btn-edit"><a href="order.html" style="color:#fff">Xem</a></button>-->
-<!--            <button class="btn btn-delete">Xóa</button>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        </tbody></table>-->
-<!--    </div>-->
     <div class="box-body">
       <table class="table table-bordered">
         <thead>

@@ -35,6 +35,7 @@ public class UserController {
     private final CouponService couponService;
     private final OrdersService ordersService;
     private final VNPAYService vnpayService;
+    private final EmailService emailService;
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -364,12 +365,35 @@ public class UserController {
 
     }
     // Sau khi hoàn tất thanh toán, VNPAY sẽ chuyển hướng trình duyệt về URL này
+//    @GetMapping("/vnpay-payment-return")
+//    public String paymentCompleted(HttpServletRequest request, Model model){
+//        int paymentStatus =vnpayService.orderReturn(request);
+//
+//        String orderInfo = request.getParameter("vnp_OrderInfo");
+//
+//        String paymentTime = request.getParameter("vnp_PayDate");
+//        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+//        LocalDateTime dateTime = LocalDateTime.parse(paymentTime, inputFormatter);
+//
+//        String transactionId = request.getParameter("vnp_TransactionNo");
+//        String totalPrice = request.getParameter("vnp_Amount");
+//
+//        Orders orders = ordersService.findById(Integer.parseInt(orderInfo));
+//        if(paymentStatus==1)
+//        ordersService.updateisPaid(orders);
+//
+//        model.addAttribute("orderId", orderInfo);
+//        model.addAttribute("totalPrice", Integer.parseInt(totalPrice) / 100);
+//        model.addAttribute("paymentTime", dateTime);
+//        model.addAttribute("transactionId", transactionId);
+//
+//        return paymentStatus == 1 ? "Payment/orderSuccess" : "Payment/orderFail";
+//    }
     @GetMapping("/vnpay-payment-return")
     public String paymentCompleted(HttpServletRequest request, Model model){
-        int paymentStatus =vnpayService.orderReturn(request);
+        int paymentStatus = vnpayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
-
         String paymentTime = request.getParameter("vnp_PayDate");
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime dateTime = LocalDateTime.parse(paymentTime, inputFormatter);
@@ -378,8 +402,26 @@ public class UserController {
         String totalPrice = request.getParameter("vnp_Amount");
 
         Orders orders = ordersService.findById(Integer.parseInt(orderInfo));
-        if(paymentStatus==1)
-        ordersService.updateisPaid(orders);
+
+        if (paymentStatus == 1) {
+            ordersService.updateisPaid(orders);
+
+            // Gửi email xác nhận
+            Account account = orders.getAccount();
+            String subject = "Đơn hàng #" + orderInfo + " đã được thanh toán thành công!";
+            String content = "Chào " + account.getName() + ",\n\n"
+                    + "Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi.\n"
+                    + "Thông tin đơn hàng:\n"
+                    + "- Mã đơn: " + orderInfo + "\n"
+                    + "- Số tiền: " + (Integer.parseInt(totalPrice) / 100) + " VNĐ\n"
+                    + "- Thời gian thanh toán: " + dateTime + "\n"
+                    + "- Mã giao dịch: " + transactionId + "\n\n"
+                    + "Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.\n"
+                    + "Trân trọng,\n"
+                    + "Đội ngũ hỗ trợ khách hàng";
+
+            emailService.sendEmail(account.getEmail(), subject, content);
+        }
 
         model.addAttribute("orderId", orderInfo);
         model.addAttribute("totalPrice", Integer.parseInt(totalPrice) / 100);
@@ -388,4 +430,5 @@ public class UserController {
 
         return paymentStatus == 1 ? "Payment/orderSuccess" : "Payment/orderFail";
     }
+
 }

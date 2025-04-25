@@ -1,4 +1,21 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: minhchienvadori@gmail.com
+    password: hkak zyer peua wfrx
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+
   servlet:
     multipart:
       max-file-size: 10MB
