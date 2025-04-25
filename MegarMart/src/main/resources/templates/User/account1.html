@@ -74,10 +74,24 @@
                             <div class="product-shop-price">
                                 <span class="product-shop-price"
                                       th:text="${#numbers.formatInteger(detail.product.price, 1, 'POINT')}"></span>
+                                <div th:if="${detail.review != null}" class="reviewed-badge">
+                                    <span class="badge bg-success">Đã đánh giá</span>
+                                </div>
+
+                                <!-- Hiển thị nút nếu chưa đánh giá -->
+                                <button th:unless="${detail.review == null}"
+                                        class="review-product"
+                                        th:attr="data-product-id=${detail.product.id},
+                                                data-product-name=${detail.product.name},
+                                                data-product-image=${detail.product.imageurl}"
+                                        onclick="openReviewModal(this)">
+                                    Đánh giá
+                                </button>
                             </div>
                         </div>
 
                         <div class="product-shop-thanhtien">
+
                             <p>Thành Tiền:
                                 <span th:text="${#numbers.formatInteger(order.totalprice, 1, 'POINT')}"></span>
                             </p>
@@ -153,13 +167,76 @@
                 </div>
             </form>
         </div>
+        <div class="review-modal" id="reviewModal">
+            <form th:action="@{/user/ReviewProduct-add}" method="post" th:object="${reviewProduct}">
+                <input type="hidden" name="productId" id="modalProductId">
+
+                <div class="review-container">
+                    <div class="review-header">
+                        <div class="product-img">
+                            <img id="modalProductImage" alt="Product image">
+                        </div>
+                        <div class="review-product-title" id="modalProductName"></div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-section-title">Mức độ hài lòng</div>
+                        <select class="satisfaction-select" name="rating" required>
+                            <option value="" disabled selected>-- Chọn --</option>
+                            <option value="VERY_GOOD">Rất hài lòng</option>
+                            <option value="GOOD">Hài lòng</option>
+                            <option value="NORMAL">Bình thường</option>
+                            <option value="BAD">Không hài lòng</option>
+                            <option value="VERY_BAD">Rất không hài lòng</option>
+                        </select>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-section-title">Đánh giá sản phẩm</div>
+                        <textarea class="review-textarea" name="comment" placeholder="Nhận xét về sản phẩm"></textarea>
+                    </div>
+
+                    <div class="review-actions">
+                        <button type="button" class="review-btn review-btn-cancel" onclick="closeReviewModal()">TRỞ LẠI</button>
+                        <button type="submit" class="review-btn review-btn-submit">HOÀN THÀNH</button>
+                    </div>
+                </div>
+            </form>
+        </div>
         <script th:src="@{/js/script.js}"></script>
     </div>
 
     <div th:replace="fragments/footer.html :: footer"></div>
 </div>
 </body>
+<script>
 
+    function openReviewModal(button) {
+    // Lấy thông tin sản phẩm từ data attributes
+    const productId = button.getAttribute('data-product-id');
+    const productName = button.getAttribute('data-product-name');
+    const productImage = button.getAttribute('data-product-image');
+
+    // Điền thông tin vào modal
+    document.getElementById('modalProductId').value = productId;
+    document.getElementById('modalProductName').textContent = productName;
+    document.getElementById('modalProductImage').src = '/img/' + productImage;
+
+    // Hiển thị modal
+    document.getElementById('reviewModal').style.display = 'block';
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+}
+
+// Đóng modal khi click bên ngoài
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('reviewModal')) {
+        closeReviewModal();
+    }
+});
+</script>
 <script>
     function toggleDetails(el) {
         const orderId = el.getAttribute("data-order-id");

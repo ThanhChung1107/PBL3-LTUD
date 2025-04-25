@@ -1,35 +1,34 @@
 package com.ProjectPBL3.MegarMart.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @RequiredArgsConstructor
-@Getter
-@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Shop {
+public class ReviewProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    String shopname;
-    String email;
-    String phone;
-    String address;
-    String imageurl;
-    Boolean status;
-    String Description;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id",referencedColumnName = "id")
-    Account account;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    RatingLevel rating;
+    String comment;
+    @ManyToOne
+    @JoinColumn(name = "account_id",referencedColumnName = "id",nullable = false)
+    private Account account;
 
-    @OneToMany(mappedBy = "shop")
-    private List<Product> products;
+    @ManyToOne
+    @JoinColumn(name = "product_id",referencedColumnName = "id", nullable = false)
+    private Product product;
+    private String sellerReply;
 
     @Column(nullable = false, updatable = false)
     LocalDate createdAt;
@@ -40,7 +39,7 @@ public class Shop {
 
     // Tự động set ngày tạo trước khi insert
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         createdAt = LocalDate.now();
         updatedAt = LocalDate.now();
     }
@@ -49,4 +48,6 @@ public class Shop {
     protected void onUpdate() {
         updatedAt = LocalDate.now();
     }
+
+
 }

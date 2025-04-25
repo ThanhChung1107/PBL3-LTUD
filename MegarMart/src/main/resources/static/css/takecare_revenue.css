@@ -31,6 +31,9 @@
     color: #999999;
     align-self: center;
 }
+table {
+    margin-top: 20px;
+}
 .main_page__eval-table{
     display: flex;
     align-content: center;
@@ -74,12 +77,41 @@
 }
 .main_page__list-eval-select{
     display: flex;
-    align-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
 }
 .main_page__list-eval-select-text{
-    font-size: 1.2rem;
-    color: #666666;
+    font-weight: 600;
+    margin-right: 10px;
+    color: #333;
+    font-size: 1.4rem;
 }
+/* Style cho label (nút lọc) */
+    .main_page__list-eval-select label {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 16px;
+        background-color: #f0f0f0;
+        color: #555;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        border: 1px solid #ddd;
+    }
+
+    /* Style khi radio được chọn */
+    .main_page__list-eval-select input[type="radio"]:checked + label {
+        background-color: #4CAF50;
+        color: white;
+        border-color: #4CAF50;
+    }
+
+    /* Hiệu ứng hover */
+    .main_page__list-eval-select label:hover {
+        background-color: #e0e0e0;
+    }
 .main_page__list-eval-select-star{
     font-size: 1.3rem;
     font-weight: 380;
@@ -358,3 +390,169 @@
     font-weight: 400;
     flex: 3;
 }
+/* bảng đánh giá sản phẩm */
+.col_height {
+    min-height: 150px;
+}
+.col_user_review {
+    padding: 10px;
+}
+.user_info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.user_img img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+.col_product_img {
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+}
+.col_product_name {
+    margin-left: 6px;
+    font-size: 1.4rem;
+}
+.user_rate {
+    margin-bottom: 6px;
+    color: var(--primary-color);
+}
+.user_review {
+    margin-bottom: 20px;
+
+}
+.id {
+    text-decoration: underline;
+}
+.order_info {
+    display: flex;
+    justify-content: space-between;
+}
+.order_id {
+    color: var(--text-color);
+}
+
+/* form reply */
+.reply-modal {
+
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    place-items: center;
+    z-index: 1000;
+    display: none;
+
+  }
+
+  .reply-box {
+    background: white;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    font-family: sans-serif;
+    margin-top: 40px;
+  }
+
+  .reply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .review-info {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .username {
+    font-size: 1.4rem;
+    font-weight: bold;
+    padding-right: 20px;
+    border-right: 0.5px solid ;
+
+  }
+  .rate {
+    margin-left: 10px;
+    font-size: 1.4rem;
+    color: var(--primary-color);
+  }
+  .stars {
+    color: #f5a623;
+    margin-left: 5px;
+  }
+
+  .user-review {
+    font-size: 14px;
+    color: #444;
+  }
+
+  .reply-input {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  .reply-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .char-count {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .btn.cancel {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+  }
+
+  .btn.submit {
+    background-color: #ee4d2d;
+    color: white;
+    border: none;
+  }

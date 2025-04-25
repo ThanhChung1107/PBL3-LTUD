@@ -20,5 +20,7 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders order;
-
+    @OneToOne
+    @JoinColumn(name = "review_id")
+    private ReviewProduct review;
 }

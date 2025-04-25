@@ -159,7 +159,8 @@
     margin-top: 60px;
 }
 .seller-sidebar {
-    width: 180px;
+    width: 160px;
+    background-color: #fff;
 }
 .sidebar-list-item {
     list-style: none;
@@ -572,92 +573,83 @@
 
 
 .container {
-    width: 250px; /* Độ rộng */
-    height: 250px; /* Độ cao (bằng với độ rộng để tạo hình tròn) */
-    background-color: #f3f3f3; /* Màu nền */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .img-area {
-    width: 100%;
-    height: 100%;
-    display: flex; /* Quan trọng để căn giữa icon */
+    position: relative;
+    width: 120px;
+    height: 140px;
+    background: #fff;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.img-area:hover {
+    border-color: #4e73df;
+}
+
+.img-area.active {
+    border-color: #4e73df;
+    background-color: #f0f4ff;
 }
 
 .img-area .icon {
-    font-size: 40px; /* Tùy chỉnh kích thước icon */
-    color: #555;
+    font-size: 60px;
+    color: #6c757d;
 }
 
-.img-area img {
+.img-area .preview-image {
     width: 100%;
     height: 100%;
-/*    object-fit: cover; */
-    border-radius: 4px;
+    object-fit: cover;
+    display: none;
+}
+
+.img-area[data-img] .preview-image {
     display: block;
 }
 
-.img-area h3 {
-	font-size: 20px;
-	font-weight: 500;
-	margin-bottom: 6px;
+.img-area[data-img] .icon {
+    display: none;
 }
-.img-area p {
-	color: #999;
+
+.select-image {
+    padding: 12px 24px;
+    background-color: #4e73df;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-.img-area p span {
-	font-weight: 600;
-}
-.img-area img {
-    position: absolute;
-	width: 100%;
-    height: 100%;
-}
-.img-area::before {
-	content: attr(data-img);
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, .5);
-	color: #fff;
-	font-weight: 500;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	pointer-events: none;
-	opacity: 0;
-	transition: all .3s ease;
-	z-index: 200;
-}
-.img-area.active:hover::before {
-	opacity: 1;
-}
-/* .select-image {
-	display: block;
-	width: 100%;
-	padding: 8px 0;
-	background: var(--blue);
-	color: #fff;
-	font-weight: 500;
-	font-size: 16px;
-	border: none;
-	cursor: pointer;
-	transition: all .3s ease;
-} */
+
 .select-image:hover {
-	background: var(--dark-blue);
+    background-color: #3a5bd9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.select-image:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 .basic_name_input {
     width: 100%;
@@ -795,6 +787,8 @@
     font-size: 1.6rem; 
 }
 .seller_profile_img {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
 }
 .seller_profile_description {
@@ -819,4 +813,27 @@
     height: 150px;
     font-size: 1.4rem;
     padding: 10px;
+}
+.btn-save {
+    background: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.preview-image {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 5px;
 }
