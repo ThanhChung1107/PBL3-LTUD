@@ -12,3 +12,5 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
     List<OrderDetail> findByProduct(Product product);
     boolean existsByProductId(Integer productId);
 }
+
+}

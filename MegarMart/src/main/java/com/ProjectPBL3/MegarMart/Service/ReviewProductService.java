@@ -30,6 +30,9 @@ public class ReviewProductService {
     public List<ReviewProduct> getReviewsByShopId(Integer shopId) {
         return reviewProductRepository.findAllByShopId(shopId);
     }
+    public List<ReviewProduct> findByProductId(int productId) {
+        return reviewProductRepository.findByProductId(productId);
+    }
     public ReviewProduct findById(Integer Id){
         return this.reviewProductRepository.findById(Id).get();
     }

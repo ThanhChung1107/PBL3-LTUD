@@ -74,12 +74,12 @@
                             <div class="product-shop-price">
                                 <span class="product-shop-price"
                                       th:text="${#numbers.formatInteger(detail.product.price, 1, 'POINT')}"></span>
+
                                 <div th:if="${detail.review != null}" class="reviewed-badge">
                                     <span class="badge bg-success">Đã đánh giá</span>
                                 </div>
 
-                                <!-- Hiển thị nút nếu chưa đánh giá -->
-                                <button th:unless="${detail.review == null}"
+                                <button th:if="${detail.review == null}"
                                         class="review-product"
                                         th:attr="data-product-id=${detail.product.id},
                                                 data-product-name=${detail.product.name},

@@ -34,6 +34,8 @@ public class UserController {
     private final CouponService couponService;
     private final OrdersService ordersService;
     private final ReviewProductService reviewProductService;
+    private final OrderDetailService orderDetailService;
+
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -154,7 +156,7 @@ public class UserController {
     public String productdetail(@PathVariable int id,Model model){
         Product product = productService.findById(id);
         model.addAttribute("pro",product);
-        List<ReviewProduct> reviews = this.reviewProductService.getAll();
+        List<ReviewProduct> reviews = this.reviewProductService.findByProductId(id);
         model.addAttribute("product",product);
         model.addAttribute("listreview",reviews);
         model.addAttribute("reviewCount",reviews.size());
