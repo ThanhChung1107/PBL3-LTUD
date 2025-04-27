@@ -173,24 +173,25 @@
     font-size: 1.8rem;
     color:red;
 }
-.product-shop-price {
-    display: flex;
-    margin-left:auto;
-    font-size: 2.4rem;
-    color: dimgrey;
-}
+
 .product-shop-price {
     display: flex;
     justify-content: center;
     align-self: center;
-    font-size: 1.4rem;
+    font-size: 2.0rem;
+    margin-left:auto;
     color: var(--primary-color);
+}
+.product-shop-price span {
+    margin-right:5px;
 }
 .product-shop-thanhtien span {
     font-size: 2.8rem;
     color: var(--primary-color);
 }
-
+.product-shop-thanhtien p {
+    font-size: 2.4rem;
+}
 /* tài khoản của tôi */
 .my-account {
     display: none; /* Ẩn mặc định */

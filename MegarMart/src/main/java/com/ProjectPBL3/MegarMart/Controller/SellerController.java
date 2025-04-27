@@ -107,7 +107,7 @@ public class SellerController {
             List<ReviewProduct> reviews = reviewProductService.getReviewsByShopId(shop.getId());
             model.addAttribute("reviews",reviews);
             model.addAttribute("id",shop.getId());
-            return "seller/seller_takecare";
+            return "Seller/seller_takecare";
         }
 
     @PostMapping("/reply")
@@ -132,7 +132,7 @@ public class SellerController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("id", shop.getId());
 
-        return "redirect:seller/seller_takecare"; // Quay lại trang quản lý đánh giá
+        return "redirect:/seller/takecare-manager"; // Quay lại trang quản lý đánh giá
     }
 
     @GetMapping("/filter")

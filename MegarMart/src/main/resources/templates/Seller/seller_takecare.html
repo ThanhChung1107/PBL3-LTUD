@@ -120,7 +120,7 @@
                         </div>
                         <div class="user-review" id="reviewComment"></div>
                     </div>
-                    <form th:action="@{/reply}" method="post">
+                    <form th:action="@{/seller/reply}" method="post">
                         <input type="hidden" name="reviewProductId" id="modalReviewId">
                         <textarea class="reply-input" name="sellerReply" required maxlength="500"></textarea>
                         <div class="btn-group">
