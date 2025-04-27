@@ -2,8 +2,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: minhchienvadori@gmail.com
-    password: hkak zyer peua wfrx
+    username: megamart.noreply@gmail.com
+    password: hkee lvye saxt obyw
     protocol: smtp
     default-encoding: UTF-8
     properties:

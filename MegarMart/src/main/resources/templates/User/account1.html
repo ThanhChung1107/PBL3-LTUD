@@ -58,8 +58,22 @@
                                     </span>
                                 </div>
                             </div>
-                            <span class="order-completed"
-                                  th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></span>
+                            <span th:if="${order.isPaid == 1}"
+                                  style="color:green;font-size:20px;font-weight:bold;">
+                                    Đã thanh toán
+                            </span>
+                            <div th:if="${order.isPaid != 1}" style="display:flex; flex-direction:column;">
+                                <span style="color:red; font-size:20px; font-weight:bold;">
+                                    Chưa thanh toán
+                                </span>
+                                <form th:action="@{/user/submitOrder}" method="get">
+                                    <input type="hidden" name="amount" th:value="${order.totalprice}">
+                                    <input type="hidden" name="orderId" th:value="${order.id}">
+                                    <button type="submit" style="font-size:1.22rem;margin-top:5px; padding:8px 40px; background-color:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;">
+                                        Thanh toán lại
+                                    </button>
+                                </form>
+                            </div>
                         </div>
 
                         <div th:each="detail : ${order.orderDetails}" class="product-shop" th:attr="data-detail-id=${iterStat.index}" style="display: none;">
