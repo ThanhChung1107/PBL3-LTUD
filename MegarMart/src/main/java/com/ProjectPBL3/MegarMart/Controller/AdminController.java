@@ -1,9 +1,6 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
-import com.ProjectPBL3.MegarMart.Entity.Category;
-import com.ProjectPBL3.MegarMart.Entity.Coupon;
-import com.ProjectPBL3.MegarMart.Entity.Product;
-import com.ProjectPBL3.MegarMart.Entity.Shop;
+import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,6 +22,7 @@ public class AdminController {
     private final FileSystemStorageService storageService;
     private final ProductService productService;
     private final CouponService couponService;
+    private final OrdersService ordersService;
 
     @GetMapping("/home")
     public String adminhome(Model model) {
@@ -109,7 +108,11 @@ public class AdminController {
 
     @GetMapping("/product")
     public String product(Model model) {
-        model.addAttribute("listpro",productService.findAll());
+        List<Product> all = productService.findAll();
+        List<Product> pending = all.stream()
+                .filter(p -> p.getStatus() == 0)
+                .collect(Collectors.toList());
+        model.addAttribute("listpro", pending);
         return "Admin/product";
     }
 
@@ -171,4 +174,15 @@ public class AdminController {
             return "Admin/edit_coupon";
         }
     }
+
+    @GetMapping("/order-history/{id}")
+    public String orderHistory(@PathVariable int id, Model model) {
+        Account acc = accountService.findById(id);
+        List<Orders> orders = ordersService.findByAccount(acc);
+
+        model.addAttribute("account", acc);
+        model.addAttribute("orders", orders);
+        return "Admin/OrderHistory";
+    }
+
 }

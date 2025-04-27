@@ -1,7 +1,9 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.*;
+import com.ProjectPBL3.MegarMart.PaymentConfig.VNPAYService;
 import com.ProjectPBL3.MegarMart.Service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -36,6 +39,8 @@ public class UserController {
     private final ReviewProductService reviewProductService;
     private final OrderDetailService orderDetailService;
 
+    private final VNPAYService vnpayService;
+    private final EmailService emailService;
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -239,14 +244,19 @@ public class UserController {
         return "User/cart";
     }
 
-
     @GetMapping("/pay")
-    public String pay(@RequestParam List<Integer> selectedIds,@RequestParam List<Integer> quantities,@RequestParam(required = false) String voucher,RedirectAttributes redirectAttributes ,Model model, HttpSession session) {
+    public String pay(@RequestParam List<Integer> selectedIds,
+                      @RequestParam List<Integer> quantities,
+                      @RequestParam(required = false) String voucher,
+                      RedirectAttributes redirectAttributes,
+                      Model model,
+                      HttpSession session) {
+
         Account acc = (Account) session.getAttribute("account");
         if (acc.getName() == null || acc.getName().isEmpty() ||
                 acc.getPhone() == null || acc.getPhone().isEmpty() ||
                 acc.getAddress() == null || acc.getAddress().isEmpty()) {
-            redirectAttributes.addFlashAttribute("fillfull","Vui lòng điền đẩy đủ thông tin để mua hàng");
+            redirectAttributes.addFlashAttribute("fillfull", "Vui lòng điền đầy đủ thông tin để mua hàng");
             return "redirect:/user/accountdetail";
         }
 
@@ -266,6 +276,7 @@ public class UserController {
             if (coupon != null) {
                 if (coupon.getStatus() == 0 || coupon.getCount() >= coupon.getUsagelimit()) {
                     model.addAttribute("error", "Mã không khả dụng hoặc đã hết lượt dùng!!");
+                    coupon = null;
                 } else {
                     coupondiscount = (int) ((coupon.getDiscount() / 100.0) * totalPrice);
                 }
@@ -277,9 +288,10 @@ public class UserController {
         model.addAttribute("selectedProducts", selectedProducts);
         model.addAttribute("quantities", quantities);
         model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("coupondiscount",coupondiscount);
-        model.addAttribute("coupon",coupon);
-        session.setAttribute("selectedProducts",selectedProducts);
+        model.addAttribute("coupondiscount", coupondiscount);
+        model.addAttribute("coupon", coupon);
+        session.setAttribute("selectedProducts", selectedProducts);
+
         return "User/pay";
     }
 
@@ -307,15 +319,9 @@ public class UserController {
             int quantity = quantities.get(i);
 
             if (product.getStock() < quantity) {
-                String errorMessage = "Sản phẩm " + product.getName() + " chỉ còn lại " + product.getStock() + " trong kho.";
-                model.addAttribute("errorproduct", errorMessage);
-                return "User/pay";  // Trả về trang pay để hiển thị lỗi
+                model.addAttribute("errorproduct", "Sản phẩm " + product.getName() + " chỉ còn lại " + product.getStock() + " trong kho.");
+                return "User/pay"; // Trả về lại trang pay nếu lỗi
             }
-
-            product.setSold(product.getSold()+quantity);
-            product.setStock(product.getStock()-quantity);
-            product.setRevenue(product.getRevenue()+product.getPrice()*quantity);
-            productService.update(product);
 
             OrderDetail detail = new OrderDetail();
             detail.setOrder(order);
@@ -326,13 +332,12 @@ public class UserController {
 
             totalPrice += product.getPrice() * quantity;
 
-            deletecart(product.getId(),session);
+            deletecart(product.getId(), session);
         }
 
-        // Gắn orderDetails vào order
         order.setOrderDetails(orderDetails);
+        order.setIsPaid(0);
 
-        // Áp dụng mã giảm giá nếu có
         if (couponCode != null && !couponCode.isEmpty()) {
             Coupon coupon = couponService.findByCode(couponCode);
             if (coupon != null) {
@@ -344,13 +349,77 @@ public class UserController {
         }
 
         order.setTotalprice(totalPrice);
+        ordersService.save(order); // Cascade OrderDetails tự động
 
-        ordersService.save(order); // Tự động cascade orderDetails
-
-
-        redirectAttributes.addFlashAttribute("orderSuccess", true);
-        return "redirect:/user/home";
+        redirectAttributes.addAttribute("orderId", order.getId());
+        redirectAttributes.addAttribute("amount", order.getTotalprice());
+        return "redirect:/user/submitOrder";
     }
+
+    @GetMapping("/submitOrder")
+    public String submitOrder(@RequestParam("amount") int orderTotal,
+                              @RequestParam("orderId") String orderInfo,
+                              HttpServletRequest request) {
+
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String vnpayUrl = vnpayService.createOrder(request, orderTotal, orderInfo, baseUrl);
+        return "redirect:" + vnpayUrl;
+    }
+
+    @GetMapping("/vnpay-payment-return")
+    public String paymentCompleted(HttpServletRequest request, Model model) {
+        int paymentStatus = vnpayService.orderReturn(request);
+
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime dateTime = LocalDateTime.parse(paymentTime, inputFormatter);
+
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        String totalPrice = request.getParameter("vnp_Amount");
+
+        Orders orders = ordersService.findById(Integer.parseInt(orderInfo));
+
+        if (paymentStatus == 1) {
+            ordersService.updateisPaid(orders); // Cập nhật isPaid = 1
+
+            // ✅ Cập nhật kho và doanh thu
+            for (OrderDetail detail : orders.getOrderDetails()) {
+                Product product = detail.getProduct();
+                int quantity = detail.getQuantity();
+
+                product.setSold(product.getSold() + quantity);
+                product.setStock(product.getStock() - quantity);
+                product.setRevenue(product.getRevenue() + detail.getPrice());
+
+                productService.update(product);
+            }
+
+            // Gửi email xác nhận
+            Account account = orders.getAccount();
+            String subject = "Đơn hàng #" + orderInfo + " đã được thanh toán thành công!";
+            String content = "Chào " + account.getName() + ",\n\n"
+                    + "Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi.\n"
+                    + "Thông tin đơn hàng:\n"
+                    + "- Mã đơn: " + orderInfo + "\n"
+                    + "- Số tiền: " + (Integer.parseInt(totalPrice) / 100) + " VNĐ\n"
+                    + "- Thời gian thanh toán: " + dateTime + "\n"
+                    + "- Mã giao dịch: " + transactionId + "\n\n"
+                    + "Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.\n"
+                    + "Trân trọng,\n"
+                    + "Đội ngũ hỗ trợ khách hàng";
+
+            emailService.sendEmail(account.getEmail(), subject, content);
+        }
+
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("totalPrice", Integer.parseInt(totalPrice) / 100);
+        model.addAttribute("paymentTime", dateTime);
+        model.addAttribute("transactionId", transactionId);
+
+        return paymentStatus == 1 ? "Payment/orderSuccess" : "Payment/orderFail";
+    }
+
 
     @GetMapping("/ReviewProduct-add")
     public String showReviewForm(

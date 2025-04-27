@@ -30,6 +30,7 @@ public class Product {
     int status;
     int sold;
 
+
     @ManyToOne
     @JoinColumn(name = "shop_id",referencedColumnName = "id")
     Shop shop;

@@ -146,6 +146,12 @@
     z-index: 1;
     position: relative;
 }
+.product-shop-item {
+    display: flex;
+    align-items: center; /* căn giữa theo chiều dọc */
+    justify-content: space-between;
+    width: 100%;
+}
 .product-shop-info {
     display: flex;
 }

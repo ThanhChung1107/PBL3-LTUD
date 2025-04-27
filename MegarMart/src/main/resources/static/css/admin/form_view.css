@@ -67,7 +67,7 @@
     border: none;
     border-radius: 3px;
     cursor: pointer;
-    color: white;
+    background: cornflowerblue;
 }
 
 .btn-edit {
