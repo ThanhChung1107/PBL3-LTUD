@@ -91,7 +91,14 @@ html{
 .btn:hover{
     background-color: rgba(0, 0, 0 , 0.05);
 }
-
+.btn.btn--nomal{
+ border: 1px solid #dadada;
+    color:var(--text-color);
+    background-color: var(--white-color);
+}
+.btn.btn--nomal:hover{
+    background-color: rgba(0, 0, 0 , 0.05);
+}
 .btn.btn--primary{
     color:var(--white-color);
     background-color: var(--primary-color);
@@ -209,3 +216,51 @@ html{
 .btn--primary:hover{
  background-color: #045bac;
 }
+/* Container phân trang */
+.custom-pagination {
+    display: flex;
+    justify-content: center; /* căn giữa */
+    align-items: center;
+    list-style: none;
+    padding: 20px 0;
+    margin: 20px 0 0 0;
+}
+
+/* Từng item phân trang */
+.custom-pagination__item {
+    margin: 0 5px;
+}
+
+/* Link trong item */
+.custom-pagination__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+/* Hover */
+.custom-pagination__link:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+/* Icon trái/phải */
+.custom-pagination__icon {
+    font-size: 18px;
+}
+
+/* Trang hiện tại */
+.custom-pagination__item--active .custom-pagination__link {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+

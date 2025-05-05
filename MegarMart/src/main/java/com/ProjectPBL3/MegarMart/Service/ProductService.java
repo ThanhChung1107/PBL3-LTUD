@@ -66,6 +66,9 @@ public class ProductService {
     public List<Product> searchProduct(String productname) {
         return productRepository.searchProduct(productname);
     }
+    public List<Product> searchProductByNameAndShop(String productname, Shop shop) {
+        return productRepository.searchProductByNameAndShop(productname,shop);
+    }
 
     public Page<Product> getAll(Integer pageNo) {
         Pageable pageable = PageRequest.of(pageNo-1,10);

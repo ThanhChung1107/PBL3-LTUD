@@ -24,6 +24,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("SELECT COUNT(*) FROM Product p WHERE p.shop.id = :shopId")
     int countByShopId(@Param("shopId") int shopid);
 
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %:keyword% AND p.shop = :shop")
+    List<Product> searchProductByNameAndShop(@Param("keyword") String keyword, @Param("shop") Shop shop);
     @Query("SELECT p FROM Product p WHERE p.name LIKE %?1%")
     List<Product> searchProduct(String productname);
 

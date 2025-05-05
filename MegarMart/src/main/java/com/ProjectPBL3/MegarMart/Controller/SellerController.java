@@ -4,6 +4,8 @@ import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -183,7 +185,10 @@ public class SellerController {
 
 
     @GetMapping("/revenue")
-    public String revenue(Model model, HttpSession session) {
+    public String revenue(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+            Model model,
+            HttpSession session) {
         Account account = (Account) session.getAttribute("account");
         Shop shop = shopService.findByAccount(account);
 
@@ -207,41 +212,162 @@ public class SellerController {
             allOrderDetails.sort((o1, o2) -> o2.getOrder().getCreatedAt().compareTo(o1.getOrder().getCreatedAt()));
         }
 
+        // Phân trang thủ công (vì đang xài List chứ không phải Page trực tiếp)
+        int pageSize = 5;
+        int start = (pageNo - 1) * pageSize;
+        int end = Math.min(start + pageSize, allOrderDetails.size());
+        List<OrderDetail> pageContent = new ArrayList<>();
+        if (start <= end) {
+            pageContent = allOrderDetails.subList(start, end);
+        }
+
+        int totalPages = (int) Math.ceil((double) allOrderDetails.size() / pageSize);
+
+        model.addAttribute("listOrder", pageContent);
+        model.addAttribute("currentpage", pageNo);
+        model.addAttribute("totalpage", totalPages);
 
         model.addAttribute("totalRevenue", totalRevenue);
         model.addAttribute("thisMonthRevenue", thisMonthRevenue);
-        model.addAttribute("listOrder", allOrderDetails); // Gửi lại danh sách sản phẩm cho view
         return "Seller/revenue";
     }
-    @PostMapping("/revenue/filter")
-    public String filterRevenue (
-            @RequestParam("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-            @RequestParam("toDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+
+    @GetMapping("/revenue/filter")
+    public String getfilterRevenue(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(value = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
             Model model, HttpSession session
-    ){
+    ) {
         Account account = (Account) session.getAttribute("account");
         Shop shop = shopService.findByAccount(account);
+
         List<Product> listpro = productService.findByShop(shop);
         List<OrderDetail> filteredDetails = new ArrayList<>();
+        List<OrderDetail> allOrderDetails = new ArrayList<>();
         int total = 0;
 
-        for (Product p : listpro) {
-            List<OrderDetail> details = orderDetailService.findOrderDetailByProduct(p);
-            for (OrderDetail od : details) {
-                LocalDate createdAt = od.getOrder().getCreatedAt();
-                if ((createdAt.isEqual(fromDate) || createdAt.isAfter(fromDate)) &&
-                        (createdAt.isEqual(toDate) || createdAt.isBefore(toDate))) {
-                    filteredDetails.add(od);
-                    total += od.getPrice();
-                }
+        // Nếu có từ khóa tìm kiếm
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // Tìm sản phẩm theo từ khóa
+            List<Product> searchProducts = productService.searchProductByNameAndShop(keyword, shop);
+            for (Product product : searchProducts) {
+                List<OrderDetail> details = orderDetailService.findOrderDetailByProduct(product);
+                filteredDetails.addAll(details);
+            }
+        } else {
+            // Không tìm kiếm -> lấy hết tất cả
+            for (Product product : listpro) {
+                List<OrderDetail> details = orderDetailService.findOrderDetailByProduct(product);
+                filteredDetails.addAll(details);
             }
         }
 
-        filteredDetails.sort((o1, o2) -> o2.getOrder().getCreatedAt().compareTo(o1.getOrder().getCreatedAt()));
+        // Lọc theo khoảng thời gian nếu có chọn ngày
+        for (OrderDetail od : filteredDetails) {
+            LocalDate createdAt = od.getOrder().getCreatedAt();
 
-        model.addAttribute("listOrder", filteredDetails);
+            if ((fromDate == null || !createdAt.isBefore(fromDate)) &&
+                    (toDate == null || !createdAt.isAfter(toDate))) {
+                allOrderDetails.add(od);
+                total += od.getPrice();
+            }
+        }
+
+        // Sắp xếp theo ngày mới nhất
+        allOrderDetails.sort((o1, o2) -> o2.getOrder().getCreatedAt().compareTo(o1.getOrder().getCreatedAt()));
+
+        // Phân trang thủ công
+        int pageSize = 5;
+        int start = (pageNo - 1) * pageSize;
+        int end = Math.min(start + pageSize, allOrderDetails.size());
+
+        List<OrderDetail> pageContent = new ArrayList<>();
+        if (start < end) {
+            pageContent = allOrderDetails.subList(start, end);
+        }
+
+        int totalPages = (int) Math.ceil((double) allOrderDetails.size() / pageSize);
+
+        model.addAttribute("fromDate", fromDate);
+        model.addAttribute("toDate", toDate);
+        model.addAttribute("listOrder", pageContent);
+        model.addAttribute("currentpage", pageNo);
+        model.addAttribute("totalpage", totalPages);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("total", total);
+
         return "Seller/RevenueFilter";
     }
+    @PostMapping("/revenue/filter")
+    public String filterRevenue(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(value = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            Model model, HttpSession session
+    ) {
+        Account account = (Account) session.getAttribute("account");
+        Shop shop = shopService.findByAccount(account);
+
+        List<Product> listpro = productService.findByShop(shop);
+        List<OrderDetail> filteredDetails = new ArrayList<>();
+        List<OrderDetail> allOrderDetails = new ArrayList<>();
+        int total = 0;
+
+        // Nếu có từ khóa tìm kiếm
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // Tìm sản phẩm theo từ khóa
+            List<Product> searchProducts = productService.searchProductByNameAndShop(keyword, shop);
+            for (Product product : searchProducts) {
+                List<OrderDetail> details = orderDetailService.findOrderDetailByProduct(product);
+                filteredDetails.addAll(details);
+            }
+        } else {
+            // Không tìm kiếm -> lấy hết tất cả
+            for (Product product : listpro) {
+                List<OrderDetail> details = orderDetailService.findOrderDetailByProduct(product);
+                filteredDetails.addAll(details);
+            }
+        }
+
+        // Lọc theo khoảng thời gian nếu có chọn ngày
+        for (OrderDetail od : filteredDetails) {
+            LocalDate createdAt = od.getOrder().getCreatedAt();
+
+            if ((fromDate == null || !createdAt.isBefore(fromDate)) &&
+                    (toDate == null || !createdAt.isAfter(toDate))) {
+                allOrderDetails.add(od);
+                total += od.getPrice();
+            }
+        }
+
+        // Sắp xếp theo ngày mới nhất
+        allOrderDetails.sort((o1, o2) -> o2.getOrder().getCreatedAt().compareTo(o1.getOrder().getCreatedAt()));
+
+        // Phân trang thủ công
+        int pageSize = 5;
+        int start = (pageNo - 1) * pageSize;
+        int end = Math.min(start + pageSize, allOrderDetails.size());
+
+        List<OrderDetail> pageContent = new ArrayList<>();
+        if (start < end) {
+            pageContent = allOrderDetails.subList(start, end);
+        }
+
+        int totalPages = (int) Math.ceil((double) allOrderDetails.size() / pageSize);
+
+        model.addAttribute("fromDate", fromDate);
+        model.addAttribute("toDate", toDate);
+        model.addAttribute("listOrder", pageContent);
+        model.addAttribute("currentpage", pageNo);
+        model.addAttribute("totalpage", totalPages);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("total", total);
+
+        return "Seller/RevenueFilter";
+    }
+
 
 }
