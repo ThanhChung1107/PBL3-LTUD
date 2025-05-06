@@ -2,6 +2,7 @@ package com.ProjectPBL3.MegarMart.Service;
 
 import com.ProjectPBL3.MegarMart.Entity.OrderDetail;
 import com.ProjectPBL3.MegarMart.Entity.Product;
+import com.ProjectPBL3.MegarMart.Entity.Shop;
 import com.ProjectPBL3.MegarMart.Repository.OrderDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.ProjectPBL3.MegarMart.Repository.OrdersRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
@@ -38,7 +40,21 @@ public class OrderDetailService {
     public boolean  existsByProductId(Integer Id) {
         return orderDetailRepository.existsByProductId(Id);
     }
+    public Page<OrderDetail> findOrderDetailsByShop(Shop shop, Pageable pageable) {
+        return orderDetailRepository.findOrderDetailsByShop(shop, pageable);
+    }
+    public List<OrderDetail> findOrderDetailsByShop(Shop shop) {
+        return orderDetailRepository.findOrderDetailsByShop(shop);
+    }
+    // Lọc toàn bộ (không phân trang)
+    public List<OrderDetail> findFilteredOrderDetails(Shop shop, String keyword, LocalDate fromDate, LocalDate toDate) {
+        return orderDetailRepository.findFilteredOrderDetails(shop, keyword, fromDate, toDate);
+    }
 
+    // Lọc có phân trang
+    public Page<OrderDetail> findFilteredOrderDetailsPage(Shop shop, String keyword, LocalDate fromDate, LocalDate toDate, Pageable pageable) {
+        return orderDetailRepository.findFilteredOrderDetailsPage(shop, keyword, fromDate, toDate, pageable);
+    }
     public List<OrderDetail> searchProduct(String productName) {
         List<Product> products = productRepository.searchProduct(productName);
         List<OrderDetail> orderDetails = new ArrayList<>();

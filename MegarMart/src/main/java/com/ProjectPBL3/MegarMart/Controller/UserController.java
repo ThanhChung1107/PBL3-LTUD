@@ -177,6 +177,9 @@ public class UserController {
 
         int productCount = productService.countByShopId(id);
         model.addAttribute("productcount", productCount);
+        List<ReviewProduct> reviewCount = reviewProductService.getReviewsByShopId(shop.getId());
+        int totalReviews = reviewCount.size();
+        model.addAttribute("totalReviews", totalReviews);
 
         List<Product> productshop = productService.findByShopAndStatus(shop);
         model.addAttribute("listproshop",productshop);

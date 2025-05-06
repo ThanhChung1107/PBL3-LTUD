@@ -23,7 +23,7 @@
                 <div class="basic_conttent">
                     <div class="basic_conttent_lable">Hình ảnh sản phẩm</div>
                     <div class="container">
-                        <input type="file" name="fileImage" id="file" accept="image/*"  style="opacity: 0; position: absolute; z-index: -1;" required>
+                        <input type="file" name="fileImage" id="file" accept="image/*" style="opacity: 0; position: absolute; z-index: -1;" required>
                         <label for="file" class="img-area" id="imgArea">
                             <i class='bx bxs-cloud-upload icon'></i>
                         </label>
@@ -69,23 +69,17 @@
     <script th:src="@{/js/add_product.js}"></script>
 </body>
 <script>
-    const fileInput = document.getElementById("file");
-    const imgArea = document.getElementById("imgArea");
+    const fileInput = document.getElementById('file');
+    const imgArea = document.getElementById('imgArea');
 
-    fileInput.addEventListener("change", function () {
+    fileInput.addEventListener('change', function () {
         const file = this.files[0];
-
         if (file) {
             const reader = new FileReader();
 
-            reader.onload = function () {
-                // Clear nội dung hiện tại
-                imgArea.innerHTML = "";
-
-                // Tạo thẻ img mới và gán src
-                const img = document.createElement("img");
-                img.src = reader.result;
-                imgArea.appendChild(img);
+            reader.onload = function (e) {
+                imgArea.setAttribute('data-img', 'true');
+                imgArea.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
             };
 
             reader.readAsDataURL(file);

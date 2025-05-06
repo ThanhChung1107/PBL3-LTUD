@@ -1,7 +1,8 @@
 .main_page {
     width: 100%;
+     overflow: hidden;
     background-color: #e7e7e7;
-    height: 1000px;
+
 }
 
 .main_page__eval-shop{

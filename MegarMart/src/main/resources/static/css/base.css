@@ -85,7 +85,7 @@ html{
     border-radius: 2px;  
     padding-top: 3px;
     cursor: pointer;
-    color: var(--text-color);
+    color: var(--white-color);
     background-color: #fff;
 }
 .btn:hover{

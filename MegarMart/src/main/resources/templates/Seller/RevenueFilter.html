@@ -26,15 +26,18 @@
 
         <!-- Form tìm kiếm sản phẩm -->
         <div class="main_page__list-eval-search">
-          <form method="POST" action="/seller/revenue/filter">
+          <form method="get" action="/seller/revenue/filter">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
                    class="input-search" style=" margin-left: 20px; margin-right: 10px;"
                    th:value="${keyword}">
-            <span class="main_page__list-eval--text" >Từ:</span>
-            <input type="date" name="fromDate" class="date" >
-            <span class="main_page__list-eval--text" >Đến:</span>
-            <input type="date" name="toDate" class="date" >
+            <span class="main_page__list-eval--text">Từ:</span>
+            <input type="date" name="fromDate" class="date"
+                   value="[[${fromDate} != null ? ${fromDate} : '']]">
+
+            <span class="main_page__list-eval--text">Đến:</span>
+            <input type="date" name="toDate" class="date"
+                   value="[[${toDate} != null ? ${toDate} : '']]">
             <button type="submit" class="btn-product-search" style="margin-left: 20px; height:30px;">Tìm</button>
             <button type="button" class="btn btn--nomal"
                     onclick="location.href='/seller/revenue'">Đặt lại</button>

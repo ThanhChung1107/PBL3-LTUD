@@ -14,7 +14,7 @@
                 <div class="seller_profile_header">
                     <p class="seller_profile_header_lable">Thông tin cơ bản</p>
                     <div class="seller_profile_btn">
-                        <a href="index.html" class="view_my_shop">Xem shop của tôi</a>
+                        <a th:href="@{/user/shop/{id}(id=${shop.id})}" class="view_my_shop">Xem shop của tôi</a>
                         <div class="seller_profile_edit" onclick="showSection('seller_profile_edit_view')">Chỉnh sửa</div>
                     </div>
                 </div>

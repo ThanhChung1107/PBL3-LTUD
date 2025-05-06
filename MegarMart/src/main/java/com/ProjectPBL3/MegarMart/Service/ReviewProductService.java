@@ -5,7 +5,9 @@ import com.ProjectPBL3.MegarMart.Entity.ReviewProduct;
 import com.ProjectPBL3.MegarMart.Repository.ReviewProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
+
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,12 @@ public class ReviewProductService {
 
     public List<ReviewProduct> getReviewsByShopId(Integer shopId) {
         return reviewProductRepository.findAllByShopId(shopId);
+    }
+    public Page<ReviewProduct> getReviewsByShopId(Integer shopId, Pageable pageable) {
+        return reviewProductRepository.findAllByShopId(shopId, pageable);
+    }
+    public List<ReviewProduct> filterReviews(Integer shopId, RatingLevel rating, LocalDate startDate, LocalDate endDate, String keyword) {
+        return reviewProductRepository.filterReviews(shopId, rating, startDate, endDate, keyword);
     }
     public List<ReviewProduct> findByProductId(int productId) {
         return reviewProductRepository.findByProductId(productId);

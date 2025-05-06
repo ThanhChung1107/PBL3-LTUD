@@ -41,6 +41,9 @@
                 </div>
 
                 <div class="main_page__list-eval-search">
+                    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                           class="input-search" style="  margin-right: 10px;"
+                           th:value="${keyword}">
                     <span class="main_page__list-eval--text">Từ:</span>
                     <input type="date" name="startDate" class="date"
                            th:value="${startDate != null} ? ${#temporals.format(startDate, 'yyyy-MM-dd')} : ''">
@@ -104,8 +107,37 @@
                     </td>
 
                 </tr>
+
                 </tbody>
             </table>
+            <ul class="custom-pagination">
+                <!-- Previous -->
+                <li class="custom-pagination__item" th:if="${currentpage > 1}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, page=${currentpage-1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
+
+                <!-- Các trang -->
+                <li class="custom-pagination__item"
+                    th:each="i : ${#numbers.sequence(1, totalpage)}"
+                    th:classappend="${currentpage == i} ? 'custom-pagination__item--active'">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, page=${i})}"
+                       th:text="${i}">
+                    </a>
+                </li>
+
+                <!-- Next -->
+                <li class="custom-pagination__item" th:if="${currentpage < totalpage}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, page=${currentpage+1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
             <div class="reply-modal" id="reply-modal">
                 <div class="reply-box">
                     <div class="reply-header">
