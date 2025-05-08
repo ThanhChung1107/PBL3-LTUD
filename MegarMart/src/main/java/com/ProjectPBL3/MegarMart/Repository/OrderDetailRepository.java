@@ -17,41 +17,42 @@ import java.util.List;
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer> {
     List<OrderDetail> findByProduct(Product product);
     boolean existsByProductId(Integer productId);
-    @Query("SELECT od FROM OrderDetail od WHERE od.product.shop = :shop ORDER BY od.order.createdAt DESC")
-    Page<OrderDetail> findOrderDetailsByShop(@Param("shop") Shop shop, Pageable pageable);
-    @Query("SELECT od FROM OrderDetail od WHERE od.product.shop = :shop ORDER BY od.order.createdAt DESC")
-    List<OrderDetail> findOrderDetailsByShop(@Param("shop") Shop shop);
-    // Không phân trang
-    @Query("""
-            SELECT od FROM OrderDetail od 
-            WHERE od.product.shop = :shop 
-            AND (:keyword IS NULL OR LOWER(od.product.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
-            AND (:fromDate IS NULL OR od.order.createdAt >= :fromDate)
-            AND (:toDate IS NULL OR od.order.createdAt <= :toDate)
-            ORDER BY od.order.createdAt DESC
-           """)
-    List<OrderDetail> findFilteredOrderDetails(
-            @Param("shop") Shop shop,
-            @Param("keyword") String keyword,
-            @Param("fromDate") LocalDate fromDate,
-            @Param("toDate") LocalDate toDate
-    );
+    Page<OrderDetail> findByProductShopAndOrderIsPaid(Shop shop, int isPaid, Pageable pageable);
 
-    // Có phân trang
+    // full list paid (không phân trang)
+    List<OrderDetail> findByProductShopAndOrderIsPaid(Shop shop, int isPaid);
+
+    // filter có paging
     @Query("""
-            SELECT od FROM OrderDetail od 
-            WHERE od.product.shop = :shop 
-            AND (:keyword IS NULL OR LOWER(od.product.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
-            AND (:fromDate IS NULL OR od.order.createdAt >= :fromDate)
-            AND (:toDate IS NULL OR od.order.createdAt <= :toDate)
-            ORDER BY od.order.createdAt DESC
-           """)
-    Page<OrderDetail> findFilteredOrderDetailsPage(
+      SELECT od FROM OrderDetail od
+      WHERE od.product.shop = :shop
+        AND od.order.isPaid = 1
+        AND (:keyword IS NULL OR od.product.name LIKE %:keyword%)
+        AND (:fromDate IS NULL OR od.order.createdAt >= :fromDate)
+        AND (:toDate   IS NULL OR od.order.createdAt <= :toDate)
+    """)
+    Page<OrderDetail> findFilteredPaid(
             @Param("shop") Shop shop,
             @Param("keyword") String keyword,
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             Pageable pageable
+    );
+
+    // filter full list paid
+    @Query("""
+      SELECT od FROM OrderDetail od
+      WHERE od.product.shop = :shop
+        AND od.order.isPaid = 1
+        AND (:keyword IS NULL OR od.product.name LIKE %:keyword%)
+        AND (:fromDate IS NULL OR od.order.createdAt >= :fromDate)
+        AND (:toDate   IS NULL OR od.order.createdAt <= :toDate)
+    """)
+    List<OrderDetail> findFilteredPaidNoPage(
+            @Param("shop") Shop shop,
+            @Param("keyword") String keyword,
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate
     );
 }
 

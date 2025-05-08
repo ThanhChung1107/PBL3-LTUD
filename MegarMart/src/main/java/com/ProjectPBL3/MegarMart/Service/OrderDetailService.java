@@ -40,20 +40,18 @@ public class OrderDetailService {
     public boolean  existsByProductId(Integer Id) {
         return orderDetailRepository.existsByProductId(Id);
     }
-    public Page<OrderDetail> findOrderDetailsByShop(Shop shop, Pageable pageable) {
-        return orderDetailRepository.findOrderDetailsByShop(shop, pageable);
+
+    public Page<OrderDetail> findOrderDetailsByShop(Shop shop, Pageable p) {
+        return orderDetailRepository.findByProductShopAndOrderIsPaid(shop, 1, p);
     }
     public List<OrderDetail> findOrderDetailsByShop(Shop shop) {
-        return orderDetailRepository.findOrderDetailsByShop(shop);
+        return orderDetailRepository.findByProductShopAndOrderIsPaid(shop, 1);
     }
-    // Lọc toàn bộ (không phân trang)
-    public List<OrderDetail> findFilteredOrderDetails(Shop shop, String keyword, LocalDate fromDate, LocalDate toDate) {
-        return orderDetailRepository.findFilteredOrderDetails(shop, keyword, fromDate, toDate);
+    public Page<OrderDetail> findFilteredOrderDetailsPage(Shop shop, String kw, LocalDate f, LocalDate t, Pageable p) {
+        return orderDetailRepository.findFilteredPaid(shop, kw, f, t, p);
     }
-
-    // Lọc có phân trang
-    public Page<OrderDetail> findFilteredOrderDetailsPage(Shop shop, String keyword, LocalDate fromDate, LocalDate toDate, Pageable pageable) {
-        return orderDetailRepository.findFilteredOrderDetailsPage(shop, keyword, fromDate, toDate, pageable);
+    public List<OrderDetail> findFilteredOrderDetails(Shop shop, String kw, LocalDate f, LocalDate t) {
+        return orderDetailRepository.findFilteredPaidNoPage(shop, kw, f, t);
     }
     public List<OrderDetail> searchProduct(String productName) {
         List<Product> products = productRepository.searchProduct(productName);

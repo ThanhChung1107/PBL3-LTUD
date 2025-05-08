@@ -77,4 +77,11 @@ public class ReviewProductService {
         // Sửa thành:
         return reviewProductRepository.findAll(spec);
     }
+    public Double getAverageRatingByShop(Integer shopId) {
+        return reviewProductRepository.averageRatingByShop(shopId);
+    }
+
+    public List<ReviewProduct> getRecentReviewsByShop(Integer shopId, int limit) {
+        return reviewProductRepository.findRecentByShop(shopId, PageRequest.of(0, limit, Sort.by("createdAt").descending()));
+    }
 }

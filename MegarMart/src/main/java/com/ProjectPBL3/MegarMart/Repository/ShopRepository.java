@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface ShopRepository extends JpaRepository<Shop,Integer> {
     Optional<Shop> findByAccount(Account account);
     List<Shop> findByStatus(boolean status);
+
 }

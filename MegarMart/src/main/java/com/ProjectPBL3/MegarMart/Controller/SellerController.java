@@ -240,79 +240,86 @@ public class SellerController {
         Shop shop = shopService.findByAccount(account);
 
         int pageSize = 5;
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(Sort.Direction.DESC, "order.createdAt"));
-        Page<OrderDetail> page = orderDetailService.findOrderDetailsByShop(shop, pageable);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize,
+                Sort.by(Sort.Direction.DESC, "order.createdAt"));
+
+        // Chỉ lấy OrderDetail của shop đã thanh toán
+        Page<OrderDetail> page = orderDetailService
+                .findOrderDetailsByShop(shop, pageable);
         List<OrderDetail> orderDetails = page.getContent();
-        List<OrderDetail> allOrderDetails = orderDetailService.findOrderDetailsByShop(shop);
-// Tính tổng doanh thu
-        int totalRevenue = 0;
-        int thisMonthRevenue = 0;
-        LocalDate now = LocalDate.now();
-        for (OrderDetail od : allOrderDetails) {
-            int price = od.getPrice();
-            totalRevenue += price;
 
-            LocalDate createdAt = od.getOrder().getCreatedAt();
-            if (createdAt.getMonthValue() == now.getMonthValue() && createdAt.getYear() == now.getYear()) {
-                thisMonthRevenue += price;
-            }
-        }
+        // Lấy toàn bộ để tính tổng (không phân trang)
+        List<OrderDetail> allOrderDetails = orderDetailService
+                .findOrderDetailsByShop(shop);
 
-        int totalPages = page.getTotalPages();
-
-        if (totalPages == 0) {
-            totalPages = 1; // Không có đánh giá nào, tránh chia trang bị lỗi
-        }
-        model.addAttribute("listOrder", orderDetails);
-        model.addAttribute("currentpage", pageNo);
-        model.addAttribute("totalpage", totalPages);
-
-        model.addAttribute("totalRevenue", totalRevenue);
-        model.addAttribute("thisMonthRevenue", thisMonthRevenue);
-        return "Seller/revenue";
-    }
-
-
-    @GetMapping("/revenue/filter")
-    public String getfilterRevenue(
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-            @RequestParam(value = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-            @RequestParam(value = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-            Model model, HttpSession session
-    ) {
-        Account account = (Account) session.getAttribute("account");
-        Shop shop = shopService.findByAccount(account);
-
-        // Lấy tất cả orderDetails đã lọc theo shop, keyword, fromDate, toDate (không phân trang)
-        List<OrderDetail> allOrderDetails = orderDetailService.findFilteredOrderDetails(shop, keyword, fromDate, toDate);
-
-        // Tính tổng doanh thu của tất cả order lọc được
-        int total = allOrderDetails.stream()
+        // Tính tổng doanh thu và doanh thu tháng này
+        int totalRevenue = allOrderDetails.stream()
                 .mapToInt(OrderDetail::getPrice)
                 .sum();
 
-        // Lấy Page hiện tại
-        Pageable pageable = PageRequest.of(pageNo - 1, 5, Sort.by(Sort.Direction.DESC, "order.createdAt"));
-        Page<OrderDetail> page = orderDetailService.findFilteredOrderDetailsPage(shop, keyword, fromDate, toDate, pageable);
-        List<OrderDetail> pageContent = page.getContent();
-        int totalPages = page.getTotalPages();
+        LocalDate now = LocalDate.now();
+        int thisMonthRevenue = allOrderDetails.stream()
+                .filter(od -> {
+                    LocalDate d = od.getOrder().getCreatedAt();
+                    return d.getYear() == now.getYear()
+                            && d.getMonthValue() == now.getMonthValue();
+                })
+                .mapToInt(OrderDetail::getPrice)
+                .sum();
 
-        if (totalPages == 0) {
-            totalPages = 1; // Không có đánh giá nào, tránh chia trang bị lỗi
-        }
+        int totalPages = page.getTotalPages();
+        if (totalPages == 0) totalPages = 1;
+
+        model.addAttribute("listOrder", orderDetails);
+        model.addAttribute("currentpage", pageNo);
+        model.addAttribute("totalpage", totalPages);
+        model.addAttribute("totalRevenue", totalRevenue);
+        model.addAttribute("thisMonthRevenue", thisMonthRevenue);
+
+        return "Seller/revenue";
+    }
+
+    @GetMapping("/revenue/filter")
+    public String filterRevenue(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "fromDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(value = "toDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+            Model model,
+            HttpSession session) {
+
+        Account account = (Account) session.getAttribute("account");
+        Shop shop = shopService.findByAccount(account);
+
+        // Lấy toàn bộ đã filter & paid
+        List<OrderDetail> allFiltered = orderDetailService
+                .findFilteredOrderDetails(shop, keyword, fromDate, toDate);
+
+        int totalRevenue = allFiltered.stream()
+                .mapToInt(OrderDetail::getPrice)
+                .sum();
+
+        // Lấy page đã filter & paid
+        Pageable pageable = PageRequest.of(pageNo - 1, 5,
+                Sort.by(Sort.Direction.DESC, "order.createdAt"));
+        Page<OrderDetail> page = orderDetailService
+                .findFilteredOrderDetailsPage(shop, keyword, fromDate, toDate, pageable);
+        List<OrderDetail> pageContent = page.getContent();
+
+        int totalPages = page.getTotalPages();
+        if (totalPages == 0) totalPages = 1;
 
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("listOrder", pageContent);
         model.addAttribute("currentpage", pageNo);
         model.addAttribute("totalpage", totalPages);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("total", total);
+        model.addAttribute("total", totalRevenue);
 
         return "Seller/RevenueFilter";
     }
-
-
 
 }

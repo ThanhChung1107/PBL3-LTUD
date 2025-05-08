@@ -43,5 +43,12 @@ public interface ReviewProductRepository extends JpaRepository<ReviewProduct,Int
     @Query("SELECT r FROM ReviewProduct r WHERE r.product.id = :productId")
     List<ReviewProduct> findReviewsByProductId(@Param("productId") int productId);
 
+    @Query(value = "SELECT AVG(r.rating + 1) FROM review_product r " +
+            "JOIN product p ON r.product_id = p.id " +
+            "WHERE p.shop_id = :shopId", nativeQuery = true)
+    Double averageRatingByShop(@Param("shopId") Integer shopId);
 
+    @Query("SELECT r FROM ReviewProduct r WHERE r.product.shop.id = :shopId " +
+            "ORDER BY r.createdAt DESC")
+    List<ReviewProduct> findRecentByShop(@Param("shopId") Integer shopId, Pageable pageable);
 }

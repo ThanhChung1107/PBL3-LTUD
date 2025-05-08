@@ -586,63 +586,80 @@
 	--grey: #f2f2f2;
 }
 
-
 .container {
+    width: 250px; /* Độ rộng */
+    height: 250px; /* Độ cao (bằng với độ rộng để tạo hình tròn) */
+    background-color: #f3f3f3; /* Màu nền */
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 12px;
-    background-color: #f8f9fa;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .img-area {
-    position: relative;
-    width: 120px;
-    height: 140px;
-    background: #fff;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    display: flex; /* Quan trọng để căn giữa icon */
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.img-area:hover {
-    border-color: #4e73df;
-}
-
-.img-area.active {
-    border-color: #4e73df;
-    background-color: #f0f4ff;
+    position: relative;
 }
 
 .img-area .icon {
-    font-size: 60px;
-    color: #6c757d;
+    font-size: 40px; /* Tùy chỉnh kích thước icon */
+    color: #555;
 }
 
-.img-area .preview-image {
+.img-area img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-  border-radius: 10px;
-}
-
-.img-area[data-img] .preview-image {
+/*    object-fit: cover; */
+    border-radius: 4px;
     display: block;
 }
 
-.img-area[data-img] .icon {
-    display: none;
+.img-area h3 {
+	font-size: 20px;
+	font-weight: 500;
+	margin-bottom: 6px;
 }
-
+.img-area p {
+	color: #999;
+}
+.img-area p span {
+	font-weight: 600;
+}
+.img-area img {
+    position: absolute;
+	width: 100%;
+    height: 100%;
+}
+.img-area::before {
+	content: attr(data-img);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .5);
+	color: #fff;
+	font-weight: 500;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+	opacity: 0;
+	transition: all .3s ease;
+	z-index: 200;
+}
+.img-area.active:hover::before {
+	opacity: 1;
+}
+/*
 .select-image {
     padding: 12px 24px;
     background-color: #4e73df;
@@ -655,7 +672,7 @@
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
+*/
 .select-image:hover {
     background-color: #3a5bd9;
     transform: translateY(-2px);
