@@ -32,14 +32,14 @@ public interface ReviewProductRepository extends JpaRepository<ReviewProduct,Int
             "AND (:startDate IS NULL OR r.createdAt >= :startDate) " +
             "AND (:endDate IS NULL OR r.createdAt <= :endDate) " +
             "AND (:keyword IS NULL OR LOWER(r.product.name) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<ReviewProduct> filterReviews(
+    Page<ReviewProduct> filterReviews(
             @Param("shopId") Integer shopId,
             @Param("rating") RatingLevel rating,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
-            @Param("keyword") String keyword
+            @Param("keyword") String keyword,
+            Pageable pageable
     );
-
     @Query("SELECT r FROM ReviewProduct r WHERE r.product.id = :productId")
     List<ReviewProduct> findReviewsByProductId(@Param("productId") int productId);
 

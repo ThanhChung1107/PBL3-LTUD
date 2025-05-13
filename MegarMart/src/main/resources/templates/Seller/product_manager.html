@@ -17,7 +17,7 @@
         <p>*Gợi ý: chuyển số lượng về 0</p>
         <button onclick="closePopup()">Đóng</button>
     </div>
-    <div <div th:if="${deleteSuccess != null or deleteFail != null}" class="overlay" id="popup-overlay" onclick="closePopup()"></div>
+     <div th:if="${deleteSuccess != null or deleteFail != null}" class="overlay" id="popup-overlay" onclick="closePopup()"></div>
 
     <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
 
@@ -27,20 +27,39 @@
             <div class="add-product"><a th:href="@{/seller/addproduct}"><span>+</span> Thêm sản phẩm mới</a></div>
         </div>
         <div class="all-product-list">
-            <div class="all-product-item item-active" onclick="showSection('all-product')">Tất cả</div>
-            <div class="all-product-item" onclick="showSection('is-active-product')">Đang hoạt Động(<span class="is-active"  th:text="${#lists.size(listproshop.?[status == 1])}"></span>)</div>
-            <div class="all-product-item" onclick="showSection('violate-product')">Vi phạm(<span class="violate"  th:text="${#lists.size(listproshop.?[status == 2])}"></span>)</div>
-            <div class="all-product-item" onclick="showSection('pending-product')">Đang chờ duyệt(<span class="Pending-approval"  th:text="${#lists.size(listproshop.?[status == 0])}"></span>)</div>
-        </div>
+        <a class="all-product-item" th:classappend="${statusFilter == null} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword})}">Tất cả</a>
+
+        <a class="all-product-item" th:classappend="${statusFilter == 1} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword}, status=1)}">
+            Đang hoạt động(<span th:text="${activeCount}"></span>)
+        </a>
+
+        <a class="all-product-item" th:classappend="${statusFilter == 2} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword}, status=2)}">
+            Vi phạm(<span th:text="${violateCount}"></span>)
+        </a>
+
+        <a class="all-product-item" th:classappend="${statusFilter == 0} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword}, status=0)}">
+            Đang chờ duyệt(<span th:text="${pendingCount}"></span>)
+        </a>
+            </div>
+            <div class="all-product-list">
         <div th:if="${message}" class="alert alert-info" th:text="${message}"></div>
         <div id="all-product" class="all-product-conttent section active">
-            <div class="all-product-search">
-                <div class="category-search">
-                    <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
-                </div>
-                <button class="btn-product-search">Tìm</button>
-            </div>
+
+                    <form th:action="@{/seller/product-manager}" method="get">
+                        <div class="all-product-search">
+                        <div class="category-search">
+                        <input type="text" class="category-search-input" name="keyword"
+                               th:value="${keyword}" placeholder="Tìm tên sản phẩm">
+                        <input type="hidden" name="status" th:value="${statusFilter}">
+                        </div>
+                        <button type="submit" class="btn-product-search">Tìm</button>
+                        </div>
+                    </form>
+
             <table class="table-product">
                 <thead>
                 <tr>
@@ -82,123 +101,39 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+            <ul class="custom-pagination">
+                <!-- Previous -->
+                <li class="custom-pagination__item" th:if="${currentPage > 1}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/product-manager'(keyword=${keyword}, status=${statusFilter}, page=${currentPage - 1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
 
-        <div id="is-active-product" class="all-product-conttent section">
-            <div class="all-product-search">
-                <div class="category-search">
-                    <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
-                </div>
-                <button class="btn-product-search">Tìm</button>
-            </div>
-            <table class="table-product">
-                <thead>
-                <tr>
-                    <th class="col_product">Sản phẩm</th>
-                    <th class="col_revenue">Doanh thu</th>
-                    <th class="col_price">Giá</th>
-                    <th class="col_stock">Kho hàng</th>
-                    <th class="col_category">Danh mục</th>
-                    <th class="col_button">Chức năng</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 1}">
-                    <td class="col_product_value">
-                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
-                        <div class="col_product_name" th:text="${pro.name}"></div>
-                    </td>
-                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
-                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
-                    <td class="col_stock_value" th:text="${pro.stock}"></td>
-                    <td class="col_category_value" th:text="${pro.category.name}"></td>
-                    <td class="col_button_value" >
-                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
-                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                <!-- Page Numbers -->
+                <li class="custom-pagination__item"
+                    th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i} ? 'custom-pagination__item--active'">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/product-manager'(keyword=${keyword}, status=${statusFilter}, page=${i})}"
+                       th:text="${i}">
+                    </a>
+                </li>
 
-        <div id="violate-product" class="all-product-conttent section">
-            <div class="all-product-search">
-                <div class="category-search">
-                    <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
-                </div>
-                <button class="btn-product-search">Tìm</button>
-            </div>
-            <table class="table-product">
-                <thead>
-                <tr>
-                    <th class="col_product">Sản phẩm</th>
-                    <th class="col_revenue">Doanh thu</th>
-                    <th class="col_price">Giá</th>
-                    <th class="col_stock">Kho hàng</th>
-                    <th class="col_category">Danh mục</th>
-                    <th class="col_button">Chức năng</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 2}">
-                    <td class="col_product_value">
-                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
-                        <div class="col_product_name" th:text="${pro.name}"></div>
-                    </td>
-                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
-                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
-                    <td class="col_stock_value" th:text="${pro.stock}"></td>
-                    <td class="col_category_value" th:text="${pro.category.name}"></td>
-                    <td class="col_button_value" >
-                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
-                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                <!-- Next -->
+                <li class="custom-pagination__item" th:if="${currentPage < totalPages}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/product-manager'(keyword=${keyword}, status=${statusFilter}, page=${currentPage + 1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
 
-        <div id="pending-product" class="all-product-conttent section">
-            <div class="all-product-search">
-                <div class="category-search">
-                    <label for="" class="category-search-lable">Tìm kiếm sản phẩm</label>
-                    <input type="text" class="category-search-input" placeholder="Tìm tên sản phẩm">
-                </div>
-                <button class="btn-product-search">Tìm</button>
-            </div>
-            <table class="table-product">
-                <thead>
-                <tr>
-                    <th class="col_product">Sản phẩm</th>
-                    <th class="col_revenue">Doanh thu</th>
-                    <th class="col_price">Giá</th>
-                    <th class="col_stock">Kho hàng</th>
-                    <th class="col_category">Danh mục</th>
-                    <th class="col_button">Chức năng</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="pro : ${listproshop}" th:if="${pro.status == 0}">
-                    <td class="col_product_value">
-                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
-                        <div class="col_product_name" th:text="${pro.name}"></div>
-                    </td>
-                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
-                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
-                    <td class="col_stock_value" th:text="${pro.stock}"></td>
-                    <td class="col_category_value" th:text="${pro.category.name}"></td>
-                    <td class="col_button_value" >
-                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
-                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}">Xóa</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
+
+<!--      -->
 <script>
     window.onload = function () {
       const popup = document.getElementById("popup-error");

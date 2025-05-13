@@ -104,10 +104,27 @@ function showSection(sectionId) {
         section.classList.remove('active');
     });
 
-    // Hiện section được chọn
-    setTimeout(() => {
-        document.getElementById(sectionId).classList.add('active');
-    }, 50);
+    // Hiển thị section được chọn
+    document.getElementById(sectionId).classList.add('active');
+
+    // Cập nhật active tab
+    document.querySelectorAll('.all-product-item').forEach(item => {
+        item.classList.remove('item-active');
+    });
+    event.currentTarget.classList.add('item-active');
+
+    // Lấy keyword từ URL hoặc input
+    const keyword = document.querySelector('.category-search-input').value;
+    const statusMap = {
+        'all-product': null,
+        'is-active-product': 1,
+        'violate-product': 2,
+        'pending-product': 0
+    };
+    const status = statusMap[sectionId];
+
+    // Chuyển hướng với các tham số
+    window.location.href = `/seller/product?page=1${keyword ? `&keyword=${encodeURIComponent(keyword)}` : ''}${status !== null ? `&status=${status}` : ''}`;
 }
 
 // Khi load trang, chỉ hiển thị "Đơn mua"

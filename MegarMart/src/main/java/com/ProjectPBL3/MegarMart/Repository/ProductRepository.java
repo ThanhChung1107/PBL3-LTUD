@@ -36,4 +36,25 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     Page<Product> searchByKeywordAndCategory(@Param("keyword") String keyword,
                                              @Param("category") Category category,
                                              Pageable pageable);
+    // Lấy tất cả sản phẩm theo shop
+    @Query("SELECT p FROM Product p WHERE p.shop = :shop")
+    Page<Product> findByShop(@Param("shop") Shop shop, Pageable pageable);
+
+    // Tìm sản phẩm theo shop và tên gần đúng
+    @Query("SELECT p FROM Product p WHERE p.shop = :shop AND LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Product> findByShopAndNameContaining(@Param("shop") Shop shop, @Param("keyword") String keyword, Pageable pageable);
+
+    // Lọc sản phẩm theo shop và status
+    @Query("SELECT p FROM Product p WHERE p.shop = :shop AND p.status = :status")
+    Page<Product> findByShopAndStatus(@Param("shop") Shop shop, @Param("status") Integer status, Pageable pageable);
+
+    // Tìm sản phẩm theo shop, tên gần đúng và status
+    @Query("SELECT p FROM Product p WHERE p.shop = :shop AND LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) AND p.status = :status")
+    Page<Product> findByShopAndNameContainingAndStatus(@Param("shop") Shop shop, @Param("keyword") String keyword, @Param("status") Integer status, Pageable pageable);
+
+    // Đếm số lượng sản phẩm theo shop và status
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.shop = :shop AND p.status = :status")
+    long countByShopAndStatus(@Param("shop") Shop shop, @Param("status") Integer status);
+
+
 }

@@ -97,4 +97,27 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page - 1, 8);
         return productRepository.searchByKeywordAndCategory(keyword, category, pageable);
     }
+
+
+
+    public Page<Product> getProductsByShop(Shop shop, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return productRepository.findByShop(shop, pageable);
+    }
+    public Page<Product> searchProductsByShopAndName(Shop shop, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return productRepository.findByShopAndNameContaining(shop, keyword, pageable);
+    }
+    public Page<Product> filterProductsByShopAndStatus(Shop shop, Integer status, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return productRepository.findByShopAndStatus(shop, status, pageable);
+    }
+    public Page<Product> searchAndFilterProducts(Shop shop, String keyword, Integer status, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return productRepository.findByShopAndNameContainingAndStatus(shop, keyword, status, pageable);
+    }
+    public long countProductsByStatus(Shop shop, Integer status) {
+        return productRepository.countByShopAndStatus(shop, status);
+    }
+
 }

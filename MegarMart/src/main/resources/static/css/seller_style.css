@@ -383,6 +383,8 @@
     padding: 20px;
     font-size: 1.6rem;
     transition: all 0.3 ease-in-out;
+     text-decoration: none;
+     color : black;
 }
 .all-product-item:hover {
     cursor: pointer;
@@ -485,7 +487,32 @@
     display: block;
     transition: opacity 0.5s ease-in-out;
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px 0;
+}
 
+.pagination a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
 
 /* add product */
 .add_product_contain {
@@ -947,3 +974,43 @@
      z-index: 999;
        pointer-events: none;
  }
+ .status-paid {
+   color: green;
+   font-weight: bold;
+   padding: 4px 8px;
+   background-color: #e6ffe6;
+   border-radius: 4px;
+ }
+
+ .status-unpaid {
+   color: #cc3300;
+   font-weight: bold;
+   padding: 4px 8px;
+   background-color: #ffebeb;
+   border-radius: 4px;
+ }
+
+ .btn-mark-paid {
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   padding: 6px 12px;
+   border-radius: 4px;
+   cursor: pointer;
+   margin-left: 5px;
+ }
+
+ .btn-mark-paid:hover {
+   background-color: #45a049;
+ }
+
+ select.status_filter{
+     max-width: 200px;
+     width: 100%;
+     box-sizing: border-box;
+     height: 40px;
+     padding: 10px 12px;
+     border: 1px solid #ccc;
+     border-radius: 6px;
+     font-size: 16px;
+     transition: border-color 0.3s;}

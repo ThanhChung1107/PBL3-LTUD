@@ -35,8 +35,8 @@ public class ReviewProductService {
     public Page<ReviewProduct> getReviewsByShopId(Integer shopId, Pageable pageable) {
         return reviewProductRepository.findAllByShopId(shopId, pageable);
     }
-    public List<ReviewProduct> filterReviews(Integer shopId, RatingLevel rating, LocalDate startDate, LocalDate endDate, String keyword) {
-        return reviewProductRepository.filterReviews(shopId, rating, startDate, endDate, keyword);
+    public Page<ReviewProduct> filterReviews(Integer shopId, RatingLevel rating, LocalDate startDate, LocalDate endDate, String keyword, Pageable pageable) {
+        return reviewProductRepository.filterReviews(shopId, rating, startDate, endDate, keyword,pageable);
     }
     public List<ReviewProduct> findByProductId(int productId) {
         return reviewProductRepository.findByProductId(productId);

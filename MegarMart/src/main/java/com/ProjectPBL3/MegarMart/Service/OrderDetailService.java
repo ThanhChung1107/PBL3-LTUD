@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ProjectPBL3.MegarMart.Repository.OrdersRepository;
 import com.ProjectPBL3.MegarMart.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -75,5 +72,18 @@ public class OrderDetailService {
         Integer end = (int) ((pageable.getOffset()+pageable.getPageSize()) > list.size() ? list.size() : pageable.getOffset()+pageable.getPageSize());
         list = list.subList(start,end);
         return new PageImpl(list,pageable,searchProduct(keyword).size());}
+
+    public Page<OrderDetail> findByShop(Shop shop,Pageable pageable) {
+        return orderDetailRepository.findByProduct_Shop(shop, pageable);
+    }
+
+
+    // Tìm kiếm đơn hàng theo trạng thái và khoảng thời gian
+    public Page<OrderDetail> findFiltered(Shop shop, Integer status, LocalDate startDate, LocalDate endDate, String keyword,Pageable pageable) {
+        return orderDetailRepository.findFiltered(shop, status, startDate, endDate, keyword, pageable);
+    }
+
+
+
 }
 
