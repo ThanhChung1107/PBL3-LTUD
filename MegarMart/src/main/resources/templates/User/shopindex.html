@@ -58,76 +58,100 @@
                     <nav class="category">
                         <h3 class="category__heading">
                             <i class='category__heading-icon bx bx-list-ul'></i>
-                            Danh mục</h3>
-                        <ul class="category-list" >
-<!--                            <li class="category-item category-item&#45;&#45;active">-->
-<!--                                <a href="#" class="category-item__link">Trang điểm mặt</a>-->
-<!--                            </li>-->
-                            <li class="category-item" th:each="cate : ${cateshop}">
-                                <a href="" class="category-item__link" th:text="${cate.name}"></a>
+                            Danh mục
+                        </h3>
+                        <ul class="category-list">
+                            <li class="category-item"  th:classappend="${selectedCategoryId == null} ? 'category-item--active'">
+                                <a th:href="@{'/user/shop/' + ${shop.id}}"
+                                   class="category-item__link"  >
+                                    Tất cả
+                                </a>
+                            </li>
+                            <li class="category-item" th:each="cate : ${cateshop}"  th:classappend="${cate.id} == ${selectedCategoryId} ? 'category-item--active'">
+                                <!-- Nếu có từ khóa, thêm tham số keyword vào URL -->
+                                <a th:if="${keyword != null and keyword != ''}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${cate.id}, sort=${sort}, keyword=${keyword})}"
+                                   th:text="${cate.name}"
+                                   class="category-item__link">
+                                </a>
+                                <!-- Nếu không có từ khóa, chỉ truyền categoryId và sort -->
+                                <a th:unless="${keyword != null and keyword != ''}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${cate.id}, sort=${sort})}"
+                                   th:text="${cate.name}"
+                                   class="category-item__link">
+                                </a>
                             </li>
                         </ul>
                     </nav>
                 </div>
+
                 <div class="grid__column-10">
                     <div class="home-filter">
                         <span class="home-filter__tilte">Sắp xếp theo</span>
-<!--                        <button class="home-filter_btn btn">Phổ biến</button>-->
-<!--                        <button class="home-filter_btn btn btn&#45;&#45;primary">Mới nhất</button>-->
-<!--                        <button class="home-filter_btn btn">Bán chạy</button>-->
 
+                        <!-- Lọc theo giá -->
                         <div class="select-input">
                             <span class="select-input__icon select-input__lable">Giá</span>
-                            <i class='bx bxs-chevron-down' ></i>
+                            <i class='bx bxs-chevron-down'></i>
                             <ul class="select-input__list">
-                                <li class="select-input__item">
-                                    <a href="" class="select-input__link">Giá thấp đến cao</a>
+                                <!-- Sắp xếp theo giá thấp đến cao -->
+                                <li class="select-input__item"  th:classappend="${sort == 'asc'} ? 'select-input__link--active'">
+                                    <a th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${categoryId}, sort='asc', keyword=${keyword})}"
+                                       class="select-input__link" >
+                                        Giá thấp đến cao
+                                    </a>
                                 </li>
-                                <li class="select-input__item">
-                                    <a href="" class="select-input__link">Giá cao đến thấp</a>
+                                <!-- Sắp xếp theo giá cao đến thấp -->
+                                <li class="select-input__item"  th:classappend="${sort == 'desc'} ? 'select-input__link--active'">
+                                    <a th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${categoryId}, sort='desc', keyword=${keyword})}"
+                                       class="select-input__link" >
+                                        Giá cao đến thấp
+                                    </a>
                                 </li>
                             </ul>
                         </div>
-
                         <div class="home-filter__page">
-                                <span class="home-filter__page-num">
-                                    <span class="home-filter__page-current">1</span>/14
-                                </span>
+    <span class="home-filter__page-num">
+        <span class="home-filter__page-current" th:text="${currentPage}"></span>
+        /
+        <span th:text="${totalPages}"></span>
+    </span>
 
                             <div class="home-filter__page-control">
-                                <a href="" class="home-filter__page-btn home-filter__page-btn--disabled">
-                                    <i class='home-filter__page-icon bx bxs-chevron-left' ></i>
+                                <!-- Nút "trang trước" -->
+                                <a class="home-filter__page-btn"
+                                   th:if="${currentPage > 1}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, page=${currentPage - 1}, categoryId=${categoryId}, sort=${sort}, keyword=${keyword})}">
+                                    <i class="home-filter__page-icon bx bxs-chevron-left"></i>
                                 </a>
-                                <a href="" class="home-filter__page-btn">
-                                    <i class='home-filter__page-icon bx bxs-chevron-right' ></i>
+
+                                <!-- Nút "trang sau" -->
+                                <a class="home-filter__page-btn"
+                                   th:if="${currentPage < totalPages}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, page=${currentPage + 1}, categoryId=${categoryId}, sort=${sort}, keyword=${keyword})}">
+                                    <i class="home-filter__page-icon bx bxs-chevron-right"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
-
                     <div class="home-product">
-                        <!-- Grid-> row -> column -->
                         <div class="grid__row">
-                            <div class="grid__column-2-4" th:each="pro : ${listproshop}" th:if="${pro.status==1}">
-                                <a th:href="@{/user/productdetail/{proid}(proid = ${pro.id})}" class="home-product-item">
+                            <div class="grid__column-2-4" th:each="pro : ${listproshop}" th:if="${pro.status == 1}">
+                                <a th:href="@{/user/productdetail/{proid}(proid=${pro.id})}" class="home-product-item">
                                     <div class="home-product-item__img"
                                          th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">
                                     </div>
 
                                     <h4 class="home-product-item__name" th:text="${pro.name}"></h4>
                                     <div class="home-product-item__price">
-                                        <span class="home-product-item__price-old" th:text="${#numbers.formatInteger(pro.price+250000, 1, 'POINT')+'đ'}"></span>
-                                        <span class="home-product-item__price-current"  th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')+'đ'}"></span>
+                                        <span class="home-product-item__price-old" th:text="${#numbers.formatInteger(pro.price + 250000, 1, 'POINT') + 'đ'}"></span>
+                                        <span class="home-product-item__price-current" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT') + 'đ'}"></span>
                                     </div>
 
                                     <div class="home-product-item__action">
-                                        <!-- Nút Like -->
-
-                                        <span class="home-product-item__like" onclick="toggleLike(event, this)">
-                                        <i class='bx bx-heart'></i>
-                                    </span>
-
-                                        <!--                                 Đánh giá sao -->
+                    <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                        <i class='bx bx-heart'></i>
+                    </span>
 
                                         <div class="home-product-item__rating">
                                             <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
@@ -137,7 +161,7 @@
                                             <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
                                         </div>
 
-                                        <span class="home-product-item__sold" th:text="${pro.sold}+' đã bán'"></span>
+                                        <span class="home-product-item__sold" th:text="${pro.sold + ' đã bán'}"></span>
                                     </div>
 
                                     <div class="home-product-item__origin">
@@ -146,13 +170,14 @@
                                     </div>
 
                                     <div class="home-product-item__favourite">
-                                        <i class='bx bx-check' ></i>
+                                        <i class='bx bx-check'></i>
                                         yêu thích
                                     </div>
                                 </a>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

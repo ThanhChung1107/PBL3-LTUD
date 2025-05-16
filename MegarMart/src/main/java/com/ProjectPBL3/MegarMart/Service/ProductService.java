@@ -3,10 +3,7 @@ package com.ProjectPBL3.MegarMart.Service;
 import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.Repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -98,8 +95,9 @@ public class ProductService {
         return productRepository.searchByKeywordAndCategory(keyword, category, pageable);
     }
 
-
-
+    public Page<Product> findByShop(Shop shop, Pageable pageable) {
+        return productRepository.findByShop(shop, pageable);
+    }
     public Page<Product> getProductsByShop(Shop shop, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         return productRepository.findByShop(shop, pageable);
@@ -119,5 +117,17 @@ public class ProductService {
     public long countProductsByStatus(Shop shop, Integer status) {
         return productRepository.countByShopAndStatus(shop, status);
     }
+    public Page<Product> getFilteredProducts(Shop shop, Category category, String sort, String keyword, int page, int size) {
+        Sort sortOption = Sort.by("price");
+        sortOption = "desc".equalsIgnoreCase(sort) ? sortOption.descending() : sortOption.ascending();
+        Pageable pageable = PageRequest.of(page - 1, size, sortOption);
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return productRepository.findByShopAndOptionalCategoryAndKeyword(shop, category, keyword.trim(), pageable);
+        } else {
+            return productRepository.findByShopAndOptionalCategory(shop, category, pageable);
+        }
+    }
+
 
 }

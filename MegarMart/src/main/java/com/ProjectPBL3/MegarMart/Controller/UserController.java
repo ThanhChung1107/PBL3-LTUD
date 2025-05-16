@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -171,27 +173,46 @@ public class UserController {
     }
 
     @GetMapping("/shop/{id}")
-    public String shopindex(@PathVariable int id,Model model){
-        Shop shop= shopService.findById(id);
-        model.addAttribute("shop",shop);
+    public String shopindex(
+            @PathVariable int id,
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "categoryId", required = false) String categoryIdStr,
+            @RequestParam(value = "sort", defaultValue = "asc") String sort,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            Model model) {
 
-        int productCount = productService.countByShopId(id);
-        model.addAttribute("productcount", productCount);
-        List<ReviewProduct> reviewCount = reviewProductService.getReviewsByShopId(shop.getId());
-        int totalReviews = reviewCount.size();
-        model.addAttribute("totalReviews", totalReviews);
+        Category category = null;
+        if (categoryIdStr != null && !"null".equalsIgnoreCase(categoryIdStr)) {
+            try {
+                Integer categoryId = Integer.parseInt(categoryIdStr);
+                category = categoryService.findById(categoryId);
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
 
-        List<Product> productshop = productService.findByShopAndStatus(shop);
-        model.addAttribute("listproshop",productshop);
+        Shop shop = shopService.findById(id);
+        model.addAttribute("shop", shop);
+        model.addAttribute("productcount", productService.countByShopId(id));
+        model.addAttribute("totalReviews", reviewProductService.getReviewsByShopId(shop.getId()).size());
 
-        Set<Category> uniqueCategories = productshop.stream()
-                .map(Product::getCategory)
-                .collect(Collectors.toCollection(LinkedHashSet::new)); // giữ thứ tự xuất hiện
+        // Thêm keyword vào gọi service
+        Page<Product> productPage = productService.getFilteredProducts(shop, category, sort, keyword, pageNo, 10);
+        List<Category> allCategories = categoryService.findAll();
+        int totalPages = productPage.getTotalPages();
+        if (totalPages == 0) totalPages = 1;
 
-        model.addAttribute("cateshop", uniqueCategories);
+        model.addAttribute("listproshop", productPage.getContent());
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("sort", sort);
+        model.addAttribute("selectedCategoryId", categoryIdStr);
+        model.addAttribute("cateshop", allCategories);
+        model.addAttribute("keyword", keyword);
 
         return "User/shopindex";
     }
+
 
 
     @PostMapping("/addcart/{id}")

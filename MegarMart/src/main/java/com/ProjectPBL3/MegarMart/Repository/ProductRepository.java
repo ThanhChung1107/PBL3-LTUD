@@ -56,5 +56,21 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Query("SELECT COUNT(p) FROM Product p WHERE p.shop = :shop AND p.status = :status")
     long countByShopAndStatus(@Param("shop") Shop shop, @Param("status") Integer status);
 
+    @Query("SELECT p FROM Product p " +
+            "WHERE p.shop = :shop " +
+            "AND (:category IS NULL OR p.category = :category) " +
+            "AND p.status = 1")
+    Page<Product> findByShopAndOptionalCategory(@Param("shop") Shop shop,
+                                                @Param("category") Category category,
+                                                Pageable pageable);
 
+    @Query("SELECT p FROM Product p " +
+            "WHERE p.shop = :shop " +
+            "AND (:category IS NULL OR p.category = :category) " +
+            "AND p.status = 1 " +
+            "AND (LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR :keyword IS NULL)")
+    Page<Product> findByShopAndOptionalCategoryAndKeyword(@Param("shop") Shop shop,
+                                                          @Param("category") Category category,
+                                                          @Param("keyword") String keyword,
+                                                          Pageable pageable);
 }

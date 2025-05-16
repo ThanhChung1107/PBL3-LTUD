@@ -116,6 +116,9 @@
             <form class="header__search">
                 <div class="header__search-input-wrap">
                     <input type="text" th:value="*{keyword}" name="keyword" class="header__search-input" placeholder="Nhập để tìm kiếm sản phẩm">
+
+                    <input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+                    <input type="hidden" name="sort" th:value="${sort}">
                 </div>
                 <button class="header__search-btn" type="submit">
                     <i class="header__search-btn-icon fa-solid fa-magnifying-glass"></i>
