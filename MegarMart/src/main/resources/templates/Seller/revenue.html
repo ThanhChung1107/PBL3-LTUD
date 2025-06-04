@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 <div th:replace="fragments/seller_header.html :: sellerheader"></div>
 
@@ -99,15 +100,70 @@
           </li>
         </ul>
         </div>
-
-
-
     </div>
       </div>
+  <div class="main_page">
+    <div class="main_page__total">
+      <div class="chart-container">
+        <h3 class="main_page__total-header">Biểu đồ sản phẩm bán chạy</h3>
+        <canvas id="productChart" height="120"></canvas>
+      </div>
     </div>
-
+  </div>
+  </div>
 
 
 <script th:src="@{/js/seller_script.js}"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const productNames = [[${productNames}]];
+  const productQuantities = [[${productQuantities}]];
+
+  const ctx = document.getElementById('productChart').getContext('2d');
+  const maxBarThickness = productNames.length <= 2 ? 50 : undefined;
+  const productChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productNames,
+     datasets: [{
+  label: 'Số lượng bán ra',
+  data: productQuantities,
+  backgroundColor: 'rgba(54, 162, 235, 0.6)',
+  borderColor: 'rgba(54, 162, 235, 1)',
+  borderWidth: 1,
+  maxBarThickness: maxBarThickness
+}]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.parsed.y + ' sản phẩm';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Số lượng'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Sản phẩm'
+          }
+        }
+      }
+    }
+  });
+  /*]]>*/
+</script>
 </body>
 </html>

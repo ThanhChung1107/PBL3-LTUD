@@ -15,9 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -37,6 +35,7 @@ public class SellerController {
     public String addproduct(Model model){
         model.addAttribute("product",new Product());
         model.addAttribute("listcate",categoryService.findAll());
+        model.addAttribute("pageTitle", "Thêm sản phẩm");
         return "Seller/add_product";
     }
     @PostMapping("/addproduct")
@@ -56,6 +55,7 @@ public class SellerController {
 //        List<Category> listcate = categoryService.findAll();
 
         model.addAttribute("product", pro);
+        model.addAttribute("pageTitle", "Sửa sản phẩm");
 //        model.addAttribute("listcate", listcate);
         return "Seller/update_product";
     }
@@ -139,7 +139,7 @@ public class SellerController {
         model.addAttribute("activeCount", productService.countProductsByStatus(currentShop, 1));
         model.addAttribute("violateCount", productService.countProductsByStatus(currentShop, 2));
         model.addAttribute("pendingCount", productService.countProductsByStatus(currentShop, 0));
-
+        model.addAttribute("pageTitle", "Quản lí sản phẩm");
         return "Seller/product_manager";
     }
 
@@ -147,34 +147,7 @@ public class SellerController {
 
 
     @GetMapping("/takecare-manager")
-        public String takemanager(    @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-                                      HttpSession session,
-                                      Model model){
-            Account account = (Account) session.getAttribute("account");
-            Shop shop = shopService.findByAccount(account);
-
-            int pageSize = 5;
-            Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-            Page<ReviewProduct> page = reviewProductService.getReviewsByShopId(shop.getId(), pageable);
-            List<ReviewProduct> reviews = page.getContent();
-            List<ReviewProduct> reviewCount = reviewProductService.getReviewsByShopId(shop.getId());
-            int totalReviews = reviewCount.size();
-            int totalPages = page.getTotalPages();
-
-            if (totalPages == 0) {
-                totalPages = 1; // Không có đánh giá nào, tránh chia trang bị lỗi
-            }
-
-            model.addAttribute("currentpage", pageNo);
-            model.addAttribute("totalpage", totalPages);
-            model.addAttribute("totalReviews", totalReviews);
-            model.addAttribute("reviews",reviews);
-            model.addAttribute("id",shop.getId());
-            return "Seller/seller_takecare";
-        }
-    @GetMapping("/filter")
-    public String filterReviews(
-
+    public String takecareManager(
             @RequestParam(required = false) RatingLevel rating,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
@@ -188,13 +161,22 @@ public class SellerController {
 
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        Page<ReviewProduct> pageReviews = reviewProductService.filterReviews(shop.getId(), rating, startDate, endDate, keyword, pageable);
-        int totalPages = pageReviews.getTotalPages();
-        int totalReviews = (int) pageReviews.getTotalElements();
-        if (totalPages == 0) {
-            totalPages = 1; // Không có đánh giá nào, tránh chia trang bị lỗi
+
+        Page<ReviewProduct> pageReviews;
+        boolean hasFilter = (rating != null || startDate != null || endDate != null || (keyword != null && !keyword.trim().isEmpty()));
+
+        if (hasFilter) {
+            // Có filter => gọi hàm lọc
+            pageReviews = reviewProductService.filterReviews(shop.getId(), rating, startDate, endDate, keyword, pageable);
+        } else {
+            // Không có filter => lấy tất cả
+            pageReviews = reviewProductService.getReviewsByShopId(shop.getId(), pageable);
         }
 
+        int totalPages = pageReviews.getTotalPages();
+        if (totalPages == 0) totalPages = 1;
+
+        int totalReviews = (int) pageReviews.getTotalElements();
 
         model.addAttribute("reviews", pageReviews.getContent());
         model.addAttribute("totalReviews", totalReviews);
@@ -204,9 +186,12 @@ public class SellerController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentpage", pageNo);
         model.addAttribute("totalpage", totalPages);
+        model.addAttribute("id", shop.getId());
+        model.addAttribute("pageTitle", "Chăm sóc khách hàng");
 
-        return "seller/seller_takecare";
+        return "Seller/seller_takecare";
     }
+
 
     @PostMapping("/reply")
     public String reply(@RequestParam("reviewProductId") Integer reviewProductId,
@@ -230,7 +215,7 @@ public class SellerController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("id", shop.getId());
 
-        return "redirect:/seller/takecare-manager"; // Quay lại trang quản lý đánh giá
+        return "redirect:/Seller/takecare-manager"; // Quay lại trang quản lý đánh giá
     }
 
 
@@ -240,7 +225,8 @@ public class SellerController {
         Account account = (Account) session.getAttribute("account");
         Shop shop = shopService.findByAccount(account);
         model.addAttribute("shop",shop);
-        return "seller/seller_profile";
+        model.addAttribute("pageTitle", "Quản lý Shop");
+        return "Seller/seller_profile";
     }
 
     @PostMapping("/edit_profile")
@@ -253,7 +239,7 @@ public class SellerController {
         shop.setShopname(name);
         shop.setDescription(description);
         shopService.save(shop,imageFile);
-        return "redirect:/seller/shopProfile";
+        return "redirect:/Seller/shopProfile";
     }
 
 
@@ -281,7 +267,7 @@ public class SellerController {
 
         // Tính tổng doanh thu và doanh thu tháng này
         int totalRevenue = allOrderDetails.stream()
-                .mapToInt(OrderDetail::getPrice)
+                .mapToInt(od -> od.getPrice() * od.getQuantity())
                 .sum();
 
         LocalDate now = LocalDate.now();
@@ -291,9 +277,18 @@ public class SellerController {
                     return d.getYear() == now.getYear()
                             && d.getMonthValue() == now.getMonthValue();
                 })
-                .mapToInt(OrderDetail::getPrice)
+                .mapToInt(od -> od.getPrice() * od.getQuantity())
                 .sum();
 
+        Map<String, Integer> productSales = new HashMap<>();
+        for (OrderDetail order : allOrderDetails) {
+            String name = order.getProduct().getName();
+            int qty = order.getQuantity();
+            productSales.put(name, productSales.getOrDefault(name, 0) + qty);
+        }
+
+        model.addAttribute("productNames", productSales.keySet());
+        model.addAttribute("productQuantities", productSales.values());
         int totalPages = page.getTotalPages();
         if (totalPages == 0) totalPages = 1;
 
@@ -302,7 +297,7 @@ public class SellerController {
         model.addAttribute("totalpage", totalPages);
         model.addAttribute("totalRevenue", totalRevenue);
         model.addAttribute("thisMonthRevenue", thisMonthRevenue);
-
+        model.addAttribute("pageTitle", "Tài chính");
         return "Seller/revenue";
     }
 
@@ -319,13 +314,12 @@ public class SellerController {
 
         Account account = (Account) session.getAttribute("account");
         Shop shop = shopService.findByAccount(account);
-
         // Lấy toàn bộ đã filter & paid
         List<OrderDetail> allFiltered = orderDetailService
                 .findFilteredOrderDetails(shop, keyword, fromDate, toDate);
 
         int totalRevenue = allFiltered.stream()
-                .mapToInt(OrderDetail::getPrice)
+                .mapToInt(od -> od.getPrice() * od.getQuantity())
                 .sum();
 
         // Lấy page đã filter & paid
@@ -345,66 +339,56 @@ public class SellerController {
         model.addAttribute("currentpage", pageNo);
         model.addAttribute("totalpage", totalPages);
         model.addAttribute("total", totalRevenue);
-
+        model.addAttribute("pageTitle", "Tài chính");
         return "Seller/RevenueFilter";
     }
-    @GetMapping("/home")
-    public String home(
-            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-            Model model, HttpSession session) {
+   @GetMapping("/home")
+public String homeOrFilter(
+        @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
+        @RequestParam(value = "status", required = false) Integer status,
+        @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+        Model model, HttpSession session) {
 
-        Account account = (Account) session.getAttribute("account");
-        Shop shop = shopService.findByAccount(account);
+    Account account = (Account) session.getAttribute("account");
+    Shop shop = shopService.findByAccount(account);
 
-        int pageSize = 5;
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+    int pageSize = 5;
+    Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 
-        // Gọi findAll (không lọc)
-        Page<OrderDetail> page = orderDetailService.findByShop(shop, pageable);
-
-        int totalPages = page.getTotalPages();
-        if (totalPages == 0) totalPages = 1;
-        int totalOrder = (int) page.getTotalElements();
-        model.addAttribute("orders", page.getContent());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalOrder", totalOrder);
-
-        return "Seller/seller_home";
+    if (keyword != null && keyword.trim().isEmpty()) {
+        keyword = null;
     }
-    @GetMapping("/home/filter")
-    public String filterHome(
-            @RequestParam(value = "page", defaultValue = "1") Integer pageNo,
-            @RequestParam(value = "status", required = false) Integer status,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-            Model model, HttpSession session) {
 
-        Account account = (Account) session.getAttribute("account");
-        Shop shop = shopService.findByAccount(account);
-        int pageSize = 5;
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        if (keyword != null && keyword.trim().isEmpty()) {
-            keyword = null;
-        }
-        // Gọi filter (có lọc)
-        Page<OrderDetail> page = orderDetailService.findFiltered(shop, status, startDate, endDate, keyword, pageable);
+    boolean hasFilter = (status != null || startDate != null || endDate != null || keyword != null);
 
-        int totalPages = page.getTotalPages();
-        if (totalPages == 0) totalPages = 1;
-        int totalOrder = (int) page.getTotalElements();
-        model.addAttribute("orders", page.getContent());
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalOrder", totalOrder);
-        model.addAttribute("statusFilter", status);
-        model.addAttribute("keyword", keyword);
-
-        return "Seller/seller_home"; // vẫn về cùng 1 view
+    Page<OrderDetail> page;
+    if (hasFilter) {
+        // Gọi hàm lọc nếu có bất kỳ filter nào
+        page = orderDetailService.findFiltered(shop, status, startDate, endDate, keyword, pageable);
+    } else {
+        // Không có filter → gọi findAll
+        page = orderDetailService.findByShop(shop, pageable);
     }
+
+    int totalPages = page.getTotalPages();
+    if (totalPages == 0) totalPages = 1;
+
+    int totalOrder = (int) page.getTotalElements();
+
+    model.addAttribute("pageTitle", "Quản lý đơn hàng");
+    model.addAttribute("orders", page.getContent());
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
+    model.addAttribute("currentPage", pageNo);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalOrder", totalOrder);
+    model.addAttribute("statusFilter", status);
+    model.addAttribute("keyword", keyword);
+
+    return "Seller/seller_home";
+}
 
 
 

@@ -12,9 +12,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -82,6 +81,38 @@ public class OrderDetailService {
     public Page<OrderDetail> findFiltered(Shop shop, Integer status, LocalDate startDate, LocalDate endDate, String keyword,Pageable pageable) {
         return orderDetailRepository.findFiltered(shop, status, startDate, endDate, keyword, pageable);
     }
+    public  double getTotalRevenueByShop(Integer shopId){
+        return orderDetailRepository.getTotalRevenueByShop(shopId);
+    }
+
+    public  int countDistinctOrdersByShop(Integer shopId){
+        return orderDetailRepository.countDistinctOrdersByShop(shopId);
+
+    }
+
+
+    public Map<String, Double> getMonthlyRevenueByShop(Integer shopId, int lastNMonths) {
+        LocalDate startDate = LocalDate.now().withDayOfMonth(1).minusMonths(lastNMonths - 1); // Lấy từ đầu tháng (N-1 tháng trước)
+        List<Object[]> rawData = orderDetailRepository.getMonthlyRevenueRawByShop(shopId, startDate);
+
+        Map<String, Double> revenueMap = new LinkedHashMap<>();
+
+        // Tạo đầy đủ các tháng (kể cả nếu không có dữ liệu)
+        for (int i = 0; i < lastNMonths; i++) {
+            LocalDate month = startDate.plusMonths(i);
+            String label = month.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+            revenueMap.put(label, 0.0);
+        }
+
+        for (Object[] row : rawData) {
+            String month = (String) row[0];
+            Double revenue = row[1] != null ? ((Number) row[1]).doubleValue() : 0.0;
+            revenueMap.put(month, revenue);
+        }
+
+        return revenueMap;
+    }
+
 
 
 

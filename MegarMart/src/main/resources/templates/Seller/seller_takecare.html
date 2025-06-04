@@ -22,7 +22,7 @@
 
         <div class="main_page__list-eval">
             <h3 class="main_page__list-eval-header">Danh sách đánh giá shop</h3>
-            <form th:action="@{/seller/filter}" method="get" class="main_page__list-eval-filter">
+            <form th:action="@{/seller/takecare-manager}" method="get" class="main_page__list-eval-filter">
                 <div class="main_page__list-eval-select">
                     <div class="main_page__list-eval-select-text">Lọc theo đánh giá:</div>
 
@@ -114,7 +114,7 @@
                 <!-- Previous -->
                 <li class="custom-pagination__item" th:if="${currentpage > 1}">
                     <a class="custom-pagination__link"
-                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, page=${currentpage-1})}">
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, rating=${ratingFilter}, startDate=${startDate}, endDate=${endDate}, page=${currentpage - 1})}">
                         <i class="custom-pagination__icon bx bxs-chevron-left"></i>
                     </a>
                 </li>
@@ -124,7 +124,7 @@
                     th:each="i : ${#numbers.sequence(1, totalpage)}"
                     th:classappend="${currentpage == i} ? 'custom-pagination__item--active'">
                     <a class="custom-pagination__link"
-                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, page=${i})}"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, rating=${ratingFilter}, startDate=${startDate}, endDate=${endDate}, page=${i})}"
                        th:text="${i}">
                     </a>
                 </li>
@@ -132,7 +132,7 @@
                 <!-- Next -->
                 <li class="custom-pagination__item" th:if="${currentpage < totalpage}">
                     <a class="custom-pagination__link"
-                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, page=${currentpage+1})}">
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, rating=${ratingFilter}, startDate=${startDate}, endDate=${endDate}, page=${currentpage + 1})}">
                         <i class="custom-pagination__icon bx bxs-chevron-right"></i>
                     </a>
                 </li>

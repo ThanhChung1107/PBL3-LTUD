@@ -25,6 +25,7 @@ public class AdminController {
     private final ReviewProductService reviewProductService;
     private final CouponService couponService;
     private final OrdersService ordersService;
+    private final OrderDetailService orderDetailService;
 
     @GetMapping("/home")
     public String adminhome(Model model) {
@@ -41,37 +42,37 @@ public class AdminController {
     @GetMapping("/shop/stats/{id}")
     public String shopStats(@PathVariable Integer id, Model model) {
         Shop shop = shopService.findById(id);
-        model.addAttribute("shopname", shop.getShopname()); // Gửi shopname riêng
+        model.addAttribute("shopname", shop.getShopname());
 
-        // Doanh thu
-        double totalRevenue = ordersService.getTotalRevenueByShop(id);
+
+        double totalRevenue = orderDetailService.getTotalRevenueByShop(id);
         model.addAttribute("monthlyRevenue", totalRevenue);
 
-        // Đơn hàng
-        int totalOrders = ordersService.countOrdersByShop(id);
+
+        int totalOrders = orderDetailService.countDistinctOrdersByShop(id);
         model.addAttribute("monthlyOrders", totalOrders);
 
-        // Số lượng sản phẩm
-        int productCount = productService.countByShopId(id); // Giả sử có service này
+
+        int productCount = productService.countByShopId(id);
         model.addAttribute("productCount", productCount);
 
-        // Đánh giá trung bình
+
         Double averageRating = reviewProductService.getAverageRatingByShop(id);
         model.addAttribute("averageRating", averageRating != null ?
                 Math.round(averageRating * 10) / 10.0 : null);
 
-        // Danh sách đánh giá mới nhất
+
         List<ReviewProduct> reviews = reviewProductService.getRecentReviewsByShop(id, 5);
         model.addAttribute("reviews", reviews);
 
-        // Dữ liệu biểu đồ doanh thu 12 tháng
-        Map<String, Double> monthlyRevenue = ordersService.getMonthlyRevenueByShop(id, 12);
+
+        Map<String, Double> monthlyRevenue = orderDetailService.getMonthlyRevenueByShop(id, 12);
         model.addAttribute("monthLabels", monthlyRevenue.keySet());
         model.addAttribute("revenueData", monthlyRevenue.values());
 
-
         return "Admin/stats_shop";
     }
+
 //        // (Optional) Nếu có thêm top sản phẩm thì cũng ném vào luôn
 //        List<String> topProductNames = productService.getTopSellingProductNamesByShop(id, 5);
 //        List<Integer> topProductSales = productService.getTopSellingProductSalesByShop(id, 5);

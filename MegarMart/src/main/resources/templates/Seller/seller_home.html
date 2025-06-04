@@ -22,7 +22,7 @@
 
         <div class="main_page__list-eval">
             <h3 class="main_page__list-eval-header">Danh sách Đơn Hàng</h3>
-            <form th:action="@{/seller/home/filter}" method="get" class="main_page__list-eval-filter">
+            <form th:action="@{/seller/home}" method="get" class="main_page__list-eval-filter">
                 <div class="main_page__list-eval-search">
                     <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
                            class="input-search" style="  margin-right: 10px;"
@@ -74,8 +74,12 @@
                     <td class="col_date_value" th:text="${#temporals.format(order.order.createdAt, 'yyyy-MM-dd')}"></td>
                     <td class="col_status_value">
                         <span th:switch="${order.order.isPaid}">
-                            <span th:case="0">Chưa Thanh Toán</span>
-                            <span th:case="1">Đã Thanh Toán</span>
+                          <span th:case="0" class="status-unpaid">
+                                ❌ Chưa Thanh Toán
+                            </span>
+                            <span th:case="1" class="status-paid">
+                                ✅ Đã Thanh Toán
+                            </span>
                         </span>
                     </td>
                 </tr>

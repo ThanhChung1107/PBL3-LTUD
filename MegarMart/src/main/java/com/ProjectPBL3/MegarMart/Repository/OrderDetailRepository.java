@@ -26,9 +26,9 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
     @Query("SELECT od FROM OrderDetail od"+
     "  WHERE od.product.shop = :shop"+
        " AND od.order.isPaid = 1"+
-       " AND (:keyword IS NULL OR od.product.name LIKE %:keyword%)"+
        " AND (:fromDate IS NULL OR od.order.createdAt >= :fromDate)"+
-       " AND (:toDate   IS NULL OR od.order.createdAt <= :toDate)"
+       " AND (:toDate   IS NULL OR od.order.createdAt <= :toDate)"+
+            "AND (:keyword IS NULL OR LOWER(od.product.name) LIKE LOWER(CONCAT('%', :keyword, '%')))"
     )
     Page<OrderDetail> findFilteredPaid(
             @Param("shop") Shop shop,
@@ -43,7 +43,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
       SELECT od FROM OrderDetail od
       WHERE od.product.shop = :shop
         AND od.order.isPaid = 1
-        AND (:keyword IS NULL OR od.product.name LIKE %:keyword%)
+        AND (:keyword IS NULL OR LOWER(od.product.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
         AND (:fromDate IS NULL OR od.order.createdAt >= :fromDate)
         AND (:toDate   IS NULL OR od.order.createdAt <= :toDate)
     """)
@@ -70,6 +70,22 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
             @Param("keyword") String keyword,
             Pageable pageable
     );
+    @Query("SELECT SUM(od.price * od.quantity) " +
+            "FROM OrderDetail od " +
+            "WHERE od.product.shop.id = :shopId AND od.order.isPaid = 1")
+    Double getTotalRevenueByShop(@Param("shopId") Integer shopId);
+
+    @Query("SELECT COUNT(DISTINCT od.order.id) FROM OrderDetail od WHERE od.product.shop.id = :shopId")
+    Integer countDistinctOrdersByShop(@Param("shopId") Integer shopId);
+
+    // Ví dụ trả về revenue theo tháng (12 tháng gần nhất)
+    @Query("SELECT FUNCTION('DATE_FORMAT', o.createdAt, '%Y-%m') AS month, SUM(od.price * od.quantity) " +
+            "FROM OrderDetail od JOIN od.order o " +
+            "WHERE od.product.shop.id = :shopId AND o.createdAt >= :startDate AND o.isPaid = 1 " +
+            "GROUP BY FUNCTION('DATE_FORMAT', o.createdAt, '%Y-%m') " +
+            "ORDER BY month ASC")
+    List<Object[]> getMonthlyRevenueRawByShop(@Param("shopId") Integer shopId, @Param("startDate") LocalDate startDate);
+
 
 }
 
