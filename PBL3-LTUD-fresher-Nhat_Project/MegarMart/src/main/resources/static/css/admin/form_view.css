@@ -1,0 +1,87 @@
+/* Box container styling */
+.box {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.box-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.box-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Table Styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 10px;
+    padding: 0;
+    list-style: none;
+    text-align: right;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+.pagination a {
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background: #337ab7;
+    color: #fff;
+}
+
+/* Button Styles */
+.btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    background: cornflowerblue;
+}
+
+.btn-edit {
+    background-color: #28a745; /* Green */
+}
+
+.btn-edit:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Red */
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}

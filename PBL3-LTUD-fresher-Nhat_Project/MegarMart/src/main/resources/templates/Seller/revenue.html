@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<body>
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="seller_home_contain">
+  <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+
+  <!-- container -->
+  <div class="main_page">
+    <div class="main_page__total">
+      <h3 class="main_page__total-header">Tổng Quan Doanh Thu</h3>
+      <div class="main_page__total-wrapper">
+        <div class="main_page__total-rev">
+          <div class="main_page__total-text">Tổng cộng</div>
+          <div class="main_page__total-num" th:text="${#numbers.formatInteger(totalRevenue, 1, 'POINT') + '$'}"></div>
+        </div>
+        <div class="main_page__total-mon">
+          <div class="main_page__total-text">Tháng này</div>
+          <div class="main_page__total-num" th:text="${#numbers.formatInteger(thisMonthRevenue, 1, 'POINT') + '$'}"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main_page">
+      <div class="main_page__total">
+        <h3 class="main_page__total-header">Chi tiết</h3>
+
+        <!-- Form tìm kiếm sản phẩm -->
+          <div class="main_page__list-eval-search">
+            <form method="get" action="/seller/revenue/filter">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                     class="input-search" style=" margin-left: 20px; margin-right: 10px;"
+                     th:value="${keyword}">
+              <span class="main_page__list-eval--text">Từ:</span>
+              <input type="date" name="fromDate" class="date"
+                     th:value="${fromDate} != null ? ${#temporals.format(fromDate, 'yyyy-MM-dd')} : ''">
+
+              <span class="main_page__list-eval--text">Đến:</span>
+              <input type="date" name="toDate" class="date"
+                     th:value="${toDate} != null ? ${#temporals.format(toDate, 'yyyy-MM-dd')} : ''">
+              <button type="submit" class="btn-product-search" style="margin-left: 20px; height:30px;">Tìm</button>
+              <button type="button" class="btn btn--nomal"
+                      onclick="location.href='/seller/revenue'">Đặt lại</button>
+            </form>
+          </div>
+        <table class="table-product">
+          <thead>
+          <tr>
+            <th class="col_product">Sản phẩm</th>
+            <th class="col_revenue">Người mua</th>
+            <th class="col_price">Số tiền thanh toán</th>
+            <th class="col_price">Số lượng</th>
+            <th class="col_stock">Ngày mua</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr th:each="order : ${listOrder}">
+            <td class="col_product_value">
+              <img th:src="@{/img/{fileimg}(fileimg=${order.product.imageurl})}" alt="" class="col_product_img">
+              <div class="col_product_name" th:text="${order.product.name}"></div>
+            </td>
+            <td class="col_revenue_value" th:text="${order.order.name}"></td>
+            <td class="col_price_value" th:text="${#numbers.formatInteger(order.price, 1, 'POINT')}"></td>
+            <td class="col_price_value" th:text="${#numbers.formatInteger(order.quantity, 1, 'POINT')}"></td>
+            <td class="col_stock_value" th:text="${order.order.createdAt}"></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <ul class="custom-pagination">
+          <!-- Previous -->
+          <li class="custom-pagination__item" th:if="${currentpage > 1}">
+            <a class="custom-pagination__link"
+               th:href="@{'/seller/revenue'(keyword=${keyword}, page=${currentpage-1})}">
+              <i class="custom-pagination__icon bx bxs-chevron-left"></i>
+            </a>
+          </li>
+
+          <!-- Các trang -->
+          <li class="custom-pagination__item"
+              th:each="i : ${#numbers.sequence(1, totalpage)}"
+              th:classappend="${currentpage == i} ? 'custom-pagination__item--active'">
+            <a class="custom-pagination__link"
+               th:href="@{'/seller/revenue'(keyword=${keyword}, page=${i})}"
+               th:text="${i}">
+            </a>
+          </li>
+
+          <!-- Next -->
+          <li class="custom-pagination__item" th:if="${currentpage < totalpage}">
+            <a class="custom-pagination__link"
+               th:href="@{'/seller/revenue'(keyword=${keyword}, page=${currentpage+1})}">
+              <i class="custom-pagination__icon bx bxs-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+        </div>
+    </div>
+      </div>
+  <div class="main_page">
+    <div class="main_page__total">
+      <div class="chart-container">
+        <h3 class="main_page__total-header">Biểu đồ sản phẩm bán chạy</h3>
+        <canvas id="productChart" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+<script th:src="@{/js/seller_script.js}"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const productNames = [[${productNames}]];
+  const productQuantities = [[${productQuantities}]];
+
+  const ctx = document.getElementById('productChart').getContext('2d');
+  const maxBarThickness = productNames.length <= 2 ? 50 : undefined;
+  const productChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productNames,
+     datasets: [{
+  label: 'Số lượng bán ra',
+  data: productQuantities,
+  backgroundColor: 'rgba(54, 162, 235, 0.6)',
+  borderColor: 'rgba(54, 162, 235, 1)',
+  borderWidth: 1,
+  maxBarThickness: maxBarThickness
+}]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.parsed.y + ' sản phẩm';
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Số lượng'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Sản phẩm'
+          }
+        }
+      }
+    }
+  });
+  /*]]>*/
+</script>
+</body>
+</html>

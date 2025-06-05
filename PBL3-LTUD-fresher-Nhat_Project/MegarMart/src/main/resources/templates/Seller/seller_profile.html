@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="seller_profile_contain">
+    <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+    <div class="seller_profile_main">
+        <div id="seller_profile" class="seller_profile_main_info section active">
+            <div class="seller_profile_lable">Thông tin cơ bản</div>
+            <div class="seller_profile">
+                <div class="seller_profile_header">
+                    <p class="seller_profile_header_lable">Thông tin cơ bản</p>
+                    <div class="seller_profile_btn">
+                        <a th:href="@{/user/shop/{id}(id=${shop.id})}" class="view_my_shop">Xem shop của tôi</a>
+                        <div class="seller_profile_edit" onclick="showSection('seller_profile_edit_view')">Chỉnh sửa</div>
+                    </div>
+                </div>
+
+                <div class="seller_profile_conttent">
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Tên shop</div>
+                        <div class="seller_profile_text" th:text="${shop.shopname}"></div>
+                    </div>
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Logo của shop</div>
+                        <div th:if="${shop != null and shop.account != null}" class="seller_avatar">
+                            <img th:src="@{/img/{image}(image=${shop.imageurl})}" alt="" class="seller_profile_img">
+                        </div>
+                    </div>
+                    <div class="seller_profile_info">
+                        <div class="seller_profile_conttent_lable">Mô tả shop</div>
+                        <textarea name="" class="seller_profile_description" th:text="${shop.Description}" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="seller_profile_edit_view" class="seller_profile_main_info section">
+            <div class="seller_profile_lable">Thông tin cơ bản</div>
+            <div class="seller_profile">
+                <div class="seller_profile_header">
+                    <p class="seller_profile_header_lable">Thông tin cơ bản</p>
+                </div>
+
+                <form th:action="@{/seller/edit_profile}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="account_id" th:value="${session.account.id}">
+                    <div class="seller_profile_conttent">
+                        <div class="seller_profile_info">
+                            <div class="seller_profile_conttent_lable">Tên shop</div>
+                            <input type="text" class="seller_profile_text_edit" th:value="${shop?.shopname}"
+                                   name="name"
+                                   placeholder="Nhập tên mới"
+                                   required>
+                        </div>
+                        <div class="seller_profile_info">
+                            <div class="seller_profile_conttent_lable">Logo của shop</div>
+                            <div class="container">
+                                <input type="file" id="file" name="imageFile" accept="image/*" hidden>
+                                <div class="img-area" data-img="">
+                                    <img th:if="${shop?.imageurl}"
+                                         th:src="@{/img/{image}(image=${shop.imageurl})}" alt="" class="preview-image">
+                                    <i th:unless="${shop?.imageurl}" class='bx bxs-cloud-upload icon'></i>
+                                </div>
+                                <button type="button" class="select-image" onclick="selectImage()">Select Image</button>
+                            </div>
+                        </div>
+                        <div class="seller_profile_info">
+                            <div class="seller_profile_conttent_lable">Mô tả shop</div>
+                            <textarea class="seller_profile_description_edit" name="description"
+                                      placeholder="Thêm mô tả"
+                                      th:text="${shop?.Description}"></textarea>
+                        </div>
+                        <div class="seller_profile_actions">
+                            <button type="submit" class="btn-save">Lưu thay đổi</button>
+                            <button type="button" class="btn-cancel" onclick="history.back()">Hủy bỏ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function selectImage() {
+    document.getElementById('file').click();  // Mở hộp thoại chọn file khi bấm vào nút Select Image
+}
+</script>
+<script th:src="@{/js/seller_script.js}"></script>
+<script th:src="@{/js/add_product.js}"></script>
+</body>
+</html>

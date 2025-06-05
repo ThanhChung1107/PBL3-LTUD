@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="add_product_contain">
+    <div class="suggest_add_product">
+        <div class="suggest_header">Gợi ý điền thông tin</div>
+        <div class="suggest_conttent">
+            <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+        </div>
+    </div>
+    <div class="add_product_conttent">
+        <div class="add_product_conttent_header">
+            <a href="#basic_info" class="basic_info_lable add_active">Thông tin cơ bản</a>
+            <a href="#sell_info" class="sell_info_lable">Thông tin bán hàng</a>
+        </div>
+        <form action="/seller/addproduct" method="post" enctype="multipart/form-data" th:object="${product}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <div id="basic_info" class="basic_info_conttent">
+                <p class="basic_info_conttent_header">Thông tin cơ bản</p>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Hình ảnh sản phẩm</div>
+                    <div class="container">
+                        <input type="file" name="fileImage" id="file" accept="image/*"  style="opacity: 0; position: absolute; z-index: -1;">
+                        <label for="file" class="img-area" id="imgArea">
+                            <i class='bx bxs-cloud-upload icon'></i>
+                        </label>
+                    </div>
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Tên sản phẩm</div>
+                    <input type="text" class="basic_name_input" placeholder="Tên sản phẩm" th:field="*{name}" required>
+                </div>
+                <div class="form-group">
+                    <label for="category" class="basic_conttent_lable">Danh mục</label>
+                    <select id="category" th:field="*{category}" style="padding:8px;margin-left:86px;font-size:15px">
+                        <option value="" disabled selected>-- Chọn danh mục --</option>
+                        <option th:each="cate : ${listcate}"
+                                th:value="${cate.id}"
+                                th:text="${cate.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Mô tả sản phẩm</div>
+                    <textarea class="basic_description_input" id="message" rows="4" cols="50" placeholder="Nhập mô tả" th:field="*{description}"></textarea>
+                </div>
+            </div>
+
+            <div id="sell_info" class="sell_info_conttent basic_info_conttent">
+                <p class="basic_info_conttent_header">Thông tin bán hàng</p>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Giá sản phẩm</div>
+                    <input type="text" class="sell_price_input" placeholder="Giá" th:field="*{price}" required>
+                </div>
+                <div class="basic_conttent">
+                    <div class="basic_conttent_lable">Số lượng trong kho</div>
+                    <input type="text" class="stock_input" placeholder="kho hàng" th:field="*{stock}" required>
+                </div>
+                <input type="submit" value="Thêm sản phẩm"
+                       style="background-color: #007BFF; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;margin-bottom:10px;">
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/js/seller_script.js}"></script>
+<script th:src="@{/js/add_product.js}"></script>
+</body>
+<script>
+    const fileInput = document.getElementById("file");
+    const imgArea = document.getElementById("imgArea");
+
+    fileInput.addEventListener("change", function () {
+        const file = this.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                // Nếu đã có ảnh cũ, xóa đi
+                const oldImg = imgArea.querySelector("img");
+                if (oldImg) {
+                    oldImg.remove();
+                }
+
+                // Tạo thẻ img mới
+                const img = document.createElement("img");
+                img.src = reader.result;
+                img.alt = "Preview";
+                img.classList.add("preview-image");
+
+                imgArea.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+</html>

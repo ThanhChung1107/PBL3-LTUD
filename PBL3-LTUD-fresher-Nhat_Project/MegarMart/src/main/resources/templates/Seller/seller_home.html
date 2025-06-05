@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="product_manager_contain">
+    <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+    <div class="main_page">
+        <div class="main_page__eval-shop">
+            <div class="main_page__eval">
+                <h3 class="main_page__eval-text">Quản lý Đơn Hàng</h3>
+            </div>
+            <div class="main_page__eval-table">
+                <div class="main_page__eval-qnt">
+                    <p class="main_page__eval--text">Tổng Đơn Hàng: </p>
+                    <div class="main_page__eval--num" th:text="${totalOrder}"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_page__list-eval">
+            <h3 class="main_page__list-eval-header">Danh sách Đơn Hàng</h3>
+            <form th:action="@{/seller/home}" method="get" class="main_page__list-eval-filter">
+                <div class="main_page__list-eval-search">
+                    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                           class="input-search" style="  margin-right: 10px;"
+                           th:value="${keyword}">
+                    <span class="main_page__list-eval--text">Trạng thái:</span>
+                    <select name="status" class="status_filter">
+                        <option th:value="null" th:selected="${statusFilter == null}">Tất cả</option>
+                        <option value="0" th:selected="${statusFilter == 0}">Chưa thanh toán</option>
+                        <option value="1" th:selected="${statusFilter == 1}">Đã thanh toán</option>
+                    </select>
+
+                    <span class="main_page__list-eval--text">Từ:</span>
+                    <input type="date" name="startDate" class="date"
+                           th:value="${startDate != null} ? ${#temporals.format(startDate, 'yyyy-MM-dd')} : ''"/>
+
+                    <span class="main_page__list-eval--text">Đến:</span>
+                    <input type="date" name="endDate" class="date"
+                           th:value="${endDate != null} ? ${#temporals.format(endDate, 'yyyy-MM-dd')} : ''"/>
+                </div>
+
+                <div class="main_page__list-eval-button">
+                    <button type="submit" class="main_page__list-eval-button-search">Tìm kiếm</button>
+                    <button type="button" class="main_page__list-eval-button-reset" onclick="location.href='/seller/home'">Đặt lại</button>
+                </div>
+            </form>
+
+            <table class="table-order">
+                <thead>
+                <tr>
+                    <th class="col_sum_product">Mã Đơn</th>
+                    <th class="col_product">Sản Phẩm</th>
+                    <th class="col_category">Người Mua</th>
+                    <th class="col_sum_product">Số Tiền</th>
+                    <th class="col_sum_product">Số Lượng</th>
+                    <th class="col_sum_product">Ngày Mua</th>
+                    <th class="col_sum_product">Trạng Thái</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td class="col_order_value" th:text="${order.id}"></td>
+                    <td class="col_product_value">
+                        <img th:src="@{/img/{fileimg}(fileimg=${order.product.imageurl})}" alt="" class="col_product_img">
+                        <div class="col_product_name" th:text="${order.product.name}"></div>
+                    </td>
+                    <td class="col_customer_value" th:text="${order.order.name}"></td>
+                    <td class="col_price_value" th:text="${#numbers.formatInteger(order.price, 1, 'POINT')}"></td>
+                    <td class="col_quantity_value" th:text="${order.quantity}"></td>
+                    <td class="col_date_value" th:text="${#temporals.format(order.order.createdAt, 'yyyy-MM-dd')}"></td>
+                    <td class="col_status_value">
+                        <span th:switch="${order.order.isPaid}">
+                          <span th:case="0" class="status-unpaid">
+                                ❌ Chưa Thanh Toán
+                            </span>
+                            <span th:case="1" class="status-paid">
+                                ✅ Đã Thanh Toán
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <ul class="custom-pagination">
+                <!-- Previous -->
+                <li class="custom-pagination__item" th:if="${currentPage > 1}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/home'(keyword=${keyword}, status=${statusFilter}, startDate=${startDate}, endDate=${endDate}, page=${currentPage-1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
+
+                <!-- Các trang -->
+                <li class="custom-pagination__item"
+                    th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i} ? 'custom-pagination__item--active'">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/home'(keyword=${keyword}, status=${statusFilter}, startDate=${startDate}, endDate=${endDate}, page=${i})}"
+                       th:text="${i}">
+                    </a>
+                </li>
+
+                <!-- Next -->
+                <li class="custom-pagination__item" th:if="${currentPage < totalPages}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/home'(keyword=${keyword}, status=${statusFilter}, startDate=${startDate}, endDate=${endDate}, page=${currentPage+1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/seller_script.js}"></script>
+</body>
+</html>

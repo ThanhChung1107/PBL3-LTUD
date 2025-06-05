@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="add_product_contain">
+  <div class="suggest_add_product">
+    <div class="suggest_header">Gợi ý điền thông tin</div>
+    <div class="suggest_conttent">
+      <div class="suggest_text"><i class="fa-solid fa-check"></i>Thêm hình ảnh rõ nét</div>
+    </div>
+  </div>
+  <div class="add_product_conttent">
+    <div class="add_product_conttent_header">
+      <a href="#basic_info" class="basic_info_lable add_active">Thông tin cơ bản</a>
+      <a href="#sell_info" class="sell_info_lable">Thông tin bán hàng</a>
+    </div>
+    <form th:action="@{'/seller/editproduct/' + ${product.id}}" method="post" enctype="multipart/form-data" th:object="${product}">
+      <input type="hidden" class="basic_name_input" placeholder="Tên sản phẩm" th:field="*{id}" >
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+      <div id="basic_info" class="basic_info_conttent">
+        <p class="basic_info_conttent_header">Thông tin cơ bản</p>
+        <div class="basic_conttent">
+          <div class="basic_conttent_lable">Hình ảnh sản phẩm</div>
+          <img th:src="@{/img/{fileimg}(fileimg=${product.imageurl})}" alt="Hình ảnh sản phẩm"  style="width: 150px ;height:150px">
+          <p class="basic_conttent_lable" style="color:red;">Không thể sửa</p>
+        </div>
+        <div class="basic_conttent">
+          <div class="basic_conttent_lable">Tên sản phẩm</div>
+          <div class="sell_price_input" th:text="${product.name}"></div>
+          <p class="basic_conttent_lable" style="color:red;">Không thể sửa</p>
+        </div>
+        <div class="basic_conttent">
+          <label class="basic_conttent_lable">Danh mục:</label>
+          <div class="sell_price_input" th:text="${product.category.name}"></div>
+          <p class="basic_conttent_lable" style="color:red;">Không thể sửa</p>
+        </div>
+
+
+        <div class="basic_conttent">
+          <div class="basic_conttent_lable">Mô tả sản phẩm</div>
+          <textarea class="basic_description_input" id="message" rows="4" cols="50" placeholder="Nhập mô tả" th:field="*{description}"></textarea>
+        </div>
+      </div>
+
+      <div id="sell_info" class="sell_info_conttent basic_info_conttent">
+        <p class="basic_info_conttent_header">Thông tin bán hàng</p>
+        <div class="basic_conttent">
+          <div class="basic_conttent_lable">Giá sản phẩm</div>
+          <input type="text" class="sell_price_input" placeholder="Giá" th:field="*{price}" required>
+        </div>
+        <div class="basic_conttent">
+          <div class="basic_conttent_lable">Số lượng trong kho</div>
+          <input type="text" class="stock_input" placeholder="kho hàng" th:field="*{stock}" required>
+        </div>
+        <input type="submit" value="Sửa sản phẩm"
+               class="btn btn--primary">
+      </div>
+    </form>
+  </div>
+</div>
+<script th:src="@{/js/seller_script.js}"></script>
+<script th:src="@{/js/add_product.js}"></script>
+</body>
+<script>
+  const fileInput = document.getElementById("file");
+  const imgArea = document.getElementById("imgArea");
+
+  fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (file) {
+          const reader = new FileReader();
+
+          reader.onload = function () {
+              // Clear nội dung hiện tại
+              imgArea.innerHTML = "";
+
+              // Tạo thẻ img mới và gán src
+              const img = document.createElement("img");
+              img.src = reader.result;
+              imgArea.appendChild(img);
+          };
+
+          reader.readAsDataURL(file);
+      }
+  });
+</script>
+</html>

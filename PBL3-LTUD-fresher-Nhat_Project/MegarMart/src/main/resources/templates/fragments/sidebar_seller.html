@@ -1,0 +1,64 @@
+<div class="seller-sidebar" th:fragment="sidebarseller">
+  <ul class="sidebar-list-item">
+    <li class="siderbar-item">
+      <div class="sidebar-item-header">
+        <a href="" class="siderbar-item-label">Quản lí đơn hàng </a>
+        <i class='bx bx-chevron-up item-icon'></i>
+      </div>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item">
+          <a th:href="@{/seller/home}">Tất cả</a>
+        </li>
+      </ul>
+    </li>
+    <li class="siderbar-item">
+      <div class="sidebar-item-header">
+        <a href="" class="siderbar-item-label">Quản lí sản phẩm </a>
+        <i class='bx bx-chevron-up item-icon'></i>
+      </div>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item">
+          <a th:href="@{/seller/product-manager}" class="active">Tất cả sản phẩm</a>
+        </li>
+        <li class="dropdown-item">
+          <a th:href="@{/seller/addproduct}">Thêm sản phẩm</a>
+        </li>
+      </ul>
+    </li>
+    <li class="siderbar-item">
+      <div class="sidebar-item-header">
+        <a href="" class="siderbar-item-label">Chăm sóc khách hàng </a>
+        <i class='bx bx-chevron-up item-icon'></i>
+      </div>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item">
+
+          <a th:href="@{/seller/takecare-manager}">Quản lí đánh giá</a>
+        </li>
+      </ul>
+    </li>
+    <li class="siderbar-item">
+      <div class="sidebar-item-header">
+        <a href="" class="siderbar-item-label">Tài chính </a>
+        <i class='bx bx-chevron-up item-icon'></i>
+      </div>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item">
+          <a  th:href="@{/seller/revenue}" >Doanh thu</a>
+        </li>
+      </ul>
+    </li>
+    <li class="siderbar-item">
+      <div class="sidebar-item-header">
+        <a href="" class="siderbar-item-label">Quản lí Shop </a>
+        <i class='bx bx-chevron-up item-icon'></i>
+      </div>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item">
+          <a th:href="@{/seller/shopProfile}">Hồ sơ Shop</a>
+        </li>
+
+      </ul>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="product_manager_contain">
+    <div th:if="${deleteSuccess}" class="popup success show" id="popup-success">
+        <i class="fa-solid fa-circle-check popup-icon"></i>
+        <h3>Xoá sản phẩm thành công! 🎉</h3>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+    <div th:if="${deleteFail}" class="popup error show" id="popup-error">
+        <i class="fa-solid fa-circle-xmark popup-icon"></i>
+        <h3> ⚠️ Không thể xoá sản phẩm vì đã có đơn hàng liên quan.</h3>
+        <p>*Gợi ý: chuyển số lượng về 0</p>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+     <div th:if="${deleteSuccess != null or deleteFail != null}" class="overlay" id="popup-overlay" onclick="closePopup()"></div>
+
+    <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+
+    <div class="all-product">
+        <div class="all-product-header">
+            <div class="all-product-title">Sản phẩm</div>
+            <div class="add-product"><a th:href="@{/seller/addproduct}"><span>+</span> Thêm sản phẩm mới</a></div>
+        </div>
+        <div class="all-product-list">
+        <a class="all-product-item" th:classappend="${statusFilter == null} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword})}">Tất cả</a>
+
+        <a class="all-product-item" th:classappend="${statusFilter == 1} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword}, status=1)}">
+            Đang hoạt động(<span th:text="${activeCount}"></span>)
+        </a>
+
+        <a class="all-product-item" th:classappend="${statusFilter == 2} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword}, status=2)}">
+            Vi phạm(<span th:text="${violateCount}"></span>)
+        </a>
+
+        <a class="all-product-item" th:classappend="${statusFilter == 0} ? ' item-active'"
+             th:href="@{/seller/product-manager(page=1, keyword=${keyword}, status=0)}">
+            Đang chờ duyệt(<span th:text="${pendingCount}"></span>)
+        </a>
+            </div>
+            <div class="all-product-list">
+        <div th:if="${message}" class="alert alert-info" th:text="${message}"></div>
+        <div id="all-product" class="all-product-conttent section active">
+
+                    <form th:action="@{/seller/product-manager}" method="get">
+                        <div class="all-product-search">
+                        <div class="category-search">
+                        <input type="text" class="category-search-input" name="keyword"
+                               th:value="${keyword}" placeholder="Tìm tên sản phẩm">
+                        <input type="hidden" name="status" th:value="${statusFilter}">
+                        </div>
+                        <button type="submit" class="btn-product-search">Tìm</button>
+                        </div>
+                    </form>
+
+            <table class="table-product">
+                <thead>
+                <tr>
+                    <th class="col_product">Sản phẩm</th>
+                    <th class="col_revenue">Doanh thu</th>
+                    <th class="col_price">Giá</th>
+                    <th class="col_stock">Kho hàng</th>
+                    <th class="col_category">Danh mục</th>
+                    <th class="col_status">Tình trạng</th>
+                    <th class="col_button">Chức năng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="pro : ${listproshop}">
+                    <td class="col_product_value">
+                        <img th:src="@{/img/{fileimg}(fileimg=${pro.imageurl})}" alt="" class="col_product_img">
+                        <div class="col_product_name" th:text="${pro.name}"></div>
+                    </td>
+                    <td class="col_revenue_value" th:text="${#numbers.formatInteger(pro.revenue, 1, 'POINT')}"></td>
+                    <td class="col_price_value" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')}"></td>
+                    <td class="col_stock_value" th:text="${pro.stock}"></td>
+                    <td class="col_category_value" th:text="${pro.category.name}"></td>
+                    <td class="col_status_value" th:switch="${pro.status}">
+                        <span th:case="0">Đang chờ duyệt</span>
+                        <span th:case="1">Đang hoạt động</span>
+                        <span th:case="2">Vi phạm</span>
+                    </td>
+                    <td class="col_button_value" >
+                        <a class="btn btn--primary" th:href="@{/seller/editproduct/{id}(id=${pro.id})}">Sửa</a>
+                        <a class="btn btn-delete" th:href="@{/seller/deleteproduct/{id}(id=${pro.id})}"
+                           onclick="return confirm('Bạn có chắc chắn muốn xoá sản phẩm này không?')">Xóa</a>
+                    </td>
+                    <!--                    <td>-->
+                    <!--                        <button class="btn btn-edit"><a th:href="@{/seller/product/edit/{id}(id=${pro.id})}" style="color:white">Sửa</a></button>-->
+                    <!--                        <form th:action="@{/seller/product/delete/{id}(id=${pro.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">-->
+                    <!--                            <button type="submit" class="btn btn-delete" >Xóa</button>-->
+                    <!--                        </form>-->
+                    <!--                    </td>-->
+                </tr>
+                </tbody>
+            </table>
+            <ul class="custom-pagination">
+                <!-- Previous -->
+                <li class="custom-pagination__item" th:if="${currentPage > 1}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/product-manager'(keyword=${keyword}, status=${statusFilter}, page=${currentPage - 1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li class="custom-pagination__item"
+                    th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${currentPage == i} ? 'custom-pagination__item--active'">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/product-manager'(keyword=${keyword}, status=${statusFilter}, page=${i})}"
+                       th:text="${i}">
+                    </a>
+                </li>
+
+                <!-- Next -->
+                <li class="custom-pagination__item" th:if="${currentPage < totalPages}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/product-manager'(keyword=${keyword}, status=${statusFilter}, page=${currentPage + 1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<!--      -->
+<script>
+    window.onload = function () {
+      const popup = document.getElementById("popup-error");
+      const overlay = document.getElementById("popup-overlay");
+      if (popup && overlay) {
+          popup.style.display = "block";
+          overlay.style.display = "block";
+      }
+  }
+
+  function closePopup() {
+      const popup = document.getElementById("popup-error");
+      const pop = document.getElementById("popup-success");
+      const overlay = document.getElementById("popup-overlay");
+
+      if (popup) popup.style.display = "none";
+      if (pop) pop.style.display = "none";
+      if (overlay) overlay.style.display = "none";
+  }
+</script>
+<script th:src="@{/js/seller_script.js}"></script>
+</body>
+</html>

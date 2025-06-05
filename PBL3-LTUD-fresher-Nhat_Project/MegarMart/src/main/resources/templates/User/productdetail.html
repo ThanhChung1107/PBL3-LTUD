@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+<div class="detail">
+    <div th:replace="fragments/user_header.html :: user_header"></div>
+
+    <div class="detail__container">
+        <div class="product-info">
+            <div class="product-info__img">
+                <div class="product-info__img-show">
+                    <img class="main-img" th:src="@{/img/{imgfile}(imgfile = ${pro.imageurl})}" alt="Ảnh lớn">
+                </div>
+            </div>
+
+            <div class="product-info-detail">
+                <div class="product-info-name">
+                    <span class="product-info-favourite">yêu thích</span>
+                    <div th:text="${pro.name}"></div>
+                </div>
+                <div class="product-info-statistics">
+                    <div class="product-info-list">
+                        <div class="product-info-chung product-info-rate">
+                            <span>4.8</span>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+
+                        </div>
+                        <div class="product-info-chung product-info-review">
+                            <span class="product-info-numr">268</span>
+                            <a href="" class="product-review">đánh giá</a>
+                        </div>
+                        <div class="product-info-chung product-info-sold">
+                            <span class="product-info-soldnum" th:text="${pro.sold}"></span>
+                            <span class="product-info-sold-text">sold</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info-flashsale">
+                    <img class="flashsale" th:src="@{/img/flashsale.svg}" alt=""></div>
+                <div class="product-price">
+                    <div class="product-info-price">
+                        <span class="product-info-price-current" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')+'đ'}"></span>
+                        <span class="product-info-price-old" th:text="${#numbers.formatInteger(pro.price+250000, 1, 'POINT')+'đ'}"></span>
+                    </div>
+                </div>
+                <div class="product-info-discount">
+                    <span class="product-info-lable product-info-discount-text">Mã giảm giá của shop</span>
+                    <p class="product-info-discount-price">Giảm 5kđ</p>
+                    <p class="product-info-discount-price">Giảm 8kđ</p>
+                    <p class="product-info-discount-price">Giảm 12kđ</p>
+                </div>
+                <div class="product-info-deal">
+                    <p class="product-info-lable product-info-text">Deal sốc</p>
+                    <p class="product-info-deal-mkds">Mua Kèm Deal Sốc</p>
+                </div>
+                <div class="product-info-vc">
+                    <p class="product-info-lable product-info-text">Vận Chuyển</p>
+                    <div class="product-info-vc-in">
+                        <p class="product-info-vc-text">Nhận từ 10 Th03 - 12 Th03</p>
+                        <p class="product-info-vc-text">Miễn Phí Vận Chuyển</p>
+                        <p class="product-info-vc-voucher">Tặng Voucher ₫15.000 nếu đơn giao sau thời gian trên.</p>
+                    </div>
+                </div>
+                <div class="product-info-count">
+                    <p class="product-info-lable product-info-count-text">Còn lại</p>
+                    <span style="font-size:20px" th:text="${pro.stock}+' sản phẩm'"></span>
+<!--                    <div class="product-info-select-count">-->
+<!--                        <span class="product-info-sub">-</span>-->
+<!--                        <span class="product-info-numcount">1</span>-->
+<!--                        <span class="product-info-add">+</span>-->
+<!--                    </div>-->
+<!--                    <p class="product-cosan" th:text="${pro.stock}+' sản phẩm có sẵn'"></p>-->
+                </div>
+              <div style="display:ruby">
+<!--                      <div class="product-buy">-->
+<!--                          <a th:href="@{/user/cart/{proid}(proid = ${pro.id})}">Mua ngay</a>-->
+<!--                      </div>-->
+                  <form th:action="@{/user/cart}" method="get">
+                      <div class="product-buy">
+                      <input type="hidden" name="buynow" th:value="${pro.id}" />
+                      <input type="submit" value="Mua Ngay">
+                      </div>
+                  </form>
+                  <form th:action="@{/user/addcart/{productId}(productId=${pro.id})}" method="post">
+                      <div class="product-buy">
+                      <input type="submit" value="Thêm vào giỏ hàng">
+                      </div>
+                  </form>
+              </div>
+
+            </div>
+        </div>
+        <div class="shop">
+            <div class="shop-view">
+                <div class="shop-logo">
+                    <img th:src="@{/img/{imgfile}(imgfile= ${pro.shop.imageurl})}" style="width:100px;height:auto;border-radius:5px;object-fit:cover;" alt="Shop Logo">
+                </div>
+                <div class="shop-info">
+                    <div class="shop-name" th:text="${pro.shop.shopname}"></div>
+                    <div class="shop-active">Online 10 Phút Trước</div>
+                    <div class="buttons">
+                        <i class='view-shop-icon bx bx-store-alt'></i>
+                        <a th:href="@{/user/shop/{id}(id=${pro.shop.id})}" class="view-shop">Xem Shop</a>
+                    </div>
+                </div>
+            </div>
+            <div class="about-shop">
+                <div>Đánh Giá <span class="highlight">62,2k</span></div>
+                <div>Sản Phẩm <span class="highlight" th:text="${productcount}"></span></div>
+                <div>Tham Gia <span class="highlight" th:text="${#temporals.format(pro.shop.createdAt, 'dd/MM/yyyy')}"></span></div>
+                <div>Người Theo Dõi <span class="highlight">107k</span></div>
+            </div>
+        </div>
+        <!-- chi tiet san pham -->
+        <div class="product-detail">
+            <p class="product-detail-text">CHI TIẾT SẢN PHẨM</p>
+            <div class="product-detail-table">
+                <table class="product-table">
+                    <tr>
+                        <td class="product-detail-col-name">Danh Mục</td>
+                        <td class="product-detail-col-content">
+                            <a href="" class="home-in-table" th:text="${pro.category.name}"></a>
+<!--                            <a href="" class="home-in-table">MegaMart</a><span>></span>-->
+<!--                            <a href="" class="category-in-table">MegaMart</a><span>></span>-->
+<!--                            <a href="" class="product-in-table">MegaMart</a>-->
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="product-detail-col-name">Mô tả sản phẩm</td>
+                            <td class="product-detail-col-content" th:text="${pro.description}"></td>
+                        </tr>
+<!--                    <tr>-->
+<!--                        <td class="product-detail-col-name">số sản phầm còn lại</td>-->
+<!--                        <td class="product-detail-col-content">234</td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td class="product-detail-col-name">Thương Hiệu</td>-->
+<!--                        <td class="product-detail-col-content"><a class="shop-name-in-table" href="">Shop name</a></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td class="product-detail-col-name">Giới Tính</td>-->
+<!--                        <td class="product-detail-col-content">Nữ</td>-->
+<!--                    </tr>-->
+                </table>
+            </div>
+        </div>
+        <div class="product-review-detail product-detail">
+            <div class="rating-header">
+                <div class="rating-title">ĐÁNH GIÁ SẢN PHẨM</div>
+                <div class="rating-score">5.0 trên 5</div>
+            </div>
+
+            <div class="rating-stats">
+                <div class="rating-stat">
+                    <div class="rating-stat-label">Tất Cả</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="rating-stat-count">124</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">5 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 98%"></div>
+                    </div>
+                    <div class="rating-stat-count">122</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">4 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 1%"></div>
+                    </div>
+                    <div class="rating-stat-count">1</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">3 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 1%"></div>
+                    </div>
+                    <div class="rating-stat-count">1</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">2 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="rating-stat-count">0</div>
+                </div>
+                <div class="rating-stat">
+                    <div class="rating-stat-label">1 Sao</div>
+                    <div class="rating-stat-bar">
+                        <div class="rating-stat-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="rating-stat-count">0</div>
+                </div>
+            </div>
+
+            <div class="review-summary">
+                <div>Có <span class="reviewcount" th:text="${reviewCount}"></span> Bình Luận </div>
+            </div>
+
+            <div class="review-detail" th:each="review : ${listreview}">
+                <div class="user-img">
+                    <img th:src="@{/img/{image}(image=${review.account.imageurl})}"
+                         th:alt="${review.account.name}">
+                </div>
+                <div class="review-item">
+                    <div class="review-user" th:text="${review.account.name}"></div>
+                    <div class="review-rating" th:text="${review.rating.displayName}"></div>
+                    <div class="review-date"
+                         th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></div>
+                    <div class="review-content" th:text="${review.comment}"></div>
+
+                    <!-- Phản hồi của shop -->
+                    <div class="seller-reply" th:if="${review.sellerReply != null}">
+                        <div class="reply-shop-name">Phản hồi từ shop
+                        </div>
+                        <div class="reply-content" th:text="${review.sellerReply}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+  <!-- footer -->
+  <div th:replace="fragments/footer.html :: footer"></div>
+</div>
+</body>
+</html>

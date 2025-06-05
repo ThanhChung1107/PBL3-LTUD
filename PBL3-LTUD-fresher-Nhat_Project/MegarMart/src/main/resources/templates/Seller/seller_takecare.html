@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="fragments/seller_head.html :: sellerhead"></div>
+<body>
+
+<div th:replace="fragments/seller_header.html :: sellerheader"></div>
+
+<div class="product_manager_contain">
+    <div th:replace="fragments/sidebar_seller.html :: sidebarseller"></div>
+    <div class="main_page">
+        <div class="main_page__eval-shop">
+            <div class="main_page__eval">
+                <h3 class="main_page__eval-text">Đánh giá shop</h3>
+            </div>
+            <div class="main_page__eval-table">
+                <div class="main_page__eval-qnt">
+                    <p class="main_page__eval--text">Tổng lượt đánh giá: </p>
+                    <div class="main_page__eval--num" th:text="${totalReviews}"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main_page__list-eval">
+            <h3 class="main_page__list-eval-header">Danh sách đánh giá shop</h3>
+            <form th:action="@{/seller/takecare-manager}" method="get" class="main_page__list-eval-filter">
+                <div class="main_page__list-eval-select">
+                    <div class="main_page__list-eval-select-text">Lọc theo đánh giá:</div>
+
+                    <!-- Radio buttons thay vì checkbox -->
+                    <input type="radio" id="filter-all" name="rating" value="" checked
+                           th:checked="${ratingFilter == null}">
+                    <label for="filter-all">Tất cả</label>
+
+                    <th:block th:each="rating : ${T(com.ProjectPBL3.MegarMart.Entity.RatingLevel).values()}">
+                        <input type="radio" th:id="'filter-' + ${rating.name()}"
+                               th:name="rating" th:value="${rating}"
+                               th:checked="${ratingFilter == rating}">
+                        <label th:for="'filter-' + ${rating.name()}"
+                               th:text="${rating.displayName}"></label>
+                    </th:block>
+                </div>
+
+                <div class="main_page__list-eval-search">
+                    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                           class="input-search" style="  margin-right: 10px;"
+                           th:value="${keyword}">
+                    <span class="main_page__list-eval--text">Từ:</span>
+                    <input type="date" name="startDate" class="date"
+                           th:value="${startDate != null} ? ${#temporals.format(startDate, 'yyyy-MM-dd')} : ''">
+
+                    <span class="main_page__list-eval--text">Đến:</span>
+                    <input type="date" name="endDate" class="date"
+                           th:value="${endDate != null} ? ${#temporals.format(endDate, 'yyyy-MM-dd')} : ''">
+                </div>
+
+                <div class="main_page__list-eval-button">
+                    <button type="submit" class="main_page__list-eval-button-search">Tìm kiếm</button>
+                    <button type="button" class="main_page__list-eval-button-reset"
+                            onclick="location.href='/seller/takecare-manager'">Đặt lại</button>
+                </div>
+            </form>
+
+            <table class="table-order">
+                <thead>
+                <tr>
+                    <th class="col_product">Thông tin Sản phẩm</th>
+                    <th class="col_category">Đánh giá của người mua</th>
+                    <th class="col_sum_product">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="review : ${reviews}">
+                    <td class="col_product_value col_height">
+                        <img th:src="@{/img/{image}(image=${review.product.imageurl})}"  alt="" class="col_product_img">
+
+                        <div class="col_product_name" th:text="${review.product.name}"></div>
+                    </td>
+                    <td class="col_user_review col_height">
+                        <div class="user_info">
+                            <div class="user_img"><img th:src="@{/img/{image}(image=${review.account.imageurl})}"  alt=""></div>
+                            <div class="user_name" th:text="${review.account.name}"></div>
+                        </div>
+                        <div class="user_rate" th:text="${review.rating.displayName}"></div>
+                        <div class="user_review" th:text="${review.comment}"></div>
+                        <div class="order_info">
+                            <div class="order_id" >ID đơn hàng:<span class="id" th:text="${review.product.id}"></span></div>
+                            <div class="createAt" th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></div>
+                        </div>
+                    </td>
+                    <td onclick="toggleForm()" class="col_action col_height">
+                        <div th:if="${review.sellerReply != null}" class="seller-replied">
+                            <span class="badge bg-success">Đã phản hồi</span>
+                        </div>
+
+                        <!-- Nếu sellerReply == null (chưa phản hồi) -->
+                        <div th:unless="${review.sellerReply != null}">
+                            <button
+                                    th:attr="data-account-id=${review.account.id},
+                                                 data-account-name=${review.account.name},
+                                                 data-product-id=${review.product.id},
+                                                 data-review-rating=${review.rating.displayName},
+                                                 data-account-image=${review.account.imageurl},
+                                                 data-review-comment = ${review.comment},
+                                                 data-review-id = ${review.id}"
+                                    class="btn-reply" th:onclick="toggleForm(this)">Trả lời</button>
+                        </div>
+                    </td>
+
+                </tr>
+
+                </tbody>
+            </table>
+            <ul class="custom-pagination">
+                <!-- Previous -->
+                <li class="custom-pagination__item" th:if="${currentpage > 1}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, rating=${ratingFilter}, startDate=${startDate}, endDate=${endDate}, page=${currentpage - 1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
+
+                <!-- Các trang -->
+                <li class="custom-pagination__item"
+                    th:each="i : ${#numbers.sequence(1, totalpage)}"
+                    th:classappend="${currentpage == i} ? 'custom-pagination__item--active'">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, rating=${ratingFilter}, startDate=${startDate}, endDate=${endDate}, page=${i})}"
+                       th:text="${i}">
+                    </a>
+                </li>
+
+                <!-- Next -->
+                <li class="custom-pagination__item" th:if="${currentpage < totalpage}">
+                    <a class="custom-pagination__link"
+                       th:href="@{'/seller/takecare-manager'(keyword=${keyword}, rating=${ratingFilter}, startDate=${startDate}, endDate=${endDate}, page=${currentpage + 1})}">
+                        <i class="custom-pagination__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+            <div class="reply-modal" id="reply-modal">
+                <div class="reply-box">
+                    <div class="reply-header">
+                        <div class="reply-title">Reply</div>
+                        <button class="close-btn">&times;</button>
+                    </div>
+                    <div class="review-info">
+                        <div class="user_info">
+                            <img  class="avatar" alt="user" id="userimg">
+                            <div class="username" id="username"></div>
+                            <div class="rate" id="reviewRating"></div>
+                        </div>
+                        <div class="user-review" id="reviewComment"></div>
+                    </div>
+                    <form th:action="@{/seller/reply}" method="post">
+                        <input type="hidden" name="reviewProductId" id="modalReviewId">
+                        <textarea class="reply-input" name="sellerReply" required maxlength="500"></textarea>
+                        <div class="btn-group">
+                            <button class="btn cancel" id="cancel">Cancel</button>
+                            <button class="btn submit" id="submit" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <script>
+            document.querySelector('.main_page__list-eval-filter').addEventListener('submit', function(e) {
+                const startDate = document.querySelector('input[name="startDate"]');
+                const endDate = document.querySelector('input[name="endDate"]');
+
+                if (startDate.value && endDate.value && new Date(startDate.value) > new Date(endDate.value)) {
+                    alert("Ngày bắt đầu phải trước ngày kết thúc");
+                    e.preventDefault();
+                }
+            });
+            // document.getElementById('submitReviewBtn').addEventListener('click', function() {
+            //     document.getElementById('reviewModal').style.display = 'flex';
+            // });
+
+            // Đóng form đánh giá
+            document.getElementById('cancel').addEventListener('click', function() {
+                document.getElementById('reply-modal').style.display = 'none';
+            });
+            document.getElementById('submit').addEventListener('click', function() {
+                document.getElementById('reply-modal').style.display = 'none';
+            });
+            function toggleForm(button) {
+                const userName = button.getAttribute('data-account-name');
+                const userImage = button.getAttribute('data-account-image');
+                const rating = button.getAttribute('data-review-rating');
+                const userId = button.getAttribute('data-account-id');
+                const comment = button.getAttribute('data-review-comment')
+                const reviewId = button.getAttribute('data-review-id')
+                // Điền thông tin vào modal
+                document.getElementById('username').textContent = userName;
+                document.getElementById('userimg').src = '/img/' + userImage;
+                document.getElementById('reviewRating').textContent = rating;
+                document.getElementById('reviewComment').textContent = comment;
+                document.getElementById('modalReviewId').value = reviewId;
+                const form = document.getElementById("reply-modal");
+                if (form.style.display === "none") {
+                form.style.display = "block";
+                } else {
+                form.style.display = "none";
+                }
+            }
+        </script>
+    </div>
+    <script th:src="@{/js/seller_script.js}"></script>
+</div>
+</body>
+</html>

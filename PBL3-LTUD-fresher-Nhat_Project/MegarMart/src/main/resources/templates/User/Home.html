@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{css/account-style.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="home">
+    <div th:replace="fragments/user_header.html :: user_header"></div>
+
+
+    <div th:if="${orderSuccess}" class="popup" id="popup">
+        <i class="fa-solid fa-circle-check popup-icon"></i>
+        <h3>Đặt hàng thành công! 🎉</h3>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+    <div th:if="${orderSuccess}" class="overlay" id="popup-overlay" onclick="closePopup()"></div>
+
+    <div class="home-container">
+        <div class="grid">
+            <div class="home-category">
+                <div class="home-category-name">DANH MỤC</div>
+
+                <div class="home-category-content">
+                    <a th:href="@{/user/home/{id}(id=${cate.id})}"
+                       class="home-category-detail"
+                       th:each="cate : ${listcate}">
+                        <img th:src="@{'/img/' + ${cate.imageurl}}" alt="" class="home-category-img">
+                        <div th:text="${cate.name}" class="home-category-detail-name"></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="home-product">
+                <!-- Grid-> row -> column -->
+                <div class="grid">
+                    <div class="goiyhomnay" th:text="${category != null ? category.name : 'GỢI Ý HÔM NAY'}"></div>
+                </div>
+                <div class="grid__row">
+                    <div class="grid__column-2-4"   th:each="pro : ${listprocate != null ? listprocate : (list != null ? list.content : listpro)}"  th:if="${pro.status == 1}">
+                        <a th:href="@{/user/productdetail/{proid}(proid = ${pro.id})}" class="home-product-item">
+                            <div class="home-product-item__img"
+                                 th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">
+                            </div>
+
+                            <h4 class="home-product-item__name" th:text="${pro.name}"></h4>
+                            <div class="home-product-item__price">
+                                <span class="home-product-item__price-old" th:text="${#numbers.formatInteger(pro.price+250000, 1, 'POINT')+'đ'}"></span>
+                                <span class="home-product-item__price-current"  th:text="${#numbers.formatInteger(pro.price, 1, 'POINT')+'đ'}"></span>
+                            </div>
+
+                            <div class="home-product-item__action">
+                                <!-- Nút Like -->
+
+                                <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                                        <i class='bx bx-heart'></i>
+                                    </span>
+
+<!--                                 Đánh giá sao -->
+
+                                <div class="home-product-item__rating">
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                    <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                </div>
+
+                                <span class="home-product-item__sold" th:text="${pro.sold}+' đã bán'"></span>
+                            </div>
+
+                            <div class="home-product-item__origin">
+                                <span class="home-product-item__brand">whoo</span>
+                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                            </div>
+
+                            <div class="home-product-item__favourite">
+                                <i class='bx bx-check' ></i>
+                                yêu thích
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <ul class="pagination home-product__pagination">
+                <!-- Nút Previous -->
+                <li class="pagination-item" th:if="${currentpage > 1}">
+                    <a class="pagination-item__link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'page=' + ${currentpage - 1}}">
+                        <i class="pagination-item__icon bx bxs-chevron-left"></i>
+                    </a>
+                </li>
+
+                <!-- Các trang -->
+                <li class="pagination-item"
+                    th:each="i : ${#numbers.sequence(1, totalpage)}"
+                    th:classappend="${currentpage == i} ? 'pagination-item-active'">
+                    <a class="pagination-item__link"
+                       th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'page=' + ${i}}"
+                       th:text="${i}">
+                    </a>
+                </li>
+
+                <!-- Nút Next -->
+                <li class="pagination-item" th:if="${currentpage < totalpage}">
+                    <a class="pagination-item__link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'page=' + ${currentpage + 1}}">
+                        <i class="pagination-item__icon bx bxs-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div th:replace="fragments/footer.html :: footer"></div>
+</div>
+<script th:src="@{/js/script.js}"></script>
+<script>
+    // Hiện popup nếu tồn tại
+    window.onload = function() {
+        const popup = document.getElementById("popup");
+        if (popup) {
+            popup.style.display = "block";
+        }
+    }
+</script>
+<script>
+    window.onload = function () {
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("popup-overlay");
+        if (popup && overlay) {
+            popup.style.display = "block";
+            overlay.style.display = "block";
+        }
+    }
+
+    function closePopup() {
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("popup-overlay");
+        if (popup) popup.style.display = "none";
+        if (overlay) overlay.style.display = "none";
+    }
+</script>
+</body>
+</html>

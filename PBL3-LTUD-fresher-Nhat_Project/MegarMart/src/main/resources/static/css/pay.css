@@ -1,0 +1,365 @@
+/* footer */
+.footer__download-apps img{
+    width: 40px;
+    height: 40px;
+}
+.footer{
+   
+    border-top: 4px solid var(--primary-color) ;
+}
+.footer__heading{
+   margin-top: 40px;
+   font-size: 1.6rem ;
+}
+.footer-list{
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 40px ;
+}
+.footer-item{
+    margin-bottom: 10px;
+}
+.footer-item a:hover{
+    color: var(--primary-color);
+}
+.footer-item a{
+    text-decoration: none;
+    color: #585858;
+   font-size: 1.2rem;
+}
+.footer__bottom{
+    display: flex;
+    justify-content: center;
+    background-color: aliceblue;
+}
+.footer__bottom-text{
+   
+        text-align: center;
+        color: #585858;
+        font-size: 1.2rem;
+ 
+}
+
+
+
+
+
+
+/* header-bar */
+.header__bar{
+    height: var(--header__bar-height);
+    background-color: var(--white-color);
+    border-bottom: 1px solid rgba(0, 0, 0,0.09) ;
+    
+}
+.header__bar-item{
+    display: flex;
+    align-items: center;
+}
+.header__logo-bar{
+   padding-right: 20px;
+   margin-top: 4px;
+}
+
+.header__bar-text{
+    border-left: 1px solid var(--primary-color);
+    padding:10px 0 10px 15px;
+    font-size: 1.9rem;
+    color: var(--primary-color);
+    font-weight: 450;
+    text-decoration: none;
+}
+
+/* Pay */
+.container{
+    background-color:aliceblue;
+    display: flex;
+}
+.DiaChi-NhanHang{
+    background-color: var(--white-color);
+    margin-top: 30px;
+    padding-bottom: 20px;
+    box-shadow :1px 1px  0.1rem rgba(0, 0, 0,0.09)  ;
+}
+.DiaChi-NhanHang-bar{
+        background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px);
+        background-position-x: -30px;
+        background-size: 116px 3px;
+        height: 3px;
+        width: 100%;
+        display: flex;
+    
+}
+.DiaChi-NhanHang-heading{
+    margin-top:15px ;
+    display: flex;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-left: 30px;
+    color: var(--primary-color);
+    
+}
+.DiaChi-NhanHan-icon{
+    margin-top: 17px;
+    margin-right: 10px;
+    font-size: 1.4rem;
+}
+
+.DiaChi-NhanHang-item{
+    margin-top: 5px;
+    margin-left: 30px;
+    align-items: center;
+    display: flex
+}
+.DiaChi-NhanHang__info{
+    margin-right: 20px;
+    font-size: 1.6rem;
+    font-weight: 600;
+
+}
+.DiaChi-NhanHang__info-address{
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+
+
+
+
+/* ProductPurchase */
+
+.ProductPurchase{
+    background-color: var(--white-color);
+    margin-top: 15px;
+    box-shadow :1px 1px 0.1rem rgba(0, 0, 0,0.09)  ;
+    padding: 0 30px;
+}
+.ProductPurchase-head{
+    padding-top: 20px ;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.ProductPurchase-head__name{
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+.ProductPurchase-head__price-item{
+    display: flex;
+    text-align:right;
+   
+}
+.ProductPurchase-head__price,
+.ProductPurchase-head__qnt,
+.ProductPurchase-head__cost {
+    margin-left: auto;
+    width: 190px;
+    font-size: 1.5rem;
+    color: #757575;
+}
+
+.ProductPurchase-body{
+    padding: 10px 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.ProductPurchase-body__info{
+    display: flex;
+    align-items: center;
+    width: 380px;
+    
+}
+.ProductPurchase-body__img{
+    width: 40px;
+    height: 40px;
+}
+.ProductPurchase-body__name{
+  margin-left: 20px;
+  font-size: 1.4rem;
+    font-weight: 400;
+}
+.ProductPurchase-body__type{
+    width: 190px;
+    font-size: 1.4rem;
+  font-weight: 350;
+  color: #7c7c7c;
+}
+.ProductPurchase-body__price-item{
+    display: flex;
+    text-align:right;
+}
+.ProductPurchase-body__price,
+.ProductPurchase-body__qnt,
+.ProductPurchase-body__cost {
+    margin-left: auto;
+    width: 190px;
+    font-size: 1.4rem;
+    font-weight:400 ;
+}
+
+.ProductPurchase__extra{
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+}
+.ProductPurchase__extra-favouri{
+    padding: 1px 2px;
+    font-size: 1.4rem;
+    border:none;
+    border-radius: 2px;  
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+.ProductPurchase__extra-nameShop{
+    margin-left: 4px;
+    font-size: 1.4rem;
+}
+
+
+.ProductPurchase-footer{
+    box-sizing: border-box;
+    box-shadow :1px 1px 0.1rem rgba(0, 0, 0,0.09)  ;
+    height: 70px;
+    background-color: #f9fdff;
+    border-top: 1px dashed rgba(0, 0, 0,0.09);
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.ProductPurchase-footer-price-text{
+    margin-left: auto;
+    font-size: 1.4rem;
+  font-weight: 350;
+  color: #686868;
+}
+.ProductPurchase-footer-price-total{
+    padding: 0 30px 0;
+    color: var(--primary-color);
+    font-size: 1.9rem;
+    font-weight: 400;
+}
+
+
+
+
+/* method pay */
+.ProductPurchase-total{
+   
+    margin: 20px 0 70px;
+    background-color: var(--white-color);
+    box-shadow :1px 1px 0.1rem rgba(0, 0, 0,0.09)  ;
+}
+.ProductPurchase-total__method{
+    height: 90px;
+    padding-left: 30px;
+   padding-right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.ProductPurchase-total__method-text{
+    font-size: 1.7rem;
+  font-weight: 400;
+}
+.ProductPurchase-total__method-way{
+    font-size: 1.4rem;
+  font-weight: 400;
+}
+
+
+.ProductPurchase-total-price{
+   height: 120px;
+    padding-right: 30px;
+    border-top: 1px solid rgba(0, 0, 0,0.09);
+    display:flex;
+    align-items: center;
+    justify-content: right;
+}
+.ProductPurchase-total__price-text{
+    font-size: 1.4rem;
+  font-weight: 380;
+  color: #686868;
+}
+.ProductPurchase-total__price-total{
+    padding: 0 20px;
+    font-size: 2.3rem;
+  font-weight: 400;
+  color: var(--primary-color);
+}
+
+.ProductPurchase-total__pay{
+    height: 100px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-top: 1px dashed rgba(0, 0, 0,0.09);
+    display:flex;
+    align-items: center;
+    justify-content: right;
+}
+.ProductPurchase-total__pay-btn{
+    width: 170px;
+}
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 1000;
+    width: 390px;
+    font-size: 1.6rem;
+    animation: popupFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.popup-icon {
+    font-size: 7.5rem;
+    color: #27ae60;
+    margin-bottom: 10px;
+}
+
+.popup h3 {
+    color: #27ae60;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.popup button {
+    padding: 10px 20px;
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup button:hover {
+    background-color: #219150;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+}

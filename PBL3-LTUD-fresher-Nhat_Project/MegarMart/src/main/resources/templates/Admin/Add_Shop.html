@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin/head_side.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/form_view.css}">
+    <script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<div class="header">
+    <div class="left-head">
+        <h3>Danh sách yêu cầu đăng kí shop</h3>
+    </div>
+    <div class="right-head">
+        <h3>Xin chào,admin</h3>
+    </div>
+</div>
+
+
+<div th:replace="fragments/sidebar_admin.html :: sidebaradmin"></div>
+
+<div class="content">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Shop</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div th:if="${isempty}"><h1 style="color:red;margin:0 auto;padding-top:20px;">Không có yêu cầu đăng kí shop!</h1></div>
+            <div th:unless="${isempty}">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Tên cửa hàng</th>
+                    <th>Tên chủ sở hữu</th>
+                    <th>SĐT Shop</th>
+                    <th>Địa chỉ Shop</th>
+                    <th>Email Shop</th>
+                    <th>Ngày yêu cầu</th>
+                    <th>Chức năng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="shop : ${pendingshop}">
+                    <td th:text="${shop.id}"></td>
+                    <td><img th:src="@{/img/{image}(image=${shop.imageurl})}" alt="Shop Image" style="width:100px;height:auto;border-radius:5px;object-fit:cover;"></td>
+                    <td th:text="${shop.shopname}"></td>
+                    <td th:text="${shop.account.name}"></td>
+                    <td th:text="${shop.phone}"></td>
+                    <td th:text="${shop.address}"></td>
+                    <td th:text="${shop.email}"></td>
+                    <td th:text="${#temporals.format(shop.createdAt, 'dd/MM/yyyy')}"></td>
+                    <td>
+                        <form th:action="@{/admin/shop/approve/{id}(id=${shop.id})}" method="post">
+                            <button type="submit" class="btn btn-edit">Duyệt</button>
+                        </form>
+                        <form th:action="@{/admin/shop/reject/{id}(id=${shop.id})}" method="post">
+                            <button type="submit" class="btn btn-delete">Từ chối</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

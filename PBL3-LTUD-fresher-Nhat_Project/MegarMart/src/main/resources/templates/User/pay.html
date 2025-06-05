@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- link cài đặt các  thành phần theo một phần nhất định-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <!-- link font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+<!-- Block__Element--Modifier -->
+<div class="app">
+    <div th:replace="fragments/user_header.html :: user_header"></div>
+
+
+    <div class="container">
+
+            <p th:if="${errorproduct}" th:text="${errorproduct}" style="color:red;font-size:1.6rem;margin:0 auto;padding:100px"></p>
+
+        <div class="grid" th:unless="${errorproduct}">
+            <div class="DiaChi-NhanHang">
+                <div class="DiaChi-NhanHang-bar">
+
+                </div>
+                <div class="DiaChi-NhanHang-heading">
+                    <i class="DiaChi-NhanHan-icon fa-solid fa-location-dot"></i>
+                    <p class="DiaChi-NhanHang-heading-text">Thông Tin Nhận Hàng</p>
+                </div>
+                <div class="DiaChi-NhanHang-item">
+                    <div class="DiaChi-NhanHang__info" th:text="${session.account.name} + ' ' +${session.account.phone}"></div>
+                    <div class="DiaChi-NhanHang__info-address" th:text="${session.account.address}"></div>
+                </div>
+
+            </div>
+            <form th:action="@{/user/pay}" method="post">
+                <input type="hidden" name="couponCode" th:value="${coupon != null ? coupon.code : ''}" />
+            <div class="ProductPurchase" th:each="product,iterStat : ${selectedProducts}">
+                <input type="hidden" name="quantities" th:value="${quantities[iterStat.index]}" />
+                <div class="ProductPurchase-head">
+                    <h3 class="ProductPurchase-head__name">Sản phẩm</h3>
+                    <div class="ProductPurchase-head__price-item">
+                        <span class="ProductPurchase-head__price">Đơn giá</span>
+                        <span class="ProductPurchase-head__qnt">Số lượng</span>
+                        <span class="ProductPurchase-head__cost">Thành tiền</span>
+                    </div>
+                </div>
+                <div class="ProductPurchase__extra">
+                    <button class="ProductPurchase__extra-favouri">Yêu thích</button>
+                    <p class="ProductPurchase__extra-nameShop" th:text="${product.shop.shopname}"></p>
+                </div>
+                <div class="ProductPurchase-body">
+                    <div class="ProductPurchase-body__info">
+                        <img th:src="@{/img/{img}(img=${product.imageurl})}"
+                             alt="SanPham" class="ProductPurchase-body__img">
+                        <h3 class="ProductPurchase-body__name" th:text="${product.name}"></h3>
+                    </div>
+
+                    <div class="ProductPurchase-body__price-item">
+                        <span class="ProductPurchase-body__price" th:text="${#numbers.formatInteger(product.price, 1, 'POINT') + 'đ'}"></span>
+                        <span class="ProductPurchase-body__qnt" th:text="${quantities[iterStat.index]}"></span>
+                        <span class="ProductPurchase-body__cost"  th:text="${#numbers.formatInteger(product.price * quantities[iterStat.index], 1, 'POINT') + 'đ'}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="ProductPurchase-footer">
+                <h3 class="ProductPurchase-footer-price-text" style="font-size:2.4rem;font-weight:bold;">Tổng tiền :</h3>
+                <span class="ProductPurchase-footer-price-total" th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}"></span>
+            </div>
+
+
+            <div class="ProductPurchase-total">
+                <div class="ProductPurchase-total__method">
+                    <h3 class="ProductPurchase-total__method-text">Phương thức thanh toán</h3>
+
+                    <h4 class="ProductPurchase-total__method-way">Thanh toán online</h4>
+
+
+                </div>
+                <div class="ProductPurchase-total-price">
+                    <h3 th:if="${coupon != null and coupondiscount !=0}" class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Khuyến mãi : </h3>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon != null and coupondiscount !=0}"
+                          th:text="${#numbers.formatInteger(coupondiscount, 1, 'POINT')}">
+                    </span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon != null and coupondiscount !=0}"
+                          th:text="'(' + ${coupon.discount} + '%' + ')'">
+                    </span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon == null or coupondiscount == 0}"
+                          th:text="${error}" style="color:red;font-size:1.5rem">
+                    </span>
+
+                    <h3 class="ProductPurchase-total__price-text" style="font-weight:bold;font-size:1.7rem">Tổng thanh toán:</h3>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon!=null}"
+                          th:text="${#numbers.formatInteger(totalPrice - coupondiscount, 1, 'POINT') + 'đ'}">
+                    </span>
+                    <span class="ProductPurchase-total__price-total"
+                          th:if="${coupon==null}"
+                          th:text="${#numbers.formatInteger(totalPrice, 1, 'POINT') + 'đ'}">
+                    </span>
+
+                </div>
+                <div class="ProductPurchase-total__pay">
+                    <button type="submit" class="btn btn--primary ProductPurchase-total__pay-btn">Đặt hàng</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer.html :: footer"></div>
+
+
+
+
+</div>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

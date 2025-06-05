@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin/head_side.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/form_view.css}">
+</head>
+<body>
+    <div class="header">
+        <div class="left-head">
+            <h3>Quản lí danh mục</h3>
+        </div>
+        <div class="right-head">
+            <h3>Xin chào,admin</h3>
+        </div>
+    </div>
+
+
+    <div th:replace="fragments/sidebar_admin.html :: sidebaradmin"></div>
+
+    <div class="content">
+        <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Danh mục</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered">
+                <tbody><tr>
+                  <th style="width: 10px">ID</th>
+                    <th>Image</th>
+                  <th>Tên danh mục</th>
+                  <th>Ngày tạo</th>
+                  <th>Ngày cập nhật</th>
+                  <th>Chức năng</th>
+                </tr>
+                <tr th:each="cate : ${listcate}">
+                  <td th:text="${cate.id}"></td>
+                    <td><img th:src="@{/img/{image}(image=${cate.imageurl})}" alt="" style="width:100px;height:auto;border-radius:5px;object-fit:cover;"></td>
+                  <td th:text="${cate.name}"></td>
+                  <td th:text="${#temporals.format(cate.createdAt, 'dd/MM/yyyy')}"></td>
+                  <td th:text="${#temporals.format(cate.updatedAt, 'dd/MM/yyyy')}"></td>
+                  <td>
+
+                      <button class="btn btn-edit"><a th:href="@{/admin/category/edit/{id}(id=${cate.id})}" style="color:white">Sửa</a></button>
+
+                      <form th:action="@{/admin/category/delete/{id}(id=${cate.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">
+                          <button type="submit" class="btn btn-delete" >Xóa</button>
+                      </form>
+                  </td>
+                </tr>
+              </tbody></table>
+            </div>
+
+          </div>
+    </div>
+    
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let menuItems = document.querySelectorAll(".has-submenu");
+    
+        menuItems.forEach(item => {
+            item.addEventListener("click", function (event) {
+                event.stopPropagation();
+    
+                let submenu = item.querySelector(".submenu");
+                let arrow = item.querySelector(".arrow");
+    
+                let isOpen = item.classList.contains("active");
+    
+                // Đóng tất cả submenu khác trước khi mở submenu mới
+                document.querySelectorAll(".has-submenu").forEach(i => {
+                    if (i !== item) {
+                        i.classList.remove("active");
+                        i.querySelector(".submenu").style.maxHeight = "0px";
+                        i.querySelector(".arrow").style.transform = "rotate(0deg)";
+                    }
+                });
+    
+                if (!isOpen) {
+                    item.classList.add("active");
+                    submenu.style.maxHeight = submenu.scrollHeight + "px"; // Mở submenu theo chiều cao thực tế
+                    arrow.style.transform = "rotate(90deg)";
+                } else {
+                    item.classList.remove("active");
+                    submenu.style.maxHeight = "0px"; // Đóng submenu
+                    arrow.style.transform = "rotate(0deg)";
+                }
+            });
+        });
+    
+        // Đóng submenu khi click ra ngoài
+        document.addEventListener("click", function () {
+            document.querySelectorAll(".has-submenu").forEach(i => {
+                i.classList.remove("active");
+                i.querySelector(".submenu").style.maxHeight = "0px";
+                i.querySelector(".arrow").style.transform = "rotate(0deg)";
+            });
+        });
+    });
+    
+</script>
+</html>

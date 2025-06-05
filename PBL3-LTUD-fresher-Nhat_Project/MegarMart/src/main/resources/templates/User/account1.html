@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/account-style.css}">
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+<div class="account">
+    <div th:replace="fragments/user_header.html :: user_header"></div>
+
+    <div class="account-container">
+        <div class="account-sidebar">
+            <div class="your-info">
+                <img th:src="@{/img/{image}(image=${session.account.imageurl})}" class="header__navbar-user-img">
+                <div class="your-name">
+                    <span th:text="${session.account.name}" class="your-name-text"></span>
+                </div>
+            </div>
+            <div class="your-info-function">
+                <div class="function function-acc" onclick="showSection('my-account')">
+                    <i class='bx bxs-user-account'></i>
+                    <span class="name-func">Tài Khoản Của Tôi</span>
+                </div>
+                <div class="function function-order" onclick="showSection('order')">
+                    <i class='bx bx-food-menu'></i>
+                    <span class="name-func">Đơn mua</span>
+                </div>
+            </div>
+        </div>
+        <div class="account-content">
+            <div id="order" class="section">
+                <div th:if="${orders == null or #lists.isEmpty(orders)}" class="no-order">
+                    <p style="color: gray; font-style: italic;font-size:5rem">Bạn chưa có đơn hàng nào.</p>
+                </div>
+
+                <div th:unless="${orders == null or #lists.isEmpty(orders)}">
+                    <div th:each="order,iterStat : ${orders}" class="oder1">
+                        <div class="order-shop">
+                            <div class="order-shop-info">
+                                <span class="order-shop-name">Mã đơn hàng: <span th:text="${order.id}"></span></span>
+                                <div class="btn-view-shop">
+                                    <i class='view-shop-icon bx bx-chevron-down'></i>
+                                    <span class="view-shop" th:attr="data-order-id=${iterStat.index}"
+                                          onclick="toggleDetails(this)">
+                                            Xem chi tiết
+                                    </span>
+                                </div>
+                            </div>
+                            <span th:if="${order.isPaid == 1}"
+                                  style="color:green;font-size:20px;font-weight:bold;">
+                                    Đã thanh toán
+                            </span>
+                            <div th:if="${order.isPaid != 1}" style="display:flex; flex-direction:column;">
+                                <span style="color:red; font-size:20px; font-weight:bold;">
+                                    Chưa thanh toán
+                                </span>
+                                <form th:action="@{/user/submitOrder}" method="get">
+                                    <input type="hidden" name="amount" th:value="${order.totalprice}">
+                                    <input type="hidden" name="orderId" th:value="${order.id}">
+                                    <button type="submit" style="font-size:1.22rem;margin-top:5px; padding:8px 40px; background-color:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;">
+                                        Thanh toán lại
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div th:each="detail : ${order.orderDetails}" class="product-shop" th:attr="data-detail-id=${iterStat.index}" style="display: none;">
+                            <div class="product-shop-item">
+                            <div class="product-shop-info">
+                                <img th:src="@{/img/{imgfile}(imgfile=${detail.product.imageurl})}" alt=""
+                                     class="product-shop-img">
+                                <div class="product-shop-info-detail">
+                                    <p class="product-shop-info-name" th:text="${detail.product.name}"></p>
+                                    <span class="product-shop-info-count" th:text="'x' + ${detail.quantity}"></span>
+                                </div>
+                            </div>
+                            <div class="product-shop-price">
+                                <span class="product-shop-price"
+                                      th:text="${#numbers.formatInteger(detail.product.price, 1, 'POINT')}"></span>
+
+                                <div th:if="${detail.review != null}" class="reviewed-badge">
+                                    <span class="badge bg-success">Đã đánh giá</span>
+                                </div>
+
+                                <button th:if="${detail.review == null}"
+                                        class="review-product"
+                                        th:attr="data-product-id=${detail.product.id},
+                                                data-product-name=${detail.product.name},
+                                                data-product-image=${detail.product.imageurl}"
+                                        onclick="openReviewModal(this)">
+                                    Đánh giá
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="product-shop-thanhtien">
+
+                            <p>Thành Tiền:
+                                <span th:text="${#numbers.formatInteger(order.totalprice, 1, 'POINT')}"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form th:action="@{/user/accountdetail}" th:object="${session.account}" method="post"
+                  enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${session.account.id}">
+                <div id="my-account" class="section my-account active">
+                    <div class="my-account-header">
+                        <div class="my-account-text">
+                            <h4>Hồ Sơ Của Tôi</h4>
+                            <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                            <p th:if="${fillfull}" th:text="${fillfull}" style="color: red;"></p>
+                        </div>
+                        <div class="my-account-edit">
+                            <i class='bx bxs-edit'></i>
+                            <input type="submit" value="Lưu"
+                                   style="background-color:rgb(3, 111, 211);border:none;color:white">
+                        </div>
+                    </div>
+
+                    <div class="my-account-info">
+                        <table class="my-account-info-table">
+                            <tr>
+                                <td class="my-account-table-lable">Tên</td>
+                                <td class="my-account-table-content">
+                                    <input type="text" name="name" th:value="${session.account.name}" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="my-account-table-lable">Email</td>
+                                <td class="my-account-table-content">
+                                    <input type="email" name="email" th:value="${session.account.email}" disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="my-account-table-lable">Số điện thoại</td>
+                                <td class="my-account-table-content">
+                                    <input type="text" name="phone" th:value="${session.account.phone}"
+                                           placeholder="Chưa cập nhật">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="my-account-table-lable">Địa chỉ</td>
+                                <td class="my-account-table-content">
+                                    <input type="text" name="address" th:value="${session.account.address}"
+                                           placeholder="Chưa cập nhật">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="my-account-table-lable">Ngày tạo</td>
+                                <td class="my-account-table-content">
+                                    <input type="text" th:value="${session.account.createdAt}" disabled>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="my-account-table-lable">Ngày sửa</td>
+                                <td class="my-account-table-content">
+                                    <input type="text" th:value="${session.account.updatedAt}" readonly>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="my-img">
+                            <img th:src="@{/img/{image}(image=${session.account.imageurl})}" class="my-img-url">
+                            <input type="file" name="fileImage" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="review-modal" id="reviewModal">
+            <form th:action="@{/user/ReviewProduct-add}" method="post" th:object="${reviewProduct}">
+                <input type="hidden" name="productId" id="modalProductId">
+
+                <div class="review-container">
+                    <div class="review-header">
+                        <div class="product-img">
+                            <img id="modalProductImage" alt="Product image">
+                        </div>
+                        <div class="review-product-title" id="modalProductName"></div>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-section-title">Mức độ hài lòng</div>
+                        <select class="satisfaction-select" name="rating" required>
+                            <option value="" disabled selected>-- Chọn --</option>
+                            <option value="VERY_GOOD">Rất hài lòng</option>
+                            <option value="GOOD">Hài lòng</option>
+                            <option value="NORMAL">Bình thường</option>
+                            <option value="BAD">Không hài lòng</option>
+                            <option value="VERY_BAD">Rất không hài lòng</option>
+                        </select>
+                    </div>
+
+                    <div class="review-section">
+                        <div class="review-section-title">Đánh giá sản phẩm</div>
+                        <textarea class="review-textarea" name="comment" placeholder="Nhận xét về sản phẩm"></textarea>
+                    </div>
+
+                    <div class="review-actions">
+                        <button type="button" class="review-btn review-btn-cancel" onclick="closeReviewModal()">TRỞ LẠI</button>
+                        <button type="submit" class="review-btn review-btn-submit">HOÀN THÀNH</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script th:src="@{/js/script.js}"></script>
+    </div>
+
+    <div th:replace="fragments/footer.html :: footer"></div>
+</div>
+</body>
+<script>
+
+    function openReviewModal(button) {
+    // Lấy thông tin sản phẩm từ data attributes
+    const productId = button.getAttribute('data-product-id');
+    const productName = button.getAttribute('data-product-name');
+    const productImage = button.getAttribute('data-product-image');
+
+    // Điền thông tin vào modal
+    document.getElementById('modalProductId').value = productId;
+    document.getElementById('modalProductName').textContent = productName;
+    document.getElementById('modalProductImage').src = '/img/' + productImage;
+
+    // Hiển thị modal
+    document.getElementById('reviewModal').style.display = 'block';
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+}
+
+// Đóng modal khi click bên ngoài
+window.addEventListener('click', function(event) {
+    if (event.target === document.getElementById('reviewModal')) {
+        closeReviewModal();
+    }
+});
+</script>
+<script>
+    function toggleDetails(el) {
+        const orderId = el.getAttribute("data-order-id");
+        const details = document.querySelectorAll(`[data-detail-id="${orderId}"]`);
+
+        details.forEach(detail => {
+            if (detail.style.display === "none" || detail.style.display === "") {
+                detail.style.display = "block";
+                el.innerText = "Ẩn chi tiết";
+            } else {
+                detail.style.display = "none";
+                el.innerText = "Xem chi tiết";
+            }
+        });
+    }
+</script>
+
+<script>
+    document.querySelector('.my-account-edit').addEventListener('click', function() {
+        document.querySelector('.my-account-edit input').click();
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const params = new URLSearchParams(window.location.search);
+        const section = params.get("section");
+
+        if (section) {
+            showSection(section);
+        }
+    });
+
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        }
+    }
+</script>
+
+</html>

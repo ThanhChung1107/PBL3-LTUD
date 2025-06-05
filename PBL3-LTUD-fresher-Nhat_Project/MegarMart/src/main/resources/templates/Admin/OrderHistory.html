@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch sử đặt hàng</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .modal{
+                background-color: rgba(0, 0, 0, 0.6); /* Nền mờ */
+            backdrop-filter: blur(3px); /* Hiệu ứng mờ */
+            }
+    body {
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* ví dụ texture */
+    background-color: rgba(0, 123, 255, 0.1); /* overlay màu xanh nhạt */
+    background-blend-mode: overlay;
+    background-repeat: repeat;
+    background-size: auto;
+}
+    /* Table Styling */
+    .order-history-table {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+    }
+
+    .order-history-table th, .order-history-table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+    }
+
+    .order-history-table th {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .order-history-table tbody tr {
+      transition: background-color 0.3s ease;
+    }
+
+    .order-history-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Styling the "No orders" message */
+    .no-orders {
+      text-align: center;
+      font-style: italic;
+      color: #6c757d;
+      font-size: 14px;
+      padding: 20px;
+    }
+
+    /* Modal Styling */
+    .modal-content {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #f8f9fa;
+    }
+
+    .modal-header {
+      background-color: #007bff;
+      color: white;
+      padding: 15px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .modal-body {
+      padding: 20px;
+      font-size: 15px;
+    }
+
+    .modal-footer {
+      padding: 15px;
+      text-align: right;
+      border-top: 1px solid #ddd;
+    }
+
+    /* Close button style */
+    .btn-close {
+      background-color: transparent;
+      border: none;
+      color: white;
+    }
+
+    .btn-close:hover {
+      color: #ff4d4d;
+    }
+
+    /* Back button style */
+    .btn-secondary {
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .btn-secondary:hover {
+      background-color: #218838;
+      color: white;
+    }
+
+    /* Button Style for Modal */
+    .btn-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .btn-info:hover {
+      background-color: #138496;
+    }
+
+    /* Product detail table inside modal */
+    .modal-body table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .modal-body th, .modal-body td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    .modal-body th {
+      background-color: #f1f1f1;
+    }
+
+    .modal-body td {
+      font-size: 14px;
+    }
+
+    /* Enhance text */
+    .modal-body p strong {
+      color: #007bff;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="container mt-5">
+  <!-- Header with user's name -->
+  <h3>Lịch sử đặt hàng - <span th:text="${account.name}"></span></h3>
+
+  <!-- Table for displaying orders -->
+  <div class="table-responsive">
+    <table class="table table-bordered order-history-table">
+      <thead>
+      <tr>
+        <th>Mã đơn</th>
+        <th>Ngày đặt</th>
+        <th>Tổng tiền</th>
+        <th>Trạng thái</th>
+        <th>Chức năng</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Loop through orders -->
+      <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></td>
+        <td th:text="${#numbers.formatInteger(order.totalprice, 1, 'POINT') + ' đ'}" style="font-weight:bold;"></td>
+        <td th:text="${order.isPaid == 1 ? 'Đã thanh toán' : 'Chưa thanh toán'}" th:style="${order.isPaid == 1 ? 'color:green; font-weight:bold;' : 'color:red; font-weight:bold;'}"></td>
+        <td>
+          <!-- Nút "Xem" để mở modal chi tiết OrderDetail -->
+          <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                  th:attr="data-bs-target='#orderDetailModal_' + ${order.id}">
+            Xem
+          </button>
+        </td>
+      </tr>
+
+      <!-- If no orders -->
+      <tr th:if="${orders.size() == 0}">
+        <td colspan="5" class="no-orders">Chưa có đơn hàng</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Back Button -->
+  <a th:href="@{/admin/home}" class="btn btn-secondary">Quay lại</a>
+</div>
+<!-- Modal hiển thị chi tiết OrderDetail -->
+<div th:each="order : ${orders}">
+  <div class="modal fade" th:id="'orderDetailModal_' + ${order.id}" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderDetailModalLabel">Chi tiết đơn hàng #<span th:text="${order.id}"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Tên sản phẩm</th>
+              <th>Số lượng</th>
+              <th>Giá</th>
+              <th>Tổng giá</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Lặp qua orderDetails để hiển thị chi tiết sản phẩm -->
+            <tr th:each="detail : ${order.orderDetails}">
+              <td th:text="${detail.product.name}"></td>
+              <td th:text="${detail.quantity}"></td>
+              <td th:text="${#numbers.formatInteger(detail.product.price, 1, 'POINT') + ' đ'}"></td>
+              <td th:text="${#numbers.formatInteger(detail.product.price*detail.quantity, 1, 'POINT') + ' đ'}"></td>
+            </tr>
+            <!-- Nếu không có chi tiết đơn hàng -->
+            <tr th:if="${order.orderDetails.size() == 0}">
+              <td colspan="4" class="text-center">Không có sản phẩm nào trong đơn hàng này</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

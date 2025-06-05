@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- link cài đặt các  thành phần theo một phần nhất định-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.7.2-web/css/all.min.css}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    <!-- link font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Block__Element--Modifier -->
+<div class="app">
+
+    <div th:replace="fragments/user_header.html :: user_header"></div>
+
+    <div class="app__container">
+        <div class="main-info-shop">
+            <div class="main-shop" th:style="|background-image: url('@{/img/background.jpg}');|">
+                <div class="main-info-shop-img">
+                    <img th:src="@{/img/{imgfile} (imgfile= ${shop.imageurl})}" style="width:100px;height:auto;border-radius:5px;object-fit:cover;" alt="">
+                    <span th:text="${shop.shopname}"></span>
+                </div>
+                <div class="main-info-shop-connect">
+                    <a href=""><i class='shop-connect-icon bx bxl-meta'></i></a>
+                    <a href=""><i class='shop-connect-icon bx bxl-instagram' ></i></a>
+                    <a href=""><i class='shop-connect-icon bx bxl-github' ></i></a>
+                    <a href=""><i class='shop-connect-icon bx bxl-youtube'></i></a>
+                </div>
+            </div>
+            <div class="main-about-shop">
+                <div>
+                    <span class="main-highlight-text">Đánh Giá</span>
+                    <span class="main-highlight" th:text=${totalReviews}></span>
+                </div>
+                <div><span class="main-highlight-text">Sản Phẩm</span>
+                    <span class="main-highlight" th:text="${productcount}"></span>
+                </div>
+                <div><span class="main-highlight-text">Tham Gia</span>
+                    <span class="main-highlight" th:text="${#temporals.format(shop.createdAt, 'dd/MM/yyyy')}"></span>
+                </div>
+                <div><span class="main-highlight-text">Theo dõi</span>
+                    <span class="main-highlight">107k</span></div>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="grid__row app__content">
+                <div class="grid__conlumn-2">
+                    <nav class="category">
+                        <h3 class="category__heading">
+                            <i class='category__heading-icon bx bx-list-ul'></i>
+                            Danh mục
+                        </h3>
+                        <ul class="category-list">
+                            <li class="category-item"  th:classappend="${selectedCategoryId == null} ? 'category-item--active'">
+                                <a th:href="@{'/user/shop/' + ${shop.id}}"
+                                   class="category-item__link"  >
+                                    Tất cả
+                                </a>
+                            </li>
+                            <li class="category-item" th:each="cate : ${cateshop}"  th:classappend="${cate.id} == ${selectedCategoryId} ? 'category-item--active'">
+                                <!-- Nếu có từ khóa, thêm tham số keyword vào URL -->
+                                <a th:if="${keyword != null and keyword != ''}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${cate.id}, sort=${sort}, keyword=${keyword})}"
+                                   th:text="${cate.name}"
+                                   class="category-item__link">
+                                </a>
+                                <!-- Nếu không có từ khóa, chỉ truyền categoryId và sort -->
+                                <a th:unless="${keyword != null and keyword != ''}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${cate.id}, sort=${sort})}"
+                                   th:text="${cate.name}"
+                                   class="category-item__link">
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="grid__column-10">
+                    <div class="home-filter">
+                        <span class="home-filter__tilte">Sắp xếp theo</span>
+
+                        <!-- Lọc theo giá -->
+                        <div class="select-input">
+                            <span class="select-input__icon select-input__lable">Giá</span>
+                            <i class='bx bxs-chevron-down'></i>
+                            <ul class="select-input__list">
+                                <!-- Sắp xếp theo giá thấp đến cao -->
+                                <li class="select-input__item"  th:classappend="${sort == 'asc'} ? 'select-input__link--active'">
+                                    <a th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${categoryId}, sort='asc', keyword=${keyword})}"
+                                       class="select-input__link" >
+                                        Giá thấp đến cao
+                                    </a>
+                                </li>
+                                <!-- Sắp xếp theo giá cao đến thấp -->
+                                <li class="select-input__item"  th:classappend="${sort == 'desc'} ? 'select-input__link--active'">
+                                    <a th:href="@{/user/shop/{id}(id=${shop.id}, categoryId=${categoryId}, sort='desc', keyword=${keyword})}"
+                                       class="select-input__link" >
+                                        Giá cao đến thấp
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="home-filter__page">
+    <span class="home-filter__page-num">
+        <span class="home-filter__page-current" th:text="${currentPage}"></span>
+        /
+        <span th:text="${totalPages}"></span>
+    </span>
+
+                            <div class="home-filter__page-control">
+                                <!-- Nút "trang trước" -->
+                                <a class="home-filter__page-btn"
+                                   th:if="${currentPage > 1}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, page=${currentPage - 1}, categoryId=${categoryId}, sort=${sort}, keyword=${keyword})}">
+                                    <i class="home-filter__page-icon bx bxs-chevron-left"></i>
+                                </a>
+
+                                <!-- Nút "trang sau" -->
+                                <a class="home-filter__page-btn"
+                                   th:if="${currentPage < totalPages}"
+                                   th:href="@{/user/shop/{id}(id=${shop.id}, page=${currentPage + 1}, categoryId=${categoryId}, sort=${sort}, keyword=${keyword})}">
+                                    <i class="home-filter__page-icon bx bxs-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="home-product">
+                        <div class="grid__row">
+                            <div class="grid__column-2-4" th:each="pro : ${listproshop}" th:if="${pro.status == 1}">
+                                <a th:href="@{/user/productdetail/{proid}(proid=${pro.id})}" class="home-product-item">
+                                    <div class="home-product-item__img"
+                                         th:style="'background-image: url(' + @{/img/{imgfile}(imgfile=${pro.imageurl})} + ')'">
+                                    </div>
+
+                                    <h4 class="home-product-item__name" th:text="${pro.name}"></h4>
+                                    <div class="home-product-item__price">
+                                        <span class="home-product-item__price-old" th:text="${#numbers.formatInteger(pro.price + 250000, 1, 'POINT') + 'đ'}"></span>
+                                        <span class="home-product-item__price-current" th:text="${#numbers.formatInteger(pro.price, 1, 'POINT') + 'đ'}"></span>
+                                    </div>
+
+                                    <div class="home-product-item__action">
+                    <span class="home-product-item__like" onclick="toggleLike(event, this)">
+                        <i class='bx bx-heart'></i>
+                    </span>
+
+                                        <div class="home-product-item__rating">
+                                            <i class='bx bx-star' onclick="rateStar(event, this, 1)"></i>
+                                            <i class='bx bx-star' onclick="rateStar(event, this, 2)"></i>
+                                            <i class='bx bx-star' onclick="rateStar(event, this, 3)"></i>
+                                            <i class='bx bx-star' onclick="rateStar(event, this, 4)"></i>
+                                            <i class='bx bx-star' onclick="rateStar(event, this, 5)"></i>
+                                        </div>
+
+                                        <span class="home-product-item__sold" th:text="${pro.sold + ' đã bán'}"></span>
+                                    </div>
+
+                                    <div class="home-product-item__origin">
+                                        <span class="home-product-item__brand">whoo</span>
+                                        <span class="home-product-item__origin-name">Nhật Bản</span>
+                                    </div>
+
+                                    <div class="home-product-item__favourite">
+                                        <i class='bx bx-check'></i>
+                                        yêu thích
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Xử lý sự kiện khi bấm vào nút trái tim (Like)
+        function toggleLike(event, element) {
+            event.preventDefault(); // Ngăn chặn điều hướng link
+            let icon = element.querySelector("i");
+            if (icon.classList.contains("bx-heart")) {
+                icon.classList.remove("bx-heart");
+                icon.classList.add("bxs-heart");
+                icon.style.color = "red"; // Đổi màu thành đỏ khi đã like
+            } else {
+                icon.classList.remove("bxs-heart");
+                icon.classList.add("bx-heart");
+                icon.style.color = ""; // Trả lại màu mặc định
+            }
+        }
+
+        // Xử lý sự kiện khi bấm vào sao (Rating)
+        function rateStar(event, starElement, rating) {
+            event.preventDefault(); // Ngăn chặn điều hướng link
+            let starContainer = starElement.parentElement; // Lấy div chứa ngôi sao
+            let stars = starContainer.querySelectorAll("i"); // Lấy tất cả sao trong nhóm
+
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove("bx-star");
+                    star.classList.add("bxs-star");
+                    star.style.color = "gold"; // Đổi màu vàng
+                } else {
+                    star.classList.remove("bxs-star");
+                    star.classList.add("bx-star");
+                    star.style.color = ""; // Trả lại màu mặc định
+                }
+            });
+        }
+    </script>
+    <div th:replace="fragments/footer.html :: footer"></div>
+</div>
+
+
+</body>
+</html>

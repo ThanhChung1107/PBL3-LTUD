@@ -1,0 +1,156 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: fixed;
+    left:160px;
+    width: calc(100% - 160px);
+    height: 41.33px;
+    background-color: #9fc1d5;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 999;
+}
+
+.sidebar {
+    width: 160px;
+    height: 100vh;
+    background-color: #333333;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    color: #b8c7ce;
+}
+
+.logo{
+    text-align: center;
+}
+
+.header__logo-img{
+    width: 150px;
+}
+
+body {
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); /* ví dụ texture */
+    background-color: rgba(0, 123, 255, 0.1); /* overlay màu xanh nhạt */
+    background-blend-mode: overlay;
+    background-repeat: repeat;
+    background-size: auto;
+}
+
+
+.sidebar a {
+  color: #b8c7ce !important;
+  text-decoration: none !important;
+}
+.sidebar ul {
+  padding-left: 0 !important;
+}
+.menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu > li {
+    font-size: 13px;
+    padding: 25px 0 0 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative; /* Để submenu vẫn nằm trong dòng chảy */
+    flex-wrap: wrap;
+}
+
+/* Icon đầu tiên nằm bên trái chữ */
+.menu li i:first-child {
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+
+/* Mũi tên bên phải sát lề */
+.arrow {
+    margin-left: auto;
+    margin-right: 5px;
+    transition: transform 0.3s ease;
+}
+
+/* ✅ SUBMENU FIX */
+.submenu {
+    list-style: none;
+    width: 160px; /* Đảm bảo submenu full width */
+    display: none; /* Ẩn submenu mặc định */
+    position: relative; /* Giữ submenu bên dưới menu cha */
+}
+
+.submenu li {
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+.submenu li a {
+    font-size: 12px;
+    display: block;
+    text-decoration: none;
+    transition: font-size 0.1s ease;
+}
+
+.submenu li:hover a{
+    font-size: 14px;
+    color: red;
+}
+
+/* Khi mở submenu, nó sẽ hiển thị và đẩy menu bên dưới xuống */
+.has-submenu.active .submenu {
+    display: block;
+}
+
+/* Khi mở submenu, xoay mũi tên */
+.has-submenu.active .arrow {
+    transform: rotate(90deg);
+}
+
+.btnlogout{
+    position: absolute;
+    bottom: 0;
+    width: 99.5%;
+    height: 40px;
+    border:none;
+    border-radius: 3px;
+    box-shadow: 0 0 1px;
+    background-color: red;
+}
+
+.btnlogout a{
+    color: black;
+    font-size: 14px;
+}
+
+.btnlogout:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.btnlogout input:hover{
+    cursor:pointer;
+}
+
+.content{
+    position: fixed;
+    top: 40px; /* Đẩy xuống dưới header */
+    left: 160px; /* Để không bị che bởi sidebar */
+    width: calc(100% - 160px);
+    height: 100vh;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+
