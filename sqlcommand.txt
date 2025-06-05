@@ -1,0 +1,48 @@
+ALTER TABLE cart
+DROP FOREIGN KEY FK4pljlvncf45mr98etwpubxvbt;
+
+ALTER TABLE cart
+ADD CONSTRAINT FK_cart_account_id
+FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE;
+
+ALTER TABLE orders
+DROP FOREIGN KEY FK3c7gbsfawn58r27cf5b2km72f;
+
+ALTER TABLE orders
+ADD CONSTRAINT FK_orders_account_id
+FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE;
+
+ALTER TABLE order_detail
+DROP FOREIGN KEY FKrws2q0si6oyd6il8gqe2aennc;
+
+ALTER TABLE order_detail
+ADD CONSTRAINT FK_order_detail_order_id
+FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE;
+
+ALTER TABLE review_product
+DROP FOREIGN KEY FKba4wnbjp83re3y8xox090cd0k;
+
+ALTER TABLE review_product
+ADD CONSTRAINT FK_review_product_account_id
+FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE;
+
+ALTER TABLE shop
+DROP FOREIGN KEY FKl3oxnwhq2g9wxjvduq1r31n19;
+
+ALTER TABLE shop
+ADD CONSTRAINT FK_shop_account_id
+FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE;
+
+ALTER TABLE cart_product
+DROP FOREIGN KEY FKlv5x4iresnv4xspvomrwd8ej9;
+
+ALTER TABLE cart_product
+ADD CONSTRAINT FK_cart_product_cart_id
+FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE;
+
+ALTER TABLE product
+DROP FOREIGN KEY FK94hgg8hlqfqfnt3dag950vm7n;
+
+ALTER TABLE product
+ADD CONSTRAINT FK_product_shop
+FOREIGN KEY (shop_id) REFERENCES shop(id) ON DELETE CASCADE;
