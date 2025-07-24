@@ -484,5 +484,9 @@ public class UserController {
 
         return "redirect:/user/accountdetail";
     }
+    @GetMapping("/chatroom")
+    public String showChatroom() {
+        return "User/chatroom";
+    }
 
 }

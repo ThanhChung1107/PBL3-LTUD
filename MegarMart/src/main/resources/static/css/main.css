@@ -1598,3 +1598,42 @@ margin-left: 10px;
         padding: 10px;
         font-size: 1.4rem;
     }
+
+.btn-chat {
+    position: fixed;
+    bottom: 10px;
+    right: 80px;
+    width: 70px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 20px 20px 20px 0; /* Tạo hình dạng bubble */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    cursor: pointer;
+}
+.btn-chat a {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-chat i {
+    font-size: 20px;
+}
+
+.btn-chat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.btn-chat a {
+    font-size: 1.8rem;
+    color: #fff;
+
+}

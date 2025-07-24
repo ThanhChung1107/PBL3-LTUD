@@ -65,27 +65,27 @@ public class AccountService {
     }
 
 
-//    private final PasswordEncoder passwordEncoder;
-//
-//    public void createAdminAccount(String username, String password, String name,String email) {
-//        if (accountRepository.findByUsername(username) != null) {
-//            throw new RuntimeException("Admin username already exists!");
-//        }
-//
-//        Role adminRole = roleRepository.findByRoleName("ROLE_ADMIN");
-//        if (adminRole == null) {
-//            throw new RuntimeException("Admin role not found! Please insert it into DB.");
-//        }
-//
-//        Account admin = new Account();
-//        admin.setUsername(username);
-//        admin.setPassword(passwordEncoder.encode(password));
-//        admin.setName(name);
-//        admin.setEmail(email);
-//        admin.setRole(adminRole);
-//
-//        accountRepository.save(admin);
-//    }
+    private final PasswordEncoder passwordEncoder;
+
+    public void createAdminAccount(String username, String password, String name,String email) {
+        if (accountRepository.findByUsername(username) != null) {
+            throw new RuntimeException("Admin username already exists!");
+        }
+
+        Role adminRole = roleRepository.findByRoleName("ROLE_ADMIN");
+        if (adminRole == null) {
+            throw new RuntimeException("Admin role not found! Please insert it into DB.");
+        }
+
+        Account admin = new Account();
+        admin.setUsername(username);
+        admin.setPassword(passwordEncoder.encode(password));
+        admin.setName(name);
+        admin.setEmail(email);
+        admin.setRole(adminRole);
+
+        accountRepository.save(admin);
+    }
 
 
 

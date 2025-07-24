@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-commerce Messenger</title>
+  <link rel="stylesheet" th:href="@{/css/chat_style.css}">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+<div class="messenger-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="add-group">
+        <h2>💬 Chat Sản Phẩm</h2>
+        <div class="icon-add-container">
+          <div class="icon-add"><i class='bx bx-plus'></i></div>
+          <div class="add-menu">
+            <div class="add-option" onclick="showCreateGroupModal()">
+              <i class='bx bx-plus-circle'></i>
+              <span>Tạo nhóm mới</span>
+            </div>
+            <div class="add-option" onclick="showJoinGroupModal()">
+              <i class='bx bx-group'></i>
+              <span>Tham gia nhóm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Tìm kiếm cuộc trò chuyện...">
+      </div>
+    </div>
+    <div class="chat-list">
+      <div class="chat-item active" data-chat="1">
+        <div class="chat-avatar">👥</div>
+        <div class="chat-info">
+          <div class="chat-name">Nhóm Điện Thoại</div>
+          <div class="chat-preview">Minh: iPhone 15 Pro mới về!</div>
+        </div>
+        <div class="chat-time">2 phút</div>
+      </div>
+      <div class="chat-item" data-chat="2">
+        <div class="chat-avatar">👥</div>
+        <div class="chat-info">
+          <div class="chat-name">Nhóm Laptop Gaming</div>
+          <div class="chat-preview">Asus ROG giá tốt đây!</div>
+        </div>
+        <div class="chat-time">15 phút</div>
+      </div>
+      <div class="chat-item" data-chat="3">
+        <div class="chat-avatar">A</div>
+        <div class="chat-info">
+          <div class="chat-name">Anh Tuấn</div>
+          <div class="chat-preview">Bạn có máy ảnh Canon không?</div>
+        </div>
+        <div class="chat-time">1 giờ</div>
+      </div>
+      <div class="chat-item" data-chat="4">
+        <div class="chat-avatar">👥</div>
+        <div class="chat-info">
+          <div class="chat-name">Nhóm Thời Trang</div>
+          <div class="chat-preview">Sale 50% toàn bộ áo khoác!</div>
+        </div>
+        <div class="chat-time">2 giờ</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main Chat Area -->
+  <div class="chat-area">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-header-avatar">👥</div>
+        <div class="chat-header-name">Nhóm Điện Thoại</div>
+      </div>
+      <div class="chat-actions">
+        <!-- <button class="action-btn product-share-btn" onclick="openProductModal()">
+            🛍️ Chia sẻ sản phẩm
+        </button> -->
+        <button class="more-option"><i class='bx  bx-dots-horizontal-rounded'></i></button>
+        <div class="group-options" id="groupOptions">
+          <div class="option-item">
+            <i class='bx bx-info-circle'></i>
+            <span onclick="showGroupDetail()">Chi tiết nhóm</span>
+          </div>
+          <div class="option-item">
+            <i class='bx bx-user-plus'></i>
+            <span>Mời thành viên</span>
+          </div>
+
+          <div class="option-item">
+            <i class='bx bx-exit'></i>
+            <span>Rời nhóm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="messages-container" id="messages">
+      <div class="message received">
+        <div class="message-avatar">M</div>
+        <div class="message-bubble">Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?</div>
+      </div>
+
+      <div class="message sent">
+        <div class="message-bubble">Mình biết một shop rất tốt, để mình share sản phẩm nhé!</div>
+        <div class="message-avatar">B</div>
+      </div>
+
+      <div class="message received">
+        <div class="message-avatar">M</div>
+        <div class="message-bubble product-message">
+          <div class="product-card">
+            <div class="product-image"><img src="assets/img/logoshop.webp" alt=""></div>
+            <div class="product-info">
+              <div class="product-name">iPhone 15 Pro Max 256GB</div>
+              <div class="product-price">29.990.000₫</div>
+              <div class="product-description">Màn hình 6.7", Camera 48MP, Chip A17 Pro</div>
+              <div class="product-actions">
+                <a href="detail.html" class="product-btn view-btn">Xem chi tiết</a>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="message received">
+        <div class="message-avatar">L</div>
+        <div class="message-bubble">Wow giá tốt đấy! Shop này ở đâu vậy?</div>
+      </div>
+
+      <div class="message sent">
+        <div class="message-bubble">Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng</div>
+        <div class="message-avatar">B</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-actions">
+        <button class="input-btn attachment-btn" title="Đính kèm file">📎</button>
+        <!-- <button class="input-btn product-btn-input" title="Chia sẻ sản phẩm" onclick="openProductModal()">🛍️</button> -->
+      </div>
+      <textarea class="message-input" placeholder="Nhập tin nhắn..." rows="1" id="messageInput"></textarea>
+      <button class="input-btn send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product Share Modal -->
+<div class="modal" id="productModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Chọn sản phẩm để chia sẻ</div>
+      <button class="close-btn" onclick="closeProductModal()">&times;</button>
+    </div>
+    <div class="product-grid">
+      <div class="product-item" onclick="shareProduct('iPhone 15 Pro Max', '29.990.000₫', '📱')">
+        <div class="product-item-image">📱</div>
+        <div class="product-item-name">iPhone 15 Pro Max</div>
+        <div class="product-item-price">29.990.000₫</div>
+      </div>
+      <div class="product-item" onclick="shareProduct('MacBook Pro M3', '52.990.000₫', '💻')">
+        <div class="product-item-image">💻</div>
+        <div class="product-item-name">MacBook Pro M3</div>
+        <div class="product-item-price">52.990.000₫</div>
+      </div>
+      <div class="product-item" onclick="shareProduct('AirPods Pro', '6.990.000₫', '🎧')">
+        <div class="product-item-image">🎧</div>
+        <div class="product-item-name">AirPods Pro</div>
+        <div class="product-item-price">6.990.000₫</div>
+      </div>
+      <div class="product-item" onclick="shareProduct('Samsung Galaxy S24', '22.990.000₫', '📱')">
+        <div class="product-item-image">📱</div>
+        <div class="product-item-name">Samsung Galaxy S24</div>
+        <div class="product-item-price">22.990.000₫</div>
+      </div>
+      <div class="product-item" onclick="shareProduct('Gaming Laptop ASUS', '35.990.000₫', '🎮')">
+        <div class="product-item-image">🎮</div>
+        <div class="product-item-name">Gaming Laptop ASUS</div>
+        <div class="product-item-price">35.990.000₫</div>
+      </div>
+      <div class="product-item" onclick="shareProduct('Canon EOS R5', '89.990.000₫', '📷')">
+        <div class="product-item-image">📷</div>
+        <div class="product-item-name">Canon EOS R5</div>
+        <div class="product-item-price">89.990.000₫</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Tạo nhóm -->
+<div class="group-modal" id="createGroupModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Tạo nhóm mới</h3>
+      <span class="close-btn" onclick="closeModal('createGroupModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="group-avatar-upload">
+        <label for="groupAvatar">
+          <div class="avatar-preview">
+            <i class='bx bx-camera'></i>
+            <span>Thêm ảnh nhóm</span>
+          </div>
+        </label>
+        <input type="file" id="groupAvatar" accept="image/*" hidden>
+      </div>
+      <div class="form-group">
+        <label>Tên nhóm</label>
+        <input type="text" placeholder="Nhập tên nhóm" class="group-name-input">
+      </div>
+      <button class="submit-btn" onclick="createGroup()">Tạo nhóm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tham gia nhóm -->
+<div class="group-modal" id="joinGroupModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Tham gia nhóm</h3>
+      <span class="close-btn" onclick="closeModal('joinGroupModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Mã nhóm</label>
+        <input type="text" placeholder="Nhập mã nhóm" class="group-code-input">
+      </div>
+      <button class="submit-btn" onclick="joinGroup()">Tham gia nhóm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Chi tiết nhóm -->
+<div class="group-modal" id="groupDetailModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Chi tiết nhóm</h3>
+      <span class="close-btn" onclick="closeModal('groupDetailModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="group-avatar">
+        <img src="https://via.placeholder.com/150" alt="Ảnh nhóm" id="detailGroupAvatar">
+        <button class="edit-avatar-btn" onclick="changeGroupAvatar()">
+          <i class='bx bx-camera'></i>
+        </button>
+      </div>
+
+      <div class="group-info">
+        <div class="info-item">
+          <i class='bx bx-rename'></i>
+          <div>
+            <span class="info-label">Tên nhóm</span>
+            <span class="info-value" id="detailGroupName">Nhóm Điện Thoại</span>
+          </div>
+          <button class="edit-btn" onclick="editGroupName()">
+            <i class='bx bx-edit'></i>
+          </button>
+        </div>
+
+        <div class="info-item">
+          <i class='bx bx-group'></i>
+          <div>
+            <span class="info-label">Thành viên</span>
+            <span class="info-value" id="detailMemberCount">15 thành viên</span>
+          </div>
+          <button class="view-member-btn" onclick="viewMembers()">
+            <i class='bx bx-show'></i>
+          </button>
+        </div>
+
+        <div class="info-item">
+          <i class='bx bx-key'></i>
+          <div>
+            <span class="info-label">Mã nhóm</span>
+            <span class="info-value" id="detailGroupCode">ABC123</span>
+          </div>
+          <button class="copy-btn" onclick="copyGroupCode()">
+            <i class='bx bx-copy'></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="group-actions">
+        <button class="action-btn share-btn" onclick="shareGroup()">
+          <i class='bx bx-share-alt'></i> Chia sẻ nhóm
+        </button>
+        <button class="action-btn leave-btn" onclick="leaveGroup()">
+          <i class='bx bx-exit'></i> Rời nhóm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="chatroom.js"></script>
+</body>
+</html>

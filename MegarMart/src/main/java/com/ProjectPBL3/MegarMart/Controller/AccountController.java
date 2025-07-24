@@ -60,14 +60,14 @@ public class AccountController {
 
 
 
-//    @GetMapping("/createAdmin")
-//    @ResponseBody
-//    public String createAdmin() {
-//        try {
-//            accountService.createAdminAccount("admin", "admin", "ADMIN","admin@gmail.com");
-//            return "Admin account created successfully!";
-//        } catch (Exception e) {
-//            return "Error: " + e.getMessage();
-//        }
-//    }
+    @GetMapping("/createAdmin")
+    @ResponseBody
+    public String createAdmin() {
+        try {
+            accountService.createAdminAccount("admin", "admin", "ADMIN","admin@gmail.com");
+            return "Admin account created successfully!";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
 }

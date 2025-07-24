@@ -125,6 +125,11 @@
     <!-- footer -->
     <div th:replace="fragments/footer.html :: footer"></div>
 </div>
+<div class="btn-chat">
+    <a th:href="@{/user/chatroom}">
+        <i class="bx bx-message-bubble-heart bx-tada"></i> Chat
+    </a>
+</div>
 <script th:src="@{/js/script.js}"></script>
 <script>
     // Hiện popup nếu tồn tại
