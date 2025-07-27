@@ -35,41 +35,34 @@
         <input type="text" placeholder="Tìm kiếm cuộc trò chuyện...">
       </div>
     </div>
+    <!-- chat-room.html -->
     <div class="chat-list">
-      <div class="chat-item active" data-chat="1">
-        <div class="chat-avatar">👥</div>
-        <div class="chat-info">
-          <div class="chat-name">Nhóm Điện Thoại</div>
-          <div class="chat-preview">Minh: iPhone 15 Pro mới về!</div>
+<!--       Vòng lặp qua các nhóm-->
+      <div th:each="group : ${groups}"
+           class="chat-item"
+           th:classappend="${group.id == selectedGroupId} ? 'active' : '  '"
+           th:data-chat="${group.id}">
+
+        <!-- Avatar nhóm -->
+        <div class="chat-avatar">
+          <img th:if="${group.groupavt != null}"
+               th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
+               alt="Group avatar">
+          <span th:unless="${group.groupavt != null}">👥</span>
         </div>
+
+        <!-- Thông tin nhóm -->
+        <div class="chat-info">
+          <div class="chat-name" th:text="${group.groupname}">Tên nhóm</div>
+<!--          <div class="chat-preview" th:text="${lastMessages.get(group.id)}">-->
+<!--            Tin nhắn gần nhất...-->
+<!--          </div>-->
+        </div>
+
+        <!-- Thời gian (cần thêm logic tính toán) -->
         <div class="chat-time">2 phút</div>
       </div>
-      <div class="chat-item" data-chat="2">
-        <div class="chat-avatar">👥</div>
-        <div class="chat-info">
-          <div class="chat-name">Nhóm Laptop Gaming</div>
-          <div class="chat-preview">Asus ROG giá tốt đây!</div>
-        </div>
-        <div class="chat-time">15 phút</div>
-      </div>
-      <div class="chat-item" data-chat="3">
-        <div class="chat-avatar">A</div>
-        <div class="chat-info">
-          <div class="chat-name">Anh Tuấn</div>
-          <div class="chat-preview">Bạn có máy ảnh Canon không?</div>
-        </div>
-        <div class="chat-time">1 giờ</div>
-      </div>
-      <div class="chat-item" data-chat="4">
-        <div class="chat-avatar">👥</div>
-        <div class="chat-info">
-          <div class="chat-name">Nhóm Thời Trang</div>
-          <div class="chat-preview">Sale 50% toàn bộ áo khoác!</div>
-        </div>
-        <div class="chat-time">2 giờ</div>
-      </div>
     </div>
-
   </div>
 
   <!-- Main Chat Area -->
@@ -195,31 +188,34 @@
     </div>
   </div>
 </div>
-<!-- Modal Tạo nhóm -->
-<div class="group-modal" id="createGroupModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Tạo nhóm mới</h3>
-      <span class="close-btn" onclick="closeModal('createGroupModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div class="group-avatar-upload">
-        <label for="groupAvatar">
-          <div class="avatar-preview">
-            <i class='bx bx-camera'></i>
-            <span>Thêm ảnh nhóm</span>
-          </div>
-        </label>
-        <input type="file" id="groupAvatar" accept="image/*" hidden>
+<form action="/user/create-group" method="post" enctype="multipart/form-data">
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+  <div class="group-modal" id="createGroupModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Tạo nhóm mới</h3>
+        <span class="close-btn" onclick="closeModal('createGroupModal')">&times;</span>
       </div>
-      <div class="form-group">
-        <label>Tên nhóm</label>
-        <input type="text" placeholder="Nhập tên nhóm" class="group-name-input">
+      <div class="modal-body">
+        <div class="group-avatar-upload">
+          <label for="groupAvatar">
+            <div class="avatar-preview">
+              <i class='bx bx-camera'></i>
+              <span>Thêm ảnh nhóm</span>
+            </div>
+          </label>
+          <input type="file" name="groupavatar" id="groupAvatar" accept="image/*" hidden>
+        </div>
+        <div class="form-group">
+          <label>Tên nhóm</label>
+          <input type="text" name="groupname" placeholder="Nhập tên nhóm" class="group-name-input" required>
+        </div>
+        <button class="submit-btn" type="submit">Tạo nhóm</button>
       </div>
-      <button class="submit-btn" onclick="createGroup()">Tạo nhóm</button>
     </div>
   </div>
-</div>
+</form>
+
 
 <!-- Modal Tham gia nhóm -->
 <div class="group-modal" id="joinGroupModal">
@@ -229,11 +225,26 @@
       <span class="close-btn" onclick="closeModal('joinGroupModal')">&times;</span>
     </div>
     <div class="modal-body">
-      <div class="form-group">
-        <label>Mã nhóm</label>
-        <input type="text" placeholder="Nhập mã nhóm" class="group-code-input">
-      </div>
-      <button class="submit-btn" onclick="joinGroup()">Tham gia nhóm</button>
+      <form id="joinGroupForm" th:action="@{/user/join}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <div class="form-group">
+          <label>Mã nhóm</label>
+          <input type="text" name="groupCode"
+                 placeholder="Nhập mã nhóm (6 ký tự)"
+                 class="group-code-input"
+                 pattern="[A-Za-z0-9]{6}"
+                 title="Mã nhóm phải gồm 6 ký tự chữ hoặc số"
+                 required>
+          <!-- Hiển thị lỗi -->
+          <div id="groupCodeError" class="error-message"></div>
+        </div>
+
+        <!-- Hiển thị thông báo lỗi chung -->
+        <div id="joinGroupError" class="error-message mb-3"></div>
+
+        <button type="submit" class="submit-btn">Tham gia nhóm</button>
+      </form>
     </div>
   </div>
 </div>
@@ -299,6 +310,6 @@
     </div>
   </div>
 </div>
-<script src="chatroom.js"></script>
+<script th:src="@{/js/chatroom.js}"></script>
 </body>
 </html>

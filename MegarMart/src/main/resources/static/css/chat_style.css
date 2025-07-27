@@ -94,7 +94,7 @@
             background: #e7f3ff;
         }
 
-        .chat-avatar {
+        .chat-avatar img {
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -775,7 +775,23 @@
 .submit-btn:hover {
     background-color: #166fe5;
 }
+.error-message {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    padding: 5px;
+    background-color: #ffeeee;
+    border-radius: 4px;
+    display: none; /* Ẩn ban đầu */
+}
 
+.error-message:not(:empty) {
+    display: block; /* Hiển thị khi có nội dung */
+}
+
+.group-code-input:invalid {
+    border-color: #ff4444;
+}
 
 /* Modal Chi tiết nhóm */
 .group-avatar {

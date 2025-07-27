@@ -1,5 +1,6 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
+import com.ProjectPBL3.MegarMart.DTO.CreateGroupRequest;
 import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.PaymentConfig.VNPAYService;
 import com.ProjectPBL3.MegarMart.Service.*;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,6 +47,8 @@ public class UserController {
 
     private final VNPAYService vnpayService;
     private final EmailService emailService;
+
+    private final ChatGroupService groupService;
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -484,9 +490,99 @@ public class UserController {
 
         return "redirect:/user/accountdetail";
     }
-    @GetMapping("/chatroom")
-    public String showChatroom() {
+
+
+    @GetMapping("/create-group")
+    public String showCreateGroupForm() {
         return "User/chatroom";
     }
 
+    @PostMapping("/create-group")
+    public String createGroup(@RequestParam("groupname") String groupname,
+                              @RequestParam(value = "groupavatar", required = false) MultipartFile groupavatar,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            redirectAttributes.addFlashAttribute("error", "Phiên đăng nhập đã hết hạn!");
+            return "redirect:/login";
+        }
+
+        try {
+            ChatGroup group = groupService.createGroup(groupname, account, groupavatar);
+            redirectAttributes.addFlashAttribute("success", "Tạo nhóm thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Có lỗi xảy ra!");
+        }
+
+        return "redirect:/user/chatroom";
+    }
+
+    @GetMapping("/chatroom")
+    public String showChatroom(Model model, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            return "redirect:/login";
+        }
+
+        // Lấy danh sách nhóm của user
+        List<ChatGroup> userGroups = groupService.getGroupsByUser(account.getId());
+
+//        userGroups.forEach(g -> System.out.println(g.getGroupname()));
+
+        // Lấy tin nhắn gần nhất cho mỗi nhóm (tuỳ chọn)
+//        Map<Integer, String> lastMessages = groupService.getLastMessagesForGroups(userGroups);
+
+        model.addAttribute("groups", userGroups);
+
+//        model.addAttribute("lastMessages", lastMessages);
+
+//        model.addAttribute("currentUserId", account.getId());
+        return "User/chatroom";
+    }
+
+//tham gia nhóm
+@PostMapping("/join")
+@ResponseBody
+public ResponseEntity<?> joinGroup(
+        @RequestParam String groupCode,
+        HttpSession session,
+        RedirectAttributes redirectAttributes) {
+
+    Account currentUser = (Account) session.getAttribute("account");
+    if (currentUser == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("success", false, "message", "Vui lòng đăng nhập"));
+    }
+
+    // Validate mã nhóm
+    if (groupCode == null || !groupCode.matches("^[A-Za-z0-9]{6}$")) {
+        return ResponseEntity.badRequest()
+                .body(Map.of("success", false, "message", "Mã nhóm không hợp lệ"));
+    }
+
+    try {
+        ChatGroup group = groupService.findByCode(groupCode)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhóm với mã này"));
+
+        if (groupService.isUserInGroup(group.getId(), currentUser.getId())) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "Bạn đã tham gia nhóm này rồi"));
+        }
+
+        groupService.addMember(group, currentUser, "MEMBER");
+
+        return ResponseEntity.ok()
+                .body(Map.of("success", true, "message", "Tham gia nhóm thành công"));
+
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest()
+                .body(Map.of("success", false, "message", e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError()
+                .body(Map.of("success", false, "message", "Lỗi hệ thống"));
+    }
+}
 }

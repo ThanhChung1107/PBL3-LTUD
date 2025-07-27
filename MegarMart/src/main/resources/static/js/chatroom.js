@@ -268,3 +268,47 @@ function leaveGroup() {
         closeModal('groupDetailModal');
     }
 }
+
+// Xử lý form submit bằng AJAX
+document.getElementById('joinGroupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const errorElement = document.getElementById('joinGroupError');
+    errorElement.textContent = '';
+
+    // Validate client-side
+    const groupCode = formData.get('groupCode');
+    if (!/^[A-Za-z0-9]{6}$/.test(groupCode)) {
+        document.getElementById('groupCodeError').textContent = 'Mã nhóm phải gồm 6 ký tự chữ hoặc số';
+        return;
+    }
+
+    // Gửi request bằng AJAX
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw err; });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Thành công - reload trang hoặc cập nhật UI
+            window.location.reload();
+        } else {
+            // Hiển thị lỗi
+            errorElement.textContent = data.message;
+        }
+    })
+    .catch(error => {
+        errorElement.textContent = error.message || 'Có lỗi xảy ra khi tham gia nhóm';
+    });
+});
