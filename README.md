@@ -26,6 +26,11 @@
 ✅ a. Ordering
   - Shopping cart: add, edit, remove products.
   - Place orders and make payments (simulate VNPay).
+👉 demo image 
+ ➕Homepage
+![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/homepage.png)
+
+
 ✅ c. Topic-based Group Chat
   - Real-time operation (using WebSocket).
   - Users can join existing groups or create new groups.
