@@ -35,29 +35,21 @@
   - Place orders and make payments (simulate VNPay).
 == demo image 
 
- --Homepage
+ ➕ Homepage
 
 ![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/homepage.png)
 
- -- Product Detail
+ ➕ Product Detail
 
 ![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/productdetail.png)
 
- -- Order Page
+ ➕ Order Page
 
 ![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/order.png)
 
  -- Successful order notification via gmail
 
 ![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/tb_dathangthanhcong.png)
-
- ➕
- ➕ 
- ➕
- ➕
-
-
-
 
 
  c. Topic-based Group Chat
@@ -66,6 +58,20 @@
   - Send messages and share products within the chat group.
   - Click on products in the chat to view details or make quick purchases.
   - Chat groups are categorized by topics.
+
+ == demo image
+
+
+ ➕ chat interface when no group is selected
+
+![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/chatbox.png)
+
+ ➕ interface in chat
+
+![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/groupchat.png)
+
+
+
 
 
 
