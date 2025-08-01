@@ -28,7 +28,25 @@
   - Place orders and make payments (simulate VNPay).
 👉 demo image 
  ➕Homepage
+
 ![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/homepage.png)
+
+ ➕ Product Detail
+![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/productdetail.png)
+
+ ➕ Order Page
+![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/order.png)
+
+ ➕ Successful order notification via gmail
+![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/tb_dathangthanhcong.png)
+
+ ➕
+ ➕ 
+ ➕
+ ➕
+
+
+
 
 
 ✅ c. Topic-based Group Chat
