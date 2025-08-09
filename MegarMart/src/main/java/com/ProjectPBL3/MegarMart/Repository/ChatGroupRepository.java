@@ -23,4 +23,9 @@ public interface ChatGroupRepository extends JpaRepository<ChatGroup,Integer> {
     // Kiểm tra invite code có tồn tại không
     @Query("SELECT COUNT(g) > 0 FROM ChatGroup g WHERE g.groupcode = :groupcode")
     boolean existsByGroupcode(@Param("groupcode") String inviteCode);
+
+    @Query("SELECT COUNT(gm) FROM GroupMember gm WHERE gm.group.id = :groupId")
+    int MemberCount(@Param("groupId") Long groupId);
+
+    ChatGroup findGroupById(Integer id);
 }

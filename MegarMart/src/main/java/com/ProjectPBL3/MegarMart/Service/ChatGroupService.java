@@ -67,7 +67,7 @@ public class ChatGroupService {
     @Transactional
     public GroupMember addMember(ChatGroup group, Account user, String role) {
         // Kiểm tra user đã ở trong nhóm chưa
-        if (memberRepository.existsByGroupAndUser(group, user)) {
+        if (memberRepository.existsByUserIdAndGroupId((int) group.getId(), user.getId())) {
             return null;
         }
 
@@ -91,6 +91,16 @@ public class ChatGroupService {
 
     public boolean isUserInGroup(long groupId, Integer userId) {
         return memberRepository.existsByUserIdAndGroupId((int) groupId, userId);
+    }
+
+    public Optional<ChatGroup> findById(Integer id) {
+        return groupRepository.findById(id);
+    }
+    public ChatGroup findById2(Integer id){
+        return groupRepository.findGroupById(id);
+    }
+    public int getMemberCount(Long id){
+        return groupRepository.MemberCount(id);
     }
 //    public Map<Integer, String> getLastMessagesForGroups(List<ChatGroup> groups) {
 //        return groups.stream()

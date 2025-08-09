@@ -7,7 +7,8 @@
   <link rel="stylesheet" th:href="@{/css/chat_style.css}">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
 <body>
 <div class="messenger-container">
@@ -36,46 +37,59 @@
       </div>
     </div>
     <!-- chat-room.html -->
-    <div class="chat-list">
-<!--       Vòng lặp qua các nhóm-->
-      <div th:each="group : ${groups}"
-           class="chat-item"
-           th:classappend="${group.id == selectedGroupId} ? 'active' : '  '"
-           th:data-chat="${group.id}">
+      <div class="chat-list">
+          <!-- Vòng lặp qua các nhóm -->
+          <a th:each="group : ${groups}"
+             th:href="@{/user/chat/group/{id}(id=${group.id})}"
+             class="chat-item-link"
+             th:classappend="${group.id == selectedGroupId} ? 'active-link' : ''">
 
-        <!-- Avatar nhóm -->
-        <div class="chat-avatar">
-          <img th:if="${group.groupavt != null}"
-               th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
-               alt="Group avatar">
-          <span th:unless="${group.groupavt != null}">👥</span>
-        </div>
+              <div class="chat-item"
+                   th:classappend="${group.id == selectedGroupId} ? 'active-chat' : ''"
+                   th:data-chat="${group.id}">
 
-        <!-- Thông tin nhóm -->
-        <div class="chat-info">
-          <div class="chat-name" th:text="${group.groupname}">Tên nhóm</div>
-<!--          <div class="chat-preview" th:text="${lastMessages.get(group.id)}">-->
-<!--            Tin nhắn gần nhất...-->
-<!--          </div>-->
-        </div>
+                  <!-- Avatar nhóm -->
+                  <div class="chat-avatar">
+                      <img th:if="${group.groupavt != null}"
+                           th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
+                           alt="Group avatar">
+                      <span th:unless="${group.groupavt != null}">👥</span>
+                  </div>
 
-        <!-- Thời gian (cần thêm logic tính toán) -->
-        <div class="chat-time">2 phút</div>
+                  <!-- Thông tin nhóm -->
+                  <div class="chat-info">
+                      <div class="chat-name" th:text="${group.groupname}">Tên nhóm</div>
+                  </div>
+
+                  <!-- Thời gian (cần thêm logic tính toán) -->
+                  <div class="chat-time">2 phút</div>
+              </div>
+          </a>
       </div>
+    <div class="sidebar-footer">
+      <a th:href="@{/user/home}" class="btn-home">
+        <i class='bx bx-home'></i>
+        <span>Trang Chủ</span>
+      </a>
     </div>
   </div>
 
   <!-- Main Chat Area -->
-  <div class="chat-area">
-    <div class="chat-header">
+  <div class="chat-area" th:if="${selectedGroup != null}">
+    <div class="chat-header" >
       <div class="chat-header-info">
-        <div class="chat-header-avatar">👥</div>
-        <div class="chat-header-name">Nhóm Điện Thoại</div>
+        <div class="chat-header-avatar">
+          <img th:if="${selectedGroup != null and selectedGroup.groupavt != null}"
+               th:src="@{/img/{imgfile}(imgfile = ${selectedGroup.groupavt})}"
+               alt="Group avatar">
+          <span th:if="${selectedGroup == null or selectedGroup.groupavt == null}">👥</span>
+        </div>
+        <div class="header-name-status">
+            <div class="chat-header-name" th:text="${selectedGroup.groupname  }"></div>
+            <div class="chat-header-status" th:text="${memberCount} + ' thành viên'"> </div>
+        </div>
       </div>
       <div class="chat-actions">
-        <!-- <button class="action-btn product-share-btn" onclick="openProductModal()">
-            🛍️ Chia sẻ sản phẩm
-        </button> -->
         <button class="more-option"><i class='bx  bx-dots-horizontal-rounded'></i></button>
         <div class="group-options" id="groupOptions">
           <div class="option-item">
@@ -136,6 +150,10 @@
       </div>
     </div>
 
+    <input type="hidden" id="username" th:value="${session.account.username}">
+    <input type="hidden" id="useravatar" th:value="${session.account.imageurl}">
+    <input type="hidden" id="userId" th:value="${session.account.id}">
+    <input type="hidden" id="currentGroupId" th:value="${selectedGroup?.id}">
     <div class="input-area">
       <div class="input-actions">
         <button class="input-btn attachment-btn" title="Đính kèm file">📎</button>
@@ -145,6 +163,21 @@
       <button class="input-btn send-btn" onclick="sendMessage()">➤</button>
     </div>
   </div>
+
+
+    <div class="empty-chat" th:unless="${selectedGroup != null}">
+        <div class="empty-icon">💬</div>
+        <p>Chưa có nhóm nào được chọn</p>
+        <p>Vui lòng chọn nhóm từ danh sách hoặc tạo nhóm mới</p>
+        <div class="action-buttons">
+            <button class="action-button" onclick="showCreateGroupModal()">
+                <i class='bx bx-plus'></i> Tạo nhóm mới
+            </button>
+            <button class="action-button" onclick="showJoinGroupModal()">
+                <i class='bx bx-group'></i> Tham gia nhóm
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Product Share Modal -->
@@ -251,14 +284,17 @@
 
 <!-- Modal Chi tiết nhóm -->
 <div class="group-modal" id="groupDetailModal">
-  <div class="modal-content">
+  <div class="modal-content" th:if="selectedGroup != null">
     <div class="modal-header">
       <h3>Chi tiết nhóm</h3>
       <span class="close-btn" onclick="closeModal('groupDetailModal')">&times;</span>
     </div>
     <div class="modal-body">
       <div class="group-avatar">
-        <img src="https://via.placeholder.com/150" alt="Ảnh nhóm" id="detailGroupAvatar">
+          <img th:if="${selectedGroup != null and selectedGroup.groupavt != null}"
+               th:src="@{/img/{imgfile}(imgfile = ${selectedGroup.groupavt})}"
+               alt="Group avatar">
+          <span th:if="${selectedGroup == null or selectedGroup.groupavt == null}">👥</span>
         <button class="edit-avatar-btn" onclick="changeGroupAvatar()">
           <i class='bx bx-camera'></i>
         </button>
@@ -269,7 +305,7 @@
           <i class='bx bx-rename'></i>
           <div>
             <span class="info-label">Tên nhóm</span>
-            <span class="info-value" id="detailGroupName">Nhóm Điện Thoại</span>
+            <span class="info-value" id="detailGroupName" th:text="${selectedGroup?.groupname}"></span>
           </div>
           <button class="edit-btn" onclick="editGroupName()">
             <i class='bx bx-edit'></i>
@@ -280,7 +316,7 @@
           <i class='bx bx-group'></i>
           <div>
             <span class="info-label">Thành viên</span>
-            <span class="info-value" id="detailMemberCount">15 thành viên</span>
+            <span class="info-value" id="detailMemberCount" th:text="${memberCount}  + ' thành viên'"></span>
           </div>
           <button class="view-member-btn" onclick="viewMembers()">
             <i class='bx bx-show'></i>
@@ -291,7 +327,7 @@
           <i class='bx bx-key'></i>
           <div>
             <span class="info-label">Mã nhóm</span>
-            <span class="info-value" id="detailGroupCode">ABC123</span>
+            <span class="info-value" id="detailGroupCode" th:text="${selectedGroup?.groupcode}"></span>
           </div>
           <button class="copy-btn" onclick="copyGroupCode()">
             <i class='bx bx-copy'></i>
@@ -311,5 +347,7 @@
   </div>
 </div>
 <script th:src="@{/js/chatroom.js}"></script>
+
+
 </body>
 </html>

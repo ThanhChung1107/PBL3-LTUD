@@ -49,66 +49,16 @@ document.getElementById('groupAvatar').addEventListener('change', function(e) {
         // Chat switching functionality
         document.querySelectorAll('.chat-item').forEach(item => {
             item.addEventListener('click', function() {
+                // Remove active class from all items
                 document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
+
+                // Add active class to clicked item
                 this.classList.add('active');
 
-                const chatId = this.getAttribute('data-chat');
-                const chatName = this.querySelector('.chat-name').textContent;
-                const avatar = this.querySelector('.chat-avatar').textContent;
-
-                document.querySelector('.chat-header-name').textContent = chatName;
-                document.querySelector('.chat-header-avatar').textContent = avatar;
-
-                // Load different messages based on chat
-                loadChatMessages(chatId);
+                // Không cần update header vì Spring đã xử lý
+                // Header sẽ được update khi trang reload qua link
             });
         });
-
-        // Message input functionality
-        const messageInput = document.getElementById('messageInput');
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        messageInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-        });
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-
-            if (message) {
-                const messagesContainer = document.getElementById('messages');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message sent';
-                messageDiv.innerHTML = `
-                    <div class="message-bubble">${message}</div>
-                    <div class="message-avatar">B</div>
-                `;
-                messagesContainer.appendChild(messageDiv);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                input.value = '';
-                input.style.height = 'auto';
-
-                // Simulate response
-                setTimeout(() => {
-                    const responseDiv = document.createElement('div');
-                    responseDiv.className = 'message received';
-                    responseDiv.innerHTML = `
-                        <div class="message-avatar">M</div>
-                        <div class="message-bubble">Cảm ơn bạn đã chia sẻ!</div>
-                    `;
-                    messagesContainer.appendChild(responseDiv);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }, 1000);
-            }
-        }
 
         function openProductModal() {
             document.getElementById('productModal').style.display = 'block';
@@ -145,170 +95,285 @@ document.getElementById('groupAvatar').addEventListener('change', function(e) {
             closeProductModal();
         }
 
-        function loadChatMessages(chatId) {
-            const messagesContainer = document.getElementById('messages');
-            messagesContainer.innerHTML = '';
-
-            // Sample messages for different chats
-            const chatMessages = {
-                '1': [
-                    {type: 'received', avatar: 'M', message: 'Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?'},
-                    {type: 'sent', avatar: 'B', message: 'Mình biết một shop rất tốt, để mình share sản phẩm nhé!'},
-                    {type: 'product', avatar: 'M', product: {name: 'iPhone 15 Pro Max 256GB', price: '29.990.000₫', emoji: '📱'}},
-                    {type: 'received', avatar: 'L', message: 'Wow giá tốt đấy! Shop này ở đâu vậy?'},
-                    {type: 'sent', avatar: 'B', message: 'Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng'}
-                ],
-                '2': [
-                    {type: 'received', avatar: 'T', message: 'Ai có laptop gaming tầm 30 triệu không?'},
-                    {type: 'received', avatar: 'N', message: 'Mình có ASUS ROG mới, còn bảo hành'},
-                    {type: 'product', avatar: 'N', product: {name: 'Gaming Laptop ASUS', price: '35.990.000₫', emoji: '🎮'}}
-                ],
-                '3': [
-                    {type: 'received', avatar: 'A', message: 'Bạn có máy ảnh Canon không?'},
-                    {type: 'sent', avatar: 'B', message: 'Có nhiều loại, bạn cần tầm giá nào?'},
-                    {type: 'received', avatar: 'A', message: 'Khoảng 50-80 triệu'},
-                    {type: 'product', avatar: 'B', product: {name: 'Canon EOS R5', price: '89.990.000₫', emoji: '📷'}}
-                ],
-                '4': [
-                    {type: 'received', avatar: 'H', message: 'Sale 50% toàn bộ áo khoác!'},
-                    {type: 'received', avatar: 'K', message: 'Có size L không shop?'},
-                    {type: 'sent', avatar: 'B', message: 'Còn nhiều size, inbox shop nhé!'}
-                ]
-            };
-
-            const messages = chatMessages[chatId] || [];
-            messages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${msg.type === 'sent' ? 'sent' : 'received'}`;
-
-                if (msg.type === 'product') {
-                    messageDiv.innerHTML = `
-                        <div class="message-avatar">${msg.avatar}</div>
-                        <div class="message-bubble product-message">
-                            <div class="product-card">
-                                <div class="product-image">${msg.product.emoji}</div>
-                                <div class="product-info">
-                                    <div class="product-name">${msg.product.name}</div>
-                                    <div class="product-price">${msg.product.price}</div>
-                                    <div class="product-description">Sản phẩm chất lượng cao, giá cả phải chăng</div>
-                                    <div class="product-actions">
-                                        <button class="product-btn view-btn">Xem chi tiết</button>
-                                        <button class="product-btn buy-btn">Mua ngay</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        ${msg.type === 'sent' ? '' : `<div class="message-avatar">${msg.avatar}</div>`}
-                        <div class="message-bubble">${msg.message}</div>
-                        ${msg.type === 'sent' ? `<div class="message-avatar">${msg.avatar}</div>` : ''}
-                    `;
-                }
-
-                messagesContainer.appendChild(messageDiv);
-            });
-
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('productModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeProductModal();
-            }
-        });
+//        function loadChatMessages(chatId) {
+//            const messagesContainer = document.getElementById('messages');
+//            messagesContainer.innerHTML = '';
+//
+//            // Sample messages for different chats
+//            const chatMessages = {
+//                '1': [
+//                    {type: 'received', avatar: 'M', message: 'Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?'},
+//                    {type: 'sent', avatar: 'B', message: 'Mình biết một shop rất tốt, để mình share sản phẩm nhé!'},
+//                    {type: 'product', avatar: 'M', product: {name: 'iPhone 15 Pro Max 256GB', price: '29.990.000₫', emoji: '📱'}},
+//                    {type: 'received', avatar: 'L', message: 'Wow giá tốt đấy! Shop này ở đâu vậy?'},
+//                    {type: 'sent', avatar: 'B', message: 'Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng'}
+//                ],
+//                '2': [
+//                    {type: 'received', avatar: 'T', message: 'Ai có laptop gaming tầm 30 triệu không?'},
+//                    {type: 'received', avatar: 'N', message: 'Mình có ASUS ROG mới, còn bảo hành'},
+//                    {type: 'product', avatar: 'N', product: {name: 'Gaming Laptop ASUS', price: '35.990.000₫', emoji: '🎮'}}
+//                ],
+//                '3': [
+//                    {type: 'received', avatar: 'A', message: 'Bạn có máy ảnh Canon không?'},
+//                    {type: 'sent', avatar: 'B', message: 'Có nhiều loại, bạn cần tầm giá nào?'},
+//                    {type: 'received', avatar: 'A', message: 'Khoảng 50-80 triệu'},
+//                    {type: 'product', avatar: 'B', product: {name: 'Canon EOS R5', price: '89.990.000₫', emoji: '📷'}}
+//                ],
+//                '4': [
+//                    {type: 'received', avatar: 'H', message: 'Sale 50% toàn bộ áo khoác!'},
+//                    {type: 'received', avatar: 'K', message: 'Có size L không shop?'},
+//                    {type: 'sent', avatar: 'B', message: 'Còn nhiều size, inbox shop nhé!'}
+//                ]
+//            };
+//
+//            const messages = chatMessages[chatId] || [];
+//            messages.forEach(msg => {
+//                const messageDiv = document.createElement('div');
+//                messageDiv.className = `message ${msg.type === 'sent' ? 'sent' : 'received'}`;
+//
+//                if (msg.type === 'product') {
+//                    messageDiv.innerHTML = `
+//                        <div class="message-avatar">${msg.avatar}</div>
+//                        <div class="message-bubble product-message">
+//                            <div class="product-card">
+//                                <div class="product-image">${msg.product.emoji}</div>
+//                                <div class="product-info">
+//                                    <div class="product-name">${msg.product.name}</div>
+//                                    <div class="product-price">${msg.product.price}</div>
+//                                    <div class="product-description">Sản phẩm chất lượng cao, giá cả phải chăng</div>
+//                                    <div class="product-actions">
+//                                        <button class="product-btn view-btn">Xem chi tiết</button>
+//                                        <button class="product-btn buy-btn">Mua ngay</button>
+//                                    </div>
+//                                </div>
+//                            </div>
+//                        </div>
+//                    `;
+//                } else {
+//                    messageDiv.innerHTML = `
+//                        ${msg.type === 'sent' ? '' : `<div class="message-avatar">${msg.avatar}</div>`}
+//                        <div class="message-bubble">${msg.message}</div>
+//                        ${msg.type === 'sent' ? `<div class="message-avatar">${msg.avatar}</div>` : ''}
+//                    `;
+//                }
+//
+//                messagesContainer.appendChild(messageDiv);
+//            });
+//
+//            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+//        }
 
 
-// Hiển thị modal chi tiết nhóm
-function showGroupDetail() {
-    // Cập nhật dữ liệu nhóm
-    // document.getElementById('detailGroupAvatar').src = groupData.avatar || 'https://via.placeholder.com/150';
-    // document.getElementById('detailGroupName').textContent = groupData.name;
-    // document.getElementById('detailMemberCount').textContent = `${groupData.memberCount} thành viên`;
-    // document.getElementById('detailGroupCode').textContent = groupData.groupCode;
+//===========================================
+   // WebSocket Connection
+   //===========================================
 
-    // // Hiển thị modal
-    document.getElementById('groupDetailModal').style.display = 'flex';
-}
+   const socket = new SockJS('/chat-websocket');
+   const stompClient = Stomp.over(socket);
+   let currentGroupId = document.getElementById('currentGroupId')?.value;
+   let currentUsername = document.getElementById('username')?.value;
 
-// Các hàm xử lý
-function changeGroupAvatar() {
-    alert('Chức năng thay đổi ảnh nhóm');
-    // Thêm logic upload ảnh
-}
+   // Kết nối đến server
+   stompClient.connect({}, function(frame) {
+       console.log('Connected: ' + frame);
 
-function editGroupName() {
-    const currentName = document.getElementById('detailGroupName').textContent;
-    const newName = prompt("Nhập tên nhóm mới:", currentName);
-    if (newName && newName !== currentName) {
-        document.getElementById('detailGroupName').textContent = newName;
-        alert('Đã cập nhật tên nhóm!');
-    }
-}
+       // Subscribe vào topic nhận tin nhắn cho nhóm hiện tại
+       if (currentGroupId) {
+           subscribeToGroup(currentGroupId);
+           joinChat(currentGroupId);
+       }
+       console.log('kết nối thành công')
+   });
 
-function viewMembers() {
-    alert('Chức năng xem danh sách thành viên');
-}
+   function subscribeToGroup(groupId) {
+       // Subscribe vào topic của nhóm cụ thể
+       stompClient.subscribe(`/topic/group/${groupId}`, function(message) {
+           showMessage(JSON.parse(message.body));
+       });
+   }
 
-function copyGroupCode() {
-    const groupCode = document.getElementById('detailGroupCode').textContent;
-    navigator.clipboard.writeText(groupCode);
-    alert('Đã sao chép mã nhóm: ' + groupCode);
-}
+   function joinChat(groupId) {
+       if (!currentUsername) {
+           console.error('Username not found');
+           return;
+       }
 
-function shareGroup() {
-    alert('Chức năng chia sẻ nhóm');
-}
+       const joinMessage = {
+           senderName: currentUsername,
+           groupId: groupId,
+           joinTime: new Date().toISOString()
+       };
 
-function leaveGroup() {
-    if (confirm('Bạn có chắc chắn muốn rời nhóm này?')) {
-        alert('Đã rời nhóm thành công');
-        closeModal('groupDetailModal');
-    }
-}
+       stompClient.send(`/app/chat/${groupId}/join`, {}, JSON.stringify(joinMessage));
+   }
 
-// Xử lý form submit bằng AJAX
-document.getElementById('joinGroupForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+   function leaveChat(groupId) {
+       if (!currentUsername) return;
 
-    const form = e.target;
-    const formData = new FormData(form);
-    const errorElement = document.getElementById('joinGroupError');
-    errorElement.textContent = '';
+       const leaveMessage = {
+           senderName: currentUsername,
+           groupId: groupId
+       };
 
-    // Validate client-side
-    const groupCode = formData.get('groupCode');
-    if (!/^[A-Za-z0-9]{6}$/.test(groupCode)) {
-        document.getElementById('groupCodeError').textContent = 'Mã nhóm phải gồm 6 ký tự chữ hoặc số';
-        return;
-    }
+       stompClient.send(`/app/chat/${groupId}/leave`, {}, JSON.stringify(leaveMessage));
+   }
 
-    // Gửi request bằng AJAX
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw err; });
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Thành công - reload trang hoặc cập nhật UI
-            window.location.reload();
-        } else {
-            // Hiển thị lỗi
-            errorElement.textContent = data.message;
-        }
-    })
-    .catch(error => {
-        errorElement.textContent = error.message || 'Có lỗi xảy ra khi tham gia nhóm';
-    });
-});
+   function sendMessage() {
+       const messageInput = document.getElementById('messageInput');
+       const content = messageInput.value.trim();
+       const groupId = document.getElementById('currentGroupId').value;
+       const username = document.getElementById('username').value;
+       const useravatar = document.getElementById('useravatar').value;
+
+       if (content && groupId && stompClient && stompClient.connected) {
+           const message = {
+               content: content,
+               senderName: username,
+               groupId: groupId,
+               senderAvatar: useravatar
+           };
+
+           // Gửi qua WebSocket với đúng mapping
+           stompClient.send(`/app/chat/${groupId}/sendMessage`, {}, JSON.stringify(message));
+
+           // Xóa nội dung input
+           messageInput.value = '';
+           messageInput.style.height = 'auto';
+       } else {
+           console.error('Cannot send message:', {
+               content: !!content,
+               groupId: !!groupId,
+               connected: stompClient?.connected
+           });
+       }
+   }
+
+   function showMessage(message) {
+       const messagesContainer = document.getElementById('messages');
+       const currentUser = document.getElementById('username').value;
+
+       let messageElement;
+
+       if (message.type === 'JOIN' || message.type === 'LEAVE') {
+           // Tin nhắn hệ thống
+
+           messageElement = createSystemMessage(message);
+       } else if (message.type === 'PRODUCT_SHARE') {
+           // Tin nhắn chia sẻ sản phẩm
+           messageElement = createProductMessage(message);
+       } else {
+           // Tin nhắn văn bản thông thường
+           messageElement = createTextMessage(message, currentUser);
+       }
+
+       messagesContainer.appendChild(messageElement);
+       messagesContainer.scrollTop = messagesContainer.scrollHeight;
+   }
+
+   function createTextMessage(message, currentUser) {
+       const messageDiv = document.createElement('div');
+       const isSentByMe = message.senderName === currentUser;
+
+       messageDiv.className = `message ${isSentByMe ? 'sent' : 'received'}`;
+
+       if (isSentByMe) {
+           messageDiv.innerHTML = `
+               <div class="message-bubble">${message.content}</div>
+               <div class="message-avatar">
+                   <img src="${'/img/' + message.senderAvatar || message.senderName.charAt(0)}" alt="Avatar">
+               </div>
+           `;
+       } else {
+           messageDiv.innerHTML = `
+               <div class="message-avatar">${message.senderAvatar}</div>
+               <div class="message-avatar">
+                   <img src="${'/img/' + message.senderAvatar || message.senderName.charAt(0)}" alt="Avatar">
+              </div>
+           `;
+       }
+
+       return messageDiv;
+   }
+
+   function createSystemMessage(message) {
+       const messageDiv = document.createElement('div');
+       messageDiv.className = 'message system';
+       messageDiv.innerHTML = `
+           <div class="system-message">${message.content}</div>
+       `;
+       return messageDiv;
+   }
+
+   function createProductMessage(message) {
+       const messageDiv = document.createElement('div');
+       const currentUser = document.getElementById('username').value;
+       const isSentByMe = message.senderName === currentUser;
+
+       messageDiv.className = `message ${isSentByMe ? 'sent' : 'received'}`;
+
+       const productHtml = `
+           <div class="message-bubble product-message">
+               <div class="product-card">
+                   <div class="product-image">${message.sharedProduct?.image || '📦'}</div>
+                   <div class="product-info">
+                       <div class="product-name">${message.sharedProduct?.name || 'Sản phẩm'}</div>
+                       <div class="product-price">${message.sharedProduct?.price || 'Liên hệ'}</div>
+                       <div class="product-description">${message.sharedProduct?.description || 'Mô tả sản phẩm'}</div>
+                       <div class="product-actions">
+                           <button class="product-btn view-btn">Xem chi tiết</button>
+                           <button class="product-btn buy-btn">Mua ngay</button>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       `;
+
+       if (isSentByMe) {
+           messageDiv.innerHTML = `
+               ${productHtml}
+               <div class="message-avatar">${message.senderAvatar}</div>
+           `;
+       } else {
+           messageDiv.innerHTML = `
+               <div class="message-avatar">${message.senderAvatar}</div>
+               ${productHtml}
+           `;
+       }
+
+       return messageDiv;
+   }
+
+   // Xử lý sự kiện gửi tin nhắn
+   document.getElementById('messageInput').addEventListener('keypress', function(e) {
+       if (e.key === 'Enter' && !e.shiftKey) {
+           e.preventDefault();
+           sendMessage();
+       }
+   });
+
+   // Xử lý khi chuyển nhóm
+   function switchGroup(newGroupId) {
+       // Rời nhóm cũ
+       if (currentGroupId) {
+           leaveChat(currentGroupId);
+       }
+
+       // Cập nhật thông tin nhóm mới
+       currentGroupId = newGroupId;
+       document.getElementById('currentGroupId').value = newGroupId;
+
+       // Subscribe vào nhóm mới
+       subscribeToGroup(newGroupId);
+
+       // Tham gia nhóm mới
+       joinChat(newGroupId);
+   }
+
+   // Error handling
+   stompClient.onStompError = function(frame) {
+       console.error('STOMP error: ' + frame.body);
+   };
+
+   socket.onclose = function() {
+       console.log('WebSocket connection closed');
+   };

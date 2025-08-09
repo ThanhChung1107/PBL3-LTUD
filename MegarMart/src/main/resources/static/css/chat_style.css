@@ -77,6 +77,9 @@
             flex: 1;
             overflow-y: auto;
         }
+        .chat-item-link {
+            text-decoration: none;
+        }
 
         .chat-item {
             display: flex;
@@ -153,7 +156,7 @@
             align-items: center;
         }
 
-        .chat-header-avatar {
+        .chat-header-avatar img{
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -165,7 +168,15 @@
             color: white;
             font-weight: bold;
         }
+        header-name-status{
+            display: flex;
+            flex-decoration: column;
 
+        }
+        .chat-header-status {
+            font-size: 0.8rem;
+            opacity: 0.5;
+        }
         .chat-header-name {
             font-weight: 600;
             color: #050505;
@@ -207,7 +218,7 @@
             color: white;
         }
 
-        .message-avatar {
+        .message-avatar img{
             width: 28px;
             height: 28px;
             border-radius: 50%;
@@ -462,6 +473,58 @@
                 width: 100%;
             }
         }
+/*phần hiển thị khi vừa vào đoạn chat*/
+/* Empty Chat State - Hiển thị khi chưa chọn nhóm */
+.empty-chat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+    width: 80%;
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 20px;
+  border-left: 1px solid #e1e1e1; /* Tạo viền phân cách với sidebar */
+}
+
+.empty-chat p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.empty-chat .empty-icon {
+  font-size: 60px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.empty-chat .action-button {
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+
+}
+
+.empty-chat .action-button:hover {
+  background-color: #3a7bc8;
+}
+
+/* Animation nhẹ cho empty state */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.empty-chat {
+  animation: fadeIn 0.5s ease-in-out;
+}
 /* chức năng trong nhóm */
 .chat-actions {
     display: flex;
@@ -778,7 +841,7 @@
 .error-message {
     color: #ff4444;
     font-size: 0.9rem;
-    margin-top: 5px;
+    margin-bottom: 10px;
     padding: 5px;
     background-color: #ffeeee;
     border-radius: 4px;
@@ -914,4 +977,39 @@
 
 .leave-btn:hover {
     background: #fdd;
+}
+
+/* Nút Trở về Trang Chủ */
+.sidebar-footer {
+  bottom: 20px;
+  text-align: center;
+  margin-bottom:20px;
+  z-index: 10;
+}
+
+.btn-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(3, 111, 211, 0.4);
+}
+
+.btn-home:hover {
+  background-color: rgb(0, 90, 180);
+  box-shadow: 0 6px 12px rgba(3, 111, 211, 0.6);
+  color: white;
+  text-decoration: none;
+}
+
+.btn-home i {
+  font-size: 20px;
 }

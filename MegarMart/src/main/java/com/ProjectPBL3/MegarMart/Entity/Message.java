@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 public class Message {
     public enum MessageType {
         TEXT,          // Tin nhắn văn bản thông thường
-        PRODUCT_SHARE  // Tin nhắn chia sẻ sản phẩm
+        PRODUCT_SHARE,
+        JOIN,
+        LEAVE// Tin nhắn chia sẻ sản phẩm
     }
 
     @Id
@@ -29,7 +31,11 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
     Account sender;
+    @Transient
+    private String senderName; // Tên người gửi để hiển thị
 
+    @Transient
+    private String senderAvatar; // Avatar người gửi
     @Column(columnDefinition = "TEXT")
     String content;
 

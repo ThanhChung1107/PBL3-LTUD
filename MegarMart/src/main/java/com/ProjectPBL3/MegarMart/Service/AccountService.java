@@ -49,6 +49,8 @@ public class AccountService {
 
     public Account findById(Integer id) {return accountRepository.findById(id).get();}
 
+    public Account findByUsername(String name){return accountRepository.findByUsername(name);}
+
     public void update(Account account) {
         accountRepository.updateAccountInfo(
                 account.getId(),

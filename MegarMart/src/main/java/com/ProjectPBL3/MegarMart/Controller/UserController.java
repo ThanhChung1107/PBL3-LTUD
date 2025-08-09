@@ -1,17 +1,14 @@
 package com.ProjectPBL3.MegarMart.Controller;
 
-import com.ProjectPBL3.MegarMart.DTO.CreateGroupRequest;
 import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.PaymentConfig.VNPAYService;
 import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -536,26 +531,36 @@ public class UserController {
 //        Map<Integer, String> lastMessages = groupService.getLastMessagesForGroups(userGroups);
 
         model.addAttribute("groups", userGroups);
-
+        model.addAttribute("selectedGroupId",null);
+        model.addAttribute("selectedGroup", null);
 //        model.addAttribute("lastMessages", lastMessages);
 
 //        model.addAttribute("currentUserId", account.getId());
         return "User/chatroom";
     }
 
+    @GetMapping("/chat/group/{id}")
+    public String groupInfo(@PathVariable Integer id, Model model, HttpSession session){
+        Account account =(Account) session.getAttribute("account");
+        List<ChatGroup> groups = groupService.getGroupsByUser(account.getId());
+        ChatGroup selectedGroup = groupService.findById(id).orElse(null);
+
+        model.addAttribute("groups", groups);
+        model.addAttribute("selectedGroupId", id);
+        model.addAttribute("selectedGroup", selectedGroup);
+        model.addAttribute("memberCount", groupService.getMemberCount(Long.valueOf(id)));
+
+        return "User/chatroom";
+    }
+
 //tham gia nhóm
 @PostMapping("/join")
 @ResponseBody
+@Transactional
 public ResponseEntity<?> joinGroup(
         @RequestParam String groupCode,
-        HttpSession session,
-        RedirectAttributes redirectAttributes) {
-
+        HttpSession session) {
     Account currentUser = (Account) session.getAttribute("account");
-    if (currentUser == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("success", false, "message", "Vui lòng đăng nhập"));
-    }
 
     // Validate mã nhóm
     if (groupCode == null || !groupCode.matches("^[A-Za-z0-9]{6}$")) {
@@ -565,21 +570,28 @@ public ResponseEntity<?> joinGroup(
 
     try {
         ChatGroup group = groupService.findByCode(groupCode)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhóm với mã này"));
+                .orElse(null);
 
-        if (groupService.isUserInGroup(group.getId(), currentUser.getId())) {
+        if (group == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "Không tìm thấy nhóm với mã này"));
+        }
+
+        // Bọc cả logic kiểm tra trong try-catch riêng
+        try {
+            if (groupService.isUserInGroup(group.getId(), currentUser.getId())) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("success", false, "message", "Bạn đã tham gia nhóm này rồi"));
+            }
+        } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body(Map.of("success", false, "message", "Bạn đã tham gia nhóm này rồi"));
         }
 
         groupService.addMember(group, currentUser, "MEMBER");
-
         return ResponseEntity.ok()
                 .body(Map.of("success", true, "message", "Tham gia nhóm thành công"));
 
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.badRequest()
-                .body(Map.of("success", false, "message", e.getMessage()));
     } catch (Exception e) {
         return ResponseEntity.internalServerError()
                 .body(Map.of("success", false, "message", "Lỗi hệ thống"));
