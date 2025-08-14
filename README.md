@@ -1,77 +1,57 @@
-1. Overall System Architecture
- - The system consists of three main layers:
-  Frontend: HTML/CSS, JavaScript
-  Backend: Spring Boot (Java)
-  Database: MySQL 
-  Realtime Communication: WebSocket / STOMP (for group chat)
-  Authentication & Authorization: Spring Security + JWT
-2. User Roles and Permissions
+# 🛒 MegaMart - E-commerce Platform
 
+## 1️⃣ Overall System Architecture  
+The system consists of **three main layers**:
 
- a. Admin
-  - Manage users: view list, lock accounts, assign roles.
-  - Manage shops: approve or delete shops.
-  - Manage products: approve new products, remove or edit violating products.
-  - Manage orders: monitor and intervene in transaction processes when issues arise.
-  - Manage chat groups: monitor discussion groups and handle reports.
+- 🎨 **Frontend**: HTML, CSS, JavaScript  
+- ⚙️ **Backend**: Spring Boot (Java)  
+- 🗄️ **Database**: MySQL  
+- 🔄 **Realtime Communication**: WebSocket / STOMP (for group chat)  
+- 🔐 **Authentication & Authorization**: Spring Security + JWT  
 
+---
 
- b. Seller
-  - Post, edit, hide/delete their own products.
-  - Manage orders of their shop.
-  - View revenue statistics and product reviews.
-  - Join or create chat groups to promote products by topics (e.g., “Korean Cosmetics,” “Affordable Electronics”).
+## 2️⃣ User Roles & Permissions  
 
+### 👑 **Admin**
+- 👥 Manage users: view list, lock accounts, assign roles  
+- 🏪 Manage shops: approve or delete shops  
+- 📦 Manage products: approve new products, remove or edit violating products  
+- 📑 Manage orders: monitor and intervene in transaction processes when issues arise  
+- 💬 Manage chat groups: monitor discussions and handle reports  
 
- c. Buyer (User/Customer)
-  - Browse and search products, add to cart, place orders.
-  - Review products after purchase.
-  - Participate in chat groups, ask questions, share comments, invite friends to shop together.
+---
 
-3. Main Features
+### 🛍 **Seller**
+- ➕ Post, edit, hide, or delete their own products  
+- 📦 Manage orders of their shop  
+- 📊 View revenue statistics and product reviews  
+- 💬 Join or create chat groups by topics *(e.g., “Korean Cosmetics,” “Affordable Electronics”)*  
 
- a. Ordering
-  - Shopping cart: add, edit, remove products.
-  - Place orders and make payments (simulate VNPay).
-== demo image 
+---
 
- ➕ Homepage
+### 👤 **Buyer (Customer)**
+- 🔍 Browse and search products, add to cart, place orders  
+- ⭐ Review products after purchase  
+- 💬 Participate in chat groups, ask questions, share comments, invite friends to shop together  
 
-![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/homepage.png)
+---
 
- ➕ Product Detail
+## 3️⃣ Main Features  
 
-![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/productdetail.png)
+### 🛒 Ordering  
+- 🛍 **Shopping cart**: add, edit, remove products  
+- 💳 Place orders and make payments *(simulate VNPay)*  
 
- ➕ Order Page
+---
 
-![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/order.png)
+## 📸 Demo Screenshots  
 
- -- Successful order notification via gmail
+### 🏠 Homepage  
+![Homepage](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/homepage.png)  
 
-![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/tb_dathangthanhcong.png)
+### 📄 Product Detail  
+![Product Detail](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/productdetail.png)  
 
-
- c. Topic-based Group Chat
-  - Real-time operation (using WebSocket).
-  - Users can join existing groups or create new groups.
-  - Send messages and share products within the chat group.
-  - Click on products in the chat to view details or make quick purchases.
-  - Chat groups are categorized by topics.
-
- == demo image
-
-
- ➕ chat interface when no group is selected
-
-![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/chatbox.png)
-
- ➕ interface in chat
-
-![Logo GitHub](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/groupchat.png)
-
-
-
-
-
-
+### 📦 Order Page  
+![Order Page](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/order.png)  
