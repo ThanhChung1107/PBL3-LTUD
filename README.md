@@ -1,5 +1,13 @@
 # 🛒 MegaMart - E-commerce Platform
 
+## 📖 Project Overview  
+MegaMart is an **e-commerce web platform** that connects buyers and sellers,  
+allowing users to **buy and sell products online, manage carts, place orders,  
+make payments, and track orders**.  
+The system also provides **chat groups by topic** for users to share product  
+information, discuss, and shop together conveniently and safely.  
+
+---
 ## 1️⃣ Overall System Architecture  
 The system consists of **three main layers**:
 
