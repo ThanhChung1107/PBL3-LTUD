@@ -44,19 +44,6 @@ The system consists of **three main layers**:
 - 💬 Participate in chat groups, ask questions, share comments, invite friends to shop together  
 
 ---
-MegaMart/
-├── frontend/
-│ ├── css/
-│ ├── js/
-│ └── images/
-├── backend/
-│ ├── src/
-│ │ ├── main/
-│ │ └── test/
-│ └── pom.xml
-├── database/
-│ └── schema.sql
-└── README.md
 
 
 ## 3️⃣ Main Features  
@@ -66,7 +53,28 @@ MegaMart/
 - 💳 Place orders and make payments *(simulate VNPay)*  
 
 ---
-
+```
+project-name/
+├── src/
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Button.jsx
+│   │   │   └── Modal.jsx
+│   │   └── pages/
+│   ├── hooks/
+│   ├── services/
+│   ├── utils/
+│   └── App.js
+├── public/
+│   ├── index.html
+│   └── favicon.ico
+├── tests/
+├── docs/
+├── package.json
+├── .env.example
+├── .gitignore
+└── README.md
+```
 ## 📸 Demo Screenshots  
 
 ### 🏠 Homepage  
