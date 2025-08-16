@@ -53,28 +53,7 @@ The system consists of **three main layers**:
 - 💳 Place orders and make payments *(simulate VNPay)*  
 
 ---
-```
-project-name/
-├── src/
-│   ├── components/
-│   │   ├── common/
-│   │   │   ├── Button.jsx
-│   │   │   └── Modal.jsx
-│   │   └── pages/
-│   ├── hooks/
-│   ├── services/
-│   ├── utils/
-│   └── App.js
-├── public/
-│   ├── index.html
-│   └── favicon.ico
-├── tests/
-├── docs/
-├── package.json
-├── .env.example
-├── .gitignore
-└── README.md
-```
+
 ## 📸 Demo Screenshots  
 
 ### 🏠 Homepage  
