@@ -44,7 +44,35 @@ The system consists of **three main layers**:
 - 💬 Participate in chat groups, ask questions, share comments, invite friends to shop together  
 
 ---
-
+project-root/
+├── src/
+│   ├── components/
+│   │   ├── Header.js
+│   │   ├── Footer.js
+│   │   └── Sidebar.js
+│   ├── pages/
+│   │   ├── Home.js
+│   │   ├── About.js
+│   │   └── Contact.js
+│   ├── utils/
+│   │   ├── helpers.js
+│   │   └── constants.js
+│   └── App.js
+├── public/
+│   ├── index.html
+│   ├── favicon.ico
+│   └── images/
+│       ├── logo.png
+│       └── banner.jpg
+├── tests/
+│   ├── unit/
+│   └── integration/
+├── docs/
+│   ├── api.md
+│   └── deployment.md
+├── package.json
+├── README.md
+└── .gitignore
 ## 3️⃣ Main Features  
 
 ### 🛒 Ordering  
