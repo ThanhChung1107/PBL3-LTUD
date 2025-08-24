@@ -41,7 +41,106 @@ The system consists of **three main layers**:
 - 💬 Participate in chat groups, ask questions, share comments, invite friends to shop together  
 
 ---
+# Cấu trúc thư mục dự án MegarMart (Spring Boot)
 
+src
+└── main
+├── java/com/ProjectPBL3/MegarMart
+│ ├── Controller
+│ │ ├── AccountController.java
+│ │ ├── AdminController.java
+│ │ ├── ChatController.java
+│ │ ├── SellerController.java
+│ │ └── UserController.java
+│ │
+│ ├── Entity
+│ │ ├── Account.java
+│ │ ├── Cart.java
+│ │ ├── Category.java
+│ │ ├── ChatGroup.java
+│ │ ├── Coupon.java
+│ │ ├── GroupMember.java
+│ │ ├── Message.java
+│ │ ├── OrderDetail.java
+│ │ ├── Orders.java
+│ │ ├── Product.java
+│ │ ├── RatingLevel.java
+│ │ ├── ReviewProduct.java
+│ │ ├── Role.java
+│ │ ├── SharedProduct.java
+│ │ └── Shop.java
+│ │
+│ ├── PaymentConfig
+│ │ ├── VNPAYConfig.java
+│ │ └── VNPAYService.java
+│ │
+│ ├── Repository
+│ │ ├── AccountRepository.java
+│ │ ├── CartRepository.java
+│ │ ├── CategoryRepository.java
+│ │ ├── ChatGroupRepository.java
+│ │ ├── CouponRepository.java
+│ │ ├── GroupMemberRepository.java
+│ │ ├── MessageRepository.java
+│ │ ├── OrderDetailRepository.java
+│ │ ├── OrdersRepository.java
+│ │ ├── ProductRepository.java
+│ │ ├── ReviewProductRepository.java
+│ │ ├── RoleRepository.java
+│ │ └── ShopRepository.java
+│ │
+│ ├── SecurityConfig
+│ │ ├── CustomAccountDetailsService.java
+│ │ ├── CustomLoginSuccessHandler.java
+│ │ ├── OAuth2LoginSuccessHandler.java
+│ │ └── SecurityConfig.java
+│ │
+│ ├── Service
+│ │ ├── AccountService.java
+│ │ ├── CartService.java
+│ │ ├── CategoryService.java
+│ │ ├── ChatGroupService.java
+│ │ ├── CouponService.java
+│ │ ├── EmailService.java
+│ │ ├── FileSystemStorageService.java
+│ │ ├── MessageService.java
+│ │ ├── OrderDetailService.java
+│ │ ├── OrdersService.java
+│ │ ├── ProductService.java
+│ │ ├── ReviewProductService.java
+│ │ └── ShopService.java
+│ │
+│ ├── config
+│ │ └── WebSocketConfig.java
+│ │
+│ └── MegarMartApplication.java
+│
+└── resources
+├── static
+│ ├── css/
+│ ├── img/
+│ └── js/
+│
+└── templates
+├── Admin
+│ ├── Add_Shop.html
+│ ├── Home.html
+│ ├── OrderHistory.html
+│ ├── Shop.html
+│ ├── add_category.html
+│ ├── add_coupon.html
+│ ├── category.html
+│ ├── coupon.html
+│ ├── edit_category.html
+│ ├── edit_coupon.html
+│ ├── product.html
+│ └── stats_shop.html
+│
+├── Payment/
+├── Seller/
+├── SignUp_SignIn/
+├── User/
+└── fragments/
 ## 3️⃣ Main Features
 
 ### 🛒 Ordering
