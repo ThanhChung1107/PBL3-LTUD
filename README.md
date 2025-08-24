@@ -1,6 +1,6 @@
 # 🛒 MegaMart - E-commerce Platform
 
-## 📖 Project Overview  
+## 📖 Project Overview
 MegaMart is an **e-commerce web platform** that connects buyers and sellers,  
 allowing users to **buy and sell products online, manage carts, place orders,  
 make payments, and track orders**.  
@@ -8,7 +8,8 @@ The system also provides **chat groups by topic** for users to share product
 information, discuss, and shop together conveniently and safely.  
 
 ---
-## 1️⃣ Overall System Architecture  
+
+## 1️⃣ Overall System Architecture
 The system consists of **three main layers**:
 
 - 🎨 **Frontend**: HTML, CSS, JavaScript  
@@ -19,48 +20,52 @@ The system consists of **three main layers**:
 
 ---
 
-## 2️⃣ User Roles & Permissions  
+## 2️⃣ User Roles & Permissions
 
-### 👑 **Admin**
+### 👑 Admin
 - 👥 Manage users: view list, lock accounts, assign roles  
 - 🏪 Manage shops: approve or delete shops  
 - 📦 Manage products: approve new products, remove or edit violating products  
 - 📑 Manage orders: monitor and intervene in transaction processes when issues arise  
 - 💬 Manage chat groups: monitor discussions and handle reports  
 
----
-
-### 🛍 **Seller**
+### 🛍 Seller
 - ➕ Post, edit, hide, or delete their own products  
 - 📦 Manage orders of their shop  
 - 📊 View revenue statistics and product reviews  
 - 💬 Join or create chat groups by topics *(e.g., “Korean Cosmetics,” “Affordable Electronics”)*  
 
----
-
-### 👤 **Buyer (Customer)**
+### 👤 Buyer (Customer)
 - 🔍 Browse and search products, add to cart, place orders  
 - ⭐ Review products after purchase  
 - 💬 Participate in chat groups, ask questions, share comments, invite friends to shop together  
 
 ---
 
+## 3️⃣ Main Features
 
-## 3️⃣ Main Features  
-
-### 🛒 Ordering  
+### 🛒 Ordering
 - 🛍 **Shopping cart**: add, edit, remove products  
 - 💳 Place orders and make payments *(simulate VNPay)*  
 
+### 💬 Chatbox
+- 📢 **Group chat by topic**: users can join or create chat groups (e.g., Cosmetics, Electronics)  
+- 🔄 **Realtime messaging**: powered by WebSocket / STOMP  
+- 🛍 **Product sharing in chat**: click product link in chat to open product detail page  
+- 👥 **Community shopping**: discuss, recommend products, and invite friends  
+
 ---
 
-## 📸 Demo Screenshots  
+## 📸 Program Screenshots
 
-### 🏠 Homepage  
+### 🏠 Homepage
 ![Homepage](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/homepage.png)  
 
-### 📄 Product Detail  
+### 📄 Product Detail
 ![Product Detail](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/productdetail.png)  
 
-### 📦 Order Page  
+### 📦 Order Page
 ![Order Page](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/order.png)  
+
+### 💬 Chatbox
+![Chatbox](https://github.com/ThanhChung1107/PBL3-LTUD/blob/MegaMart_scp/chatbox.png)  
