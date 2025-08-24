@@ -41,8 +41,9 @@ The system consists of **three main layers**:
 - 💬 Participate in chat groups, ask questions, share comments, invite friends to shop together  
 
 ---
-# Cấu trúc thư mục dự án MegarMart (Spring Boot)
+## MegarMart Project Directory Structure
 
+```  
 src
 └── main
 ├── java/com/ProjectPBL3/MegarMart
@@ -141,6 +142,9 @@ src
 ├── SignUp_SignIn/
 ├── User/
 └── fragments/
+```  
+
+
 ## 3️⃣ Main Features
 
 ### 🛒 Ordering
