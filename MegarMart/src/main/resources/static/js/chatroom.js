@@ -95,74 +95,28 @@ document.getElementById('groupAvatar').addEventListener('change', function(e) {
             closeProductModal();
         }
 
-//        function loadChatMessages(chatId) {
-//            const messagesContainer = document.getElementById('messages');
-//            messagesContainer.innerHTML = '';
-//
-//            // Sample messages for different chats
-//            const chatMessages = {
-//                '1': [
-//                    {type: 'received', avatar: 'M', message: 'Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?'},
-//                    {type: 'sent', avatar: 'B', message: 'Mình biết một shop rất tốt, để mình share sản phẩm nhé!'},
-//                    {type: 'product', avatar: 'M', product: {name: 'iPhone 15 Pro Max 256GB', price: '29.990.000₫', emoji: '📱'}},
-//                    {type: 'received', avatar: 'L', message: 'Wow giá tốt đấy! Shop này ở đâu vậy?'},
-//                    {type: 'sent', avatar: 'B', message: 'Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng'}
-//                ],
-//                '2': [
-//                    {type: 'received', avatar: 'T', message: 'Ai có laptop gaming tầm 30 triệu không?'},
-//                    {type: 'received', avatar: 'N', message: 'Mình có ASUS ROG mới, còn bảo hành'},
-//                    {type: 'product', avatar: 'N', product: {name: 'Gaming Laptop ASUS', price: '35.990.000₫', emoji: '🎮'}}
-//                ],
-//                '3': [
-//                    {type: 'received', avatar: 'A', message: 'Bạn có máy ảnh Canon không?'},
-//                    {type: 'sent', avatar: 'B', message: 'Có nhiều loại, bạn cần tầm giá nào?'},
-//                    {type: 'received', avatar: 'A', message: 'Khoảng 50-80 triệu'},
-//                    {type: 'product', avatar: 'B', product: {name: 'Canon EOS R5', price: '89.990.000₫', emoji: '📷'}}
-//                ],
-//                '4': [
-//                    {type: 'received', avatar: 'H', message: 'Sale 50% toàn bộ áo khoác!'},
-//                    {type: 'received', avatar: 'K', message: 'Có size L không shop?'},
-//                    {type: 'sent', avatar: 'B', message: 'Còn nhiều size, inbox shop nhé!'}
-//                ]
-//            };
-//
-//            const messages = chatMessages[chatId] || [];
-//            messages.forEach(msg => {
-//                const messageDiv = document.createElement('div');
-//                messageDiv.className = `message ${msg.type === 'sent' ? 'sent' : 'received'}`;
-//
-//                if (msg.type === 'product') {
-//                    messageDiv.innerHTML = `
-//                        <div class="message-avatar">${msg.avatar}</div>
-//                        <div class="message-bubble product-message">
-//                            <div class="product-card">
-//                                <div class="product-image">${msg.product.emoji}</div>
-//                                <div class="product-info">
-//                                    <div class="product-name">${msg.product.name}</div>
-//                                    <div class="product-price">${msg.product.price}</div>
-//                                    <div class="product-description">Sản phẩm chất lượng cao, giá cả phải chăng</div>
-//                                    <div class="product-actions">
-//                                        <button class="product-btn view-btn">Xem chi tiết</button>
-//                                        <button class="product-btn buy-btn">Mua ngay</button>
-//                                    </div>
-//                                </div>
-//                            </div>
-//                        </div>
-//                    `;
-//                } else {
-//                    messageDiv.innerHTML = `
-//                        ${msg.type === 'sent' ? '' : `<div class="message-avatar">${msg.avatar}</div>`}
-//                        <div class="message-bubble">${msg.message}</div>
-//                        ${msg.type === 'sent' ? `<div class="message-avatar">${msg.avatar}</div>` : ''}
-//                    `;
-//                }
-//
-//                messagesContainer.appendChild(messageDiv);
-//            });
-//
-//            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-//        }
+function showGroupDetail() {
+    const modal = document.getElementById("groupDetailModal");
+    if (modal) {
+      modal.style.display = "block";
+    }
+  }
 
+  // Đóng modal (nếu chưa có)
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  // Đóng modal khi bấm ra ngoài vùng nội dung
+  window.onclick = function(event) {
+    const modal = document.getElementById("groupDetailModal");
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  }
 
 //===========================================
    // WebSocket Connection
