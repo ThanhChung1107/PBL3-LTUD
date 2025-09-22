@@ -1,8 +1,13 @@
 package com.ProjectPBL3.MegarMart.Service;
 
+import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Entity.Message;
 import com.ProjectPBL3.MegarMart.Entity.ChatGroup;
+import com.ProjectPBL3.MegarMart.Entity.SharedProduct;
+import com.ProjectPBL3.MegarMart.Repository.AccountRepository;
+import com.ProjectPBL3.MegarMart.Repository.ChatGroupRepository;
 import com.ProjectPBL3.MegarMart.Repository.MessageRepository;
+import com.ProjectPBL3.MegarMart.Repository.SharedProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,7 +27,10 @@ import java.util.Optional;
 public class MessageService {
 
     @Autowired
-    private MessageRepository messageRepository;
+    private static MessageRepository messageRepository;
+    private static AccountRepository accountRepository;
+    private static ChatGroupRepository groupRepository;
+    private static SharedProductRepository sharedProductRepository;
 
     /**
      * Lưu tin nhắn mới
@@ -42,10 +52,41 @@ public class MessageService {
     /**
      * Lấy tất cả tin nhắn của một nhóm, sắp xếp theo thời gian tạo
      */
-    public List<Message> getMessagesByGroup(ChatGroup group) {
-        return messageRepository.findByGroupOrderByCreatedAtAsc(group);
+    public List<Message> getMessagesByGroup(Long groupId) {
+        return messageRepository.findByGroupIdOrderByCreatedAtAsc(groupId);
     }
+    @Transactional
+    public static Message shareProduct(Long groupId, Long senderId, SharedProduct productData) {
+        ChatGroup group = groupRepository.findById(Math.toIntExact(groupId))
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        Account sender = accountRepository.findById(Math.toIntExact(senderId))
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
 
+        Message message = new Message();
+        message.setGroup(group);
+        message.setSender(sender);
+        message.setSenderName(sender.getUsername());
+        message.setSenderAvatar(sender.getImageurl());
+        message.setType(Message.MessageType.PRODUCT_SHARE);
+        message.setCreatedAt(LocalDateTime.now());
+
+        // Lưu trước message
+        Message savedMessage = messageRepository.save(message);
+
+        // Tạo SharedProduct gắn vào message
+        SharedProduct sharedProduct = SharedProduct.builder()
+                .message(savedMessage)
+                .productId(productData.getProductId())
+                .productName(productData.getProductName())
+                .productImage(productData.getProductImage())
+                .productPrice(productData.getProductPrice())
+                .sharedBy(sender)
+                .build();
+
+        savedMessage.setSharedProduct(sharedProductRepository.save(sharedProduct));
+
+        return savedMessage;
+    }
     /**
      * Lấy tin nhắn của nhóm theo ID
      */

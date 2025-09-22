@@ -2,6 +2,7 @@ package com.ProjectPBL3.MegarMart.Controller;
 
 import com.ProjectPBL3.MegarMart.Entity.*;
 import com.ProjectPBL3.MegarMart.PaymentConfig.VNPAYService;
+import com.ProjectPBL3.MegarMart.Repository.MessageRepository;
 import com.ProjectPBL3.MegarMart.Service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,6 +45,8 @@ public class UserController {
     private final EmailService emailService;
 
     private final ChatGroupService groupService;
+    private final MessageService messageService;
+    private final MessageRepository messageRepository;
 
     @GetMapping("/home")
     public String userhome(Model model, HttpSession session, @Param("keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer page)
@@ -161,13 +164,16 @@ public class UserController {
     }
 
     @GetMapping("/productdetail/{id}")
-    public String productdetail(@PathVariable int id,Model model){
+    public String productdetail(@PathVariable int id,Model model, HttpSession session){
+        Account account = (Account) session.getAttribute("account");
         Product product = productService.findById(id);
+        List<ChatGroup> groups = groupService.getGroupsByUser(account.getId());
         model.addAttribute("pro",product);
         List<ReviewProduct> reviews = this.reviewProductService.findByProductId(id);
         model.addAttribute("product",product);
         model.addAttribute("listreview",reviews);
         model.addAttribute("reviewCount",reviews.size());
+        model.addAttribute("groups", groups);
         int productCount = productService.countByShopId(product.getShop().getId());
         model.addAttribute("productcount", productCount);
         return "User/productdetail";
@@ -525,35 +531,49 @@ public class UserController {
         // Lấy danh sách nhóm của user
         List<ChatGroup> userGroups = groupService.getGroupsByUser(account.getId());
 
-//        userGroups.forEach(g -> System.out.println(g.getGroupname()));
-
-        // Lấy tin nhắn gần nhất cho mỗi nhóm (tuỳ chọn)
-//        Map<Integer, String> lastMessages = groupService.getLastMessagesForGroups(userGroups);
+        Map<Long, Message> lastMessages = new HashMap<>();
+        for (ChatGroup group : userGroups) {
+            Message lastMsg = messageRepository.findTop1ByGroupIdOrderByCreatedAtDesc(group.getId());
+            lastMessages.put(group.getId(), lastMsg);
+        }
 
         model.addAttribute("groups", userGroups);
-        model.addAttribute("selectedGroupId",null);
+        model.addAttribute("lastMessages", lastMessages);
+        model.addAttribute("selectedGroupId", null);
         model.addAttribute("selectedGroup", null);
-//        model.addAttribute("lastMessages", lastMessages);
 
 //        model.addAttribute("currentUserId", account.getId());
         return "User/chatroom";
     }
 
     @GetMapping("/chat/group/{id}")
-    public String groupInfo(@PathVariable Integer id, Model model, HttpSession session){
-        Account account =(Account) session.getAttribute("account");
+    public String groupInfo(@PathVariable Integer id, Model model, HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
         List<ChatGroup> groups = groupService.getGroupsByUser(account.getId());
         ChatGroup selectedGroup = groupService.findById(id).orElse(null);
 
+        // Lấy danh sách tin nhắn
+        List<Message> messages = messageService.getMessagesByGroup(Long.valueOf(id));
+
+        // ✅ THÊM PHẦN NÀY - tạo lastMessages Map
+        Map<Long, Message> lastMessages = new HashMap<>();
+        for (ChatGroup group : groups) {
+            Message lastMsg = messageRepository.findTop1ByGroupIdOrderByCreatedAtDesc(group.getId());
+            lastMessages.put(group.getId(), lastMsg);
+        }
+
         model.addAttribute("groups", groups);
+        model.addAttribute("lastMessages", lastMessages); // ✅ THÊM dòng này
         model.addAttribute("selectedGroupId", id);
         model.addAttribute("selectedGroup", selectedGroup);
         model.addAttribute("memberCount", groupService.getMemberCount(Long.valueOf(id)));
+        model.addAttribute("messages", messages);
 
         return "User/chatroom";
     }
 
-//tham gia nhóm
+
+    //tham gia nhóm
 @PostMapping("/join")
 @ResponseBody
 @Transactional
@@ -597,4 +617,25 @@ public ResponseEntity<?> joinGroup(
                 .body(Map.of("success", false, "message", "Lỗi hệ thống"));
     }
 }
+
+    // API load danh sách group cho modal
+    @GetMapping("/share/groups")
+    @ResponseBody
+    public List<Map<String, Object>> getGroupsForShare(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+        if (account == null) {
+            return Collections.emptyList();
+        }
+
+        List<ChatGroup> groups = groupService.getGroupsByUser(account.getId());
+
+        // Trả về JSON gọn gàng
+        return groups.stream().map(g -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", g.getId());
+            map.put("name", g.getGroupname());
+            map.put("avatar", g.getGroupavt());
+            return map;
+        }).toList();
+    }
 }

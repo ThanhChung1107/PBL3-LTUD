@@ -79,6 +79,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("SELECT m FROM Message m WHERE m.group.id = :groupId ORDER BY m.createdAt DESC")
     List<Message> findTopByGroupIdOrderByCreatedAtDesc(@Param("groupId") Long groupId);
 
+    Message findTop1ByGroupIdOrderByCreatedAtDesc(Long groupId);
     /**
      * Tìm tin nhắn theo người gửi và nhóm
      */

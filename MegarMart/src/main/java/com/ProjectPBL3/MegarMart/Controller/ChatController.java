@@ -4,6 +4,7 @@ import com.ProjectPBL3.MegarMart.Entity.Message;
 import com.ProjectPBL3.MegarMart.Entity.Message.MessageType;
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Entity.ChatGroup;
+import com.ProjectPBL3.MegarMart.Entity.SharedProduct;
 import com.ProjectPBL3.MegarMart.Service.MessageService;
 import com.ProjectPBL3.MegarMart.Service.AccountService;
 import com.ProjectPBL3.MegarMart.Service.ChatGroupService;
@@ -121,24 +122,26 @@ public class ChatController {
 
     @MessageMapping("/chat/{groupId}/shareProduct")
     @SendTo("/topic/group/{groupId}")
-    public Message shareProduct(@DestinationVariable String groupId, @Payload Map<String, Object> payload) {
+    public Message shareProduct(
+            @DestinationVariable Long groupId,
+            @Payload Map<String, Object> payload) {
+
         try {
-            String senderName = (String) payload.get("senderName");
-            @SuppressWarnings("unchecked")
-            Map<String, Object> productData = (Map<String, Object>) payload.get("product");
+            Long senderId = Long.parseLong(payload.get("senderId").toString());
 
-            Message message = new Message();
-            message.setSenderName(senderName);
-            message.setType(MessageType.PRODUCT_SHARE);
-            message.setCreatedAt(LocalDateTime.now());
+            Map<String, Object> productMap = (Map<String, Object>) payload.get("product");
 
-            // Xử lý thông tin sản phẩm
-            // Có thể tạo SharedProduct object và gắn vào message
+            SharedProduct product = SharedProduct.builder()
+                    .productId(Long.parseLong(productMap.get("id").toString()))
+                    .productName((String) productMap.get("name"))
+                    .productImage((String) productMap.get("imageUrl"))
+                    .productPrice(Double.parseDouble(productMap.get("price").toString()))
+                    .build();
 
-            return message;
+            return MessageService.shareProduct(groupId, senderId, product);
 
         } catch (Exception e) {
-            System.err.println("Error processing product share: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }

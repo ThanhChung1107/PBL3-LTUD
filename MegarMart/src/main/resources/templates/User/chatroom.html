@@ -37,35 +37,37 @@
       </div>
     </div>
     <!-- chat-room.html -->
-      <div class="chat-list">
-          <!-- Vòng lặp qua các nhóm -->
-          <a th:each="group : ${groups}"
-             th:href="@{/user/chat/group/{id}(id=${group.id})}"
-             class="chat-item-link"
-             th:classappend="${group.id == selectedGroupId} ? 'active-link' : ''">
+    <div class="chat-list">
+      <a th:each="group : ${groups}"
+         th:href="@{/user/chat/group/{id}(id=${group.id})}"
+         class="chat-item-link"
+         th:classappend="${group.id == selectedGroupId} ? 'active-link' : ''">
 
-              <div class="chat-item"
-                   th:classappend="${group.id == selectedGroupId} ? 'active-chat' : ''"
-                   th:data-chat="${group.id}">
+        <div class="chat-item"
+             th:classappend="${group.id == selectedGroupId} ? 'active-chat' : ''"
+             th:data-chat="${group.id}">
 
-                  <!-- Avatar nhóm -->
-                  <div class="chat-avatar">
-                      <img th:if="${group.groupavt != null}"
-                           th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
-                           alt="Group avatar">
-                      <span th:unless="${group.groupavt != null}">👥</span>
-                  </div>
+          <div class="chat-avatar">
+            <img th:if="${group.groupavt != null}"
+                 th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
+                 alt="Group avatar">
+            <span th:unless="${group.groupavt != null}">👥</span>
+          </div>
 
-                  <!-- Thông tin nhóm -->
-                  <div class="chat-info">
-                      <div class="chat-name" th:text="${group.groupname}">Tên nhóm</div>
-                  </div>
+          <div class="chat-info">
+            <div class="chat-name" th:text="${group.groupname}">Tên nhóm</div>
+            <div class="chat-last-msg"
+                 th:text="${lastMessages[group.id] != null ? lastMessages[group.id].content : 'Chưa có tin nhắn'}">
+            </div>
+          </div>
 
-                  <!-- Thời gian (cần thêm logic tính toán) -->
-                  <div class="chat-time">2 phút</div>
-              </div>
-          </a>
-      </div>
+          <div class="chat-time"
+               th:text="${lastMessages[group.id] != null ? #temporals.format(lastMessages[group.id].createdAt, 'HH:mm') : ''}">
+          </div>
+        </div>
+      </a>
+    </div>
+
     <div class="sidebar-footer">
       <a th:href="@{/user/home}" class="btn-home">
         <i class='bx bx-home'></i>
@@ -109,46 +111,75 @@
       </div>
     </div>
 
+<!--    <div class="messages-container" id="messages">-->
+<!--      <div class="message received">-->
+<!--        <div class="message-avatar">M</div>-->
+<!--        <div class="message-bubble">Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?</div>-->
+<!--      </div>-->
+
+<!--      <div class="message sent">-->
+<!--        <div class="message-bubble">Mình biết một shop rất tốt, để mình share sản phẩm nhé!</div>-->
+<!--        <div class="message-avatar">B</div>-->
+<!--      </div>-->
+
+<!--      <div class="message received">-->
+<!--        <div class="message-avatar">M</div>-->
+<!--        <div class="message-bubble product-message">-->
+<!--          <div class="product-card">-->
+<!--            <div class="product-image"><img src="assets/img/logoshop.webp" alt=""></div>-->
+<!--            <div class="product-info">-->
+<!--              <div class="product-name">iPhone 15 Pro Max 256GB</div>-->
+<!--              <div class="product-price">29.990.000₫</div>-->
+<!--              <div class="product-description">Màn hình 6.7", Camera 48MP, Chip A17 Pro</div>-->
+<!--              <div class="product-actions">-->
+<!--                <a href="detail.html" class="product-btn view-btn">Xem chi tiết</a>-->
+
+<!--              </div>-->
+
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="message received">-->
+<!--        <div class="message-avatar">L</div>-->
+<!--        <div class="message-bubble">Wow giá tốt đấy! Shop này ở đâu vậy?</div>-->
+<!--      </div>-->
+
+<!--      <div class="message sent">-->
+<!--        <div class="message-bubble">Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng</div>-->
+<!--        <div class="message-avatar">B</div>-->
+<!--      </div>-->
+<!--    </div>-->
     <div class="messages-container" id="messages">
-      <div class="message received">
-        <div class="message-avatar">M</div>
-        <div class="message-bubble">Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?</div>
-      </div>
+      <th:block th:each="msg : ${messages}">
+        <div th:class="'message ' + (${msg.sender.username} == ${session.account.username} ? 'sent' : 'received')">
 
-      <div class="message sent">
-        <div class="message-bubble">Mình biết một shop rất tốt, để mình share sản phẩm nhé!</div>
-        <div class="message-avatar">B</div>
-      </div>
-
-      <div class="message received">
-        <div class="message-avatar">M</div>
-        <div class="message-bubble product-message">
-          <div class="product-card">
-            <div class="product-image"><img src="assets/img/logoshop.webp" alt=""></div>
-            <div class="product-info">
-              <div class="product-name">iPhone 15 Pro Max 256GB</div>
-              <div class="product-price">29.990.000₫</div>
-              <div class="product-description">Màn hình 6.7", Camera 48MP, Chip A17 Pro</div>
-              <div class="product-actions">
-                <a href="detail.html" class="product-btn view-btn">Xem chi tiết</a>
-
-              </div>
-
+          <!-- Nếu là của tôi thì bubble trước avatar -->
+          <th:block th:if="${msg.sender.username} == ${session.account.username}">
+            <div class="message-bubble" th:text="${msg.content}"></div>
+            <div class="message-avatar">
+              <img th:src="@{'/img/' + ${msg.sender.imageurl}}" alt="Avatar">
             </div>
-          </div>
+          </th:block>
+
+          <!-- Nếu là người khác thì avatar trước bubble -->
+          <th:block th:unless="${msg.sender.username} == ${session.account.username}">
+            <div class="message-avatar">
+              <img th:src="@{'/img/' + ${msg.sender.imageurl}}" alt="Avatar">
+            </div>
+            <div class="message-bubble" th:text="${msg.content}"></div>
+          </th:block>
+
         </div>
-      </div>
-
-      <div class="message received">
-        <div class="message-avatar">L</div>
-        <div class="message-bubble">Wow giá tốt đấy! Shop này ở đâu vậy?</div>
-      </div>
-
-      <div class="message sent">
-        <div class="message-bubble">Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng</div>
-        <div class="message-avatar">B</div>
-      </div>
+      </th:block>
     </div>
+    <script>
+      window.onload = function() {
+          const messagesContainer = document.getElementById("messages");
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    </script>
 
     <input type="hidden" id="username" th:value="${session.account.username}">
     <input type="hidden" id="useravatar" th:value="${session.account.imageurl}">
@@ -181,46 +212,7 @@
 </div>
 
 <!-- Product Share Modal -->
-<div class="modal" id="productModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div class="modal-title">Chọn sản phẩm để chia sẻ</div>
-      <button class="close-btn" onclick="closeProductModal()">&times;</button>
-    </div>
-    <div class="product-grid">
-      <div class="product-item" onclick="shareProduct('iPhone 15 Pro Max', '29.990.000₫', '📱')">
-        <div class="product-item-image">📱</div>
-        <div class="product-item-name">iPhone 15 Pro Max</div>
-        <div class="product-item-price">29.990.000₫</div>
-      </div>
-      <div class="product-item" onclick="shareProduct('MacBook Pro M3', '52.990.000₫', '💻')">
-        <div class="product-item-image">💻</div>
-        <div class="product-item-name">MacBook Pro M3</div>
-        <div class="product-item-price">52.990.000₫</div>
-      </div>
-      <div class="product-item" onclick="shareProduct('AirPods Pro', '6.990.000₫', '🎧')">
-        <div class="product-item-image">🎧</div>
-        <div class="product-item-name">AirPods Pro</div>
-        <div class="product-item-price">6.990.000₫</div>
-      </div>
-      <div class="product-item" onclick="shareProduct('Samsung Galaxy S24', '22.990.000₫', '📱')">
-        <div class="product-item-image">📱</div>
-        <div class="product-item-name">Samsung Galaxy S24</div>
-        <div class="product-item-price">22.990.000₫</div>
-      </div>
-      <div class="product-item" onclick="shareProduct('Gaming Laptop ASUS', '35.990.000₫', '🎮')">
-        <div class="product-item-image">🎮</div>
-        <div class="product-item-name">Gaming Laptop ASUS</div>
-        <div class="product-item-price">35.990.000₫</div>
-      </div>
-      <div class="product-item" onclick="shareProduct('Canon EOS R5', '89.990.000₫', '📷')">
-        <div class="product-item-image">📷</div>
-        <div class="product-item-name">Canon EOS R5</div>
-        <div class="product-item-price">89.990.000₫</div>
-      </div>
-    </div>
-  </div>
-</div>
+
 <form action="/user/create-group" method="post" enctype="multipart/form-data">
   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
   <div class="group-modal" id="createGroupModal">

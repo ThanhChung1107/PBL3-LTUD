@@ -104,6 +104,7 @@
                       <input type="submit" value="Thêm vào giỏ hàng">
                       </div>
                   </form>
+                  <button class="btn-share" id="btn-share" onclick="openModal()">Chia sẻ</button>
               </div>
 
             </div>
@@ -239,7 +240,123 @@
             </div>
         </div>
     </div>
+    <div class="share-modal" id="shareModal">
+        <div class="share-container">
+            <div class="share-header">
+                <h3 class="share-title">Chia sẻ sản phẩm</h3>
+                <button class="close-button" id="closeButton">&times;</button>
+            </div>
+
+            <div class="groups-container" id="groupsContainer">
+                <!-- Danh sách nhóm được đưa lên HTML -->
+                <div th:each="group : ${groups}">
+                    <div class="group-item" th:data-chat="${group.id}">
+                        <div class="group-avatar">
+                            <img th:if="${group.groupavt != null}"
+                                 th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
+                                 alt="Group avatar">
+                            <span th:unless="${group.groupavt != null}">👥</span>
+                        </div>
+                        <span class="group-name" th:text="${group.groupname}">Nhóm mua sắm chung</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-container" id="messageContainer">
+                <textarea class="message-input" placeholder="Nhập nội dung chia sẻ..."></textarea>
+                <button class="send-button" id="sendButton">Gửi</button>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </div>
     <script th:src="@{/js/script.js}"></script>
+    <script>
+        const shareButton = document.getElementById('btn-share');
+        const shareModal = document.getElementById('shareModal');
+        const closeButton = document.getElementById('closeButton');
+        const groupsContainer = document.getElementById('groupsContainer');
+        const messageContainer = document.getElementById('messageContainer');
+        const sendButton = document.getElementById('sendButton');
+        const messageInput = document.querySelector('.message-input');
+        const groupItems = document.querySelectorAll('.group-item');
+
+        let selectedGroupId = null;
+
+        // Hiển thị modal khi click nút chia sẻ
+        shareButton.addEventListener('click', () => {
+            shareModal.style.display = 'flex';
+        });
+
+        // Ẩn modal khi click nút đóng
+        closeButton.addEventListener('click', () => {
+            shareModal.style.display = 'none';
+            resetShareModal();
+        });
+
+        // Ẩn modal khi click bên ngoài
+        shareModal.addEventListener('click', (e) => {
+            if (e.target === shareModal) {
+                shareModal.style.display = 'none';
+                resetShareModal();
+            }
+        });
+
+        // Gửi tin nhắn khi click nút gửi
+        sendButton.addEventListener('click', sendMessage);
+
+        // Gửi tin nhắn khi nhấn Enter
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Ngăn không xuống dòng
+                sendMessage();
+            }
+        });
+
+        // Hàm gửi tin nhắn
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message && selectedGroupId) {
+                // Ở đây có thể thêm code gửi dữ liệu thực tế đến server
+                console.log(`Gửi "${message}" đến nhóm ${selectedGroupId}`);
+
+                // Tự động đóng modal
+                shareModal.style.display = 'none';
+                resetShareModal();
+            }
+        }
+
+        // Thêm sự kiện click cho từng nhóm
+        groupItems.forEach(group => {
+            group.addEventListener('click', () => {
+                // Xóa class selected từ tất cả các nhóm
+                groupItems.forEach(item => {
+                    item.classList.remove('selected');
+                });
+
+                // Thêm class selected cho nhóm được chọn
+                group.classList.add('selected');
+
+                // Lưu id nhóm được chọn
+                selectedGroupId = group.dataset.groupId;
+
+                // Hiển thị ô nhập nội dung
+                messageContainer.style.display = 'block';
+
+                // Tự động focus vào ô nhập tin nhắn
+                messageInput.focus();
+            });
+        });
+
+        // Reset modal về trạng thái ban đầu
+        function resetShareModal() {
+            selectedGroupId = null;
+            messageInput.value = '';
+            messageContainer.style.display = 'none';
+            groupItems.forEach(item => {
+                item.classList.remove('selected');
+            });
+        }
+    </script>
   <!-- footer -->
   <div th:replace="fragments/footer.html :: footer"></div>
 </div>

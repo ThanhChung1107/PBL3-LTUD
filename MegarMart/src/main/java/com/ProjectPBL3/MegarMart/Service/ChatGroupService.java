@@ -3,18 +3,18 @@ package com.ProjectPBL3.MegarMart.Service;
 import com.ProjectPBL3.MegarMart.Entity.Account;
 import com.ProjectPBL3.MegarMart.Entity.ChatGroup;
 import com.ProjectPBL3.MegarMart.Entity.GroupMember;
+import com.ProjectPBL3.MegarMart.Entity.Message;
 import com.ProjectPBL3.MegarMart.Repository.AccountRepository;
 import com.ProjectPBL3.MegarMart.Repository.ChatGroupRepository;
 import com.ProjectPBL3.MegarMart.Repository.GroupMemberRepository;
+import com.ProjectPBL3.MegarMart.Repository.MessageRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +24,7 @@ public class ChatGroupService {
     private final AccountRepository accountRepository;
     private final GroupMemberRepository memberRepository;
     private final FileSystemStorageService storageService;
+    private final MessageRepository messageRepository;
 
     private String generateGroupCode() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -111,4 +112,19 @@ public class ChatGroupService {
 //                                .orElse("Chưa có tin nhắn")
 //                ));
 //    }
+public Map<Long, Message> getLastMessagesForGroups(List<ChatGroup> groups) {
+    Map<Long, Message> lastMessages = new HashMap<>();
+
+    for (ChatGroup group : groups) {
+        List<Message> messages = messageRepository.findTopByGroupOrderByCreatedAtDesc(group);
+
+        if (messages != null && !messages.isEmpty()) {
+            lastMessages.put(group.getId(), messages.get(0)); // lấy tin nhắn mới nhất
+        } else {
+            lastMessages.put(group.getId(), null); // chưa có tin nhắn
+        }
+    }
+
+    return lastMessages;
+}
 }

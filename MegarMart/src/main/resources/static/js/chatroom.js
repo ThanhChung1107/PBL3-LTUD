@@ -228,26 +228,31 @@ function showGroupDetail() {
        const messageDiv = document.createElement('div');
        const isSentByMe = message.senderName === currentUser;
 
+       const avatar = message.senderAvatar
+           ? '/img/' + message.senderAvatar
+           : message.senderName.charAt(0);
+
        messageDiv.className = `message ${isSentByMe ? 'sent' : 'received'}`;
 
        if (isSentByMe) {
            messageDiv.innerHTML = `
                <div class="message-bubble">${message.content}</div>
                <div class="message-avatar">
-                   <img src="${'/img/' + message.senderAvatar || message.senderName.charAt(0)}" alt="Avatar">
+                   <img src="${avatar}" alt="Avatar">
                </div>
            `;
        } else {
            messageDiv.innerHTML = `
-               <div class="message-avatar">${message.senderAvatar}</div>
                <div class="message-avatar">
-                   <img src="${'/img/' + message.senderAvatar || message.senderName.charAt(0)}" alt="Avatar">
-              </div>
+                   <img src="${avatar}" alt="Avatar">
+               </div>
+               <div class="message-bubble">${message.content}</div>
            `;
        }
 
        return messageDiv;
    }
+
 
    function createSystemMessage(message) {
        const messageDiv = document.createElement('div');
@@ -331,3 +336,15 @@ function showGroupDetail() {
    socket.onclose = function() {
        console.log('WebSocket connection closed');
    };
+    function shareProductToGroup(groupId, product) {
+        const senderId = document.getElementById("userId").value;
+
+        stompClient.send(
+            `/app/chat/${groupId}/shareProduct`,
+            {},
+            JSON.stringify({
+                senderId: senderId,
+                product: product
+            })
+        );
+    }
