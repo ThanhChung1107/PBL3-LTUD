@@ -207,7 +207,12 @@
             font-size: 14px;
             line-height: 1.4;
         }
-
+        .sender-name {
+            display: block;
+            font-size: 0.75rem;
+            color: #555;
+            margin-bottom: 2px;
+        }
         .message.received .message-bubble {
             background: #e4e6ea;
             color: #050505;
@@ -1012,4 +1017,87 @@
 
 .btn-home i {
   font-size: 20px;
+}
+/* ====== PRODUCT MESSAGE ====== */
+.shared-product {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f9f9f9;
+  border: 1px solid #e6e6e6;
+  max-width: 300px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.shared-product:hover {
+  transform: translateY(-2px);
+}
+
+.shared-product .product-thumb {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.shared-product .product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.shared-product .product-info div {
+  margin-bottom: 4px;
+}
+
+.shared-product .product-info .shared-product-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.2;
+}
+
+.shared-product .product-info .shared-product-price {
+  font-weight: 700;
+  font-size: 14px;
+  color: #e63946; /* đỏ nổi bật */
+}
+
+.shared-product .product-info .product-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+}
+
+.shared-product .product-btn {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.shared-product .view-btn {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.shared-product .view-btn:hover {
+  background: #ddd;
+}
+
+.shared-product .buy-btn {
+  background: #4caf50;
+  color: #fff;
+}
+
+.shared-product .buy-btn:hover {
+  background: #45a049;
 }

@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -104,7 +106,12 @@
                       <input type="submit" value="Thêm vào giỏ hàng">
                       </div>
                   </form>
-                  <button class="btn-share" id="btn-share" onclick="openModal()">Chia sẻ</button>
+                  <input type="hidden" id="productId" th:value="${pro.id}" />
+                  <input type="hidden" id="productName" th:value="${pro.name}" />
+                  <input type="hidden" id="productImage" th:value="@{/img/{imgfile}(imgfile=${pro.imageurl})}" />
+                  <input type="hidden" id="productPrice" th:value="${pro.price}" />
+                  <input type="hidden" id="currentUserId" th:value="${session.account.id}" />
+                  <button class="btn-share" id="btn-share">Chia sẻ</button>
               </div>
 
             </div>
@@ -250,14 +257,14 @@
             <div class="groups-container" id="groupsContainer">
                 <!-- Danh sách nhóm được đưa lên HTML -->
                 <div th:each="group : ${groups}">
-                    <div class="group-item" th:data-chat="${group.id}">
+                    <div class="group-item" th:attr="data-group-id=${group.id}">
                         <div class="group-avatar">
                             <img th:if="${group.groupavt != null}"
-                                 th:src="@{/img/{imgfile}(imgfile = ${group.groupavt})}"
+                                 th:src="@{/img/{imgfile}(imgfile=${group.groupavt})}"
                                  alt="Group avatar">
                             <span th:unless="${group.groupavt != null}">👥</span>
                         </div>
-                        <span class="group-name" th:text="${group.groupname}">Nhóm mua sắm chung</span>
+                        <span class="group-name" th:text="${group.groupname}">Nhóm</span>
                     </div>
                 </div>
             </div>
@@ -278,86 +285,141 @@
         const messageContainer = document.getElementById('messageContainer');
         const sendButton = document.getElementById('sendButton');
         const messageInput = document.querySelector('.message-input');
-        const groupItems = document.querySelectorAll('.group-item');
+        let stompClient = null;
 
-        let selectedGroupId = null;
+        function connectWebsocket() {
+          const socket = new SockJS("/chat-websocket");
+          stompClient = Stomp.over(socket);
 
-        // Hiển thị modal khi click nút chia sẻ
-        shareButton.addEventListener('click', () => {
-            shareModal.style.display = 'flex';
-        });
-
-        // Ẩn modal khi click nút đóng
-        closeButton.addEventListener('click', () => {
-            shareModal.style.display = 'none';
-            resetShareModal();
-        });
-
-        // Ẩn modal khi click bên ngoài
-        shareModal.addEventListener('click', (e) => {
-            if (e.target === shareModal) {
-                shareModal.style.display = 'none';
-                resetShareModal();
-            }
-        });
-
-        // Gửi tin nhắn khi click nút gửi
-        sendButton.addEventListener('click', sendMessage);
-
-        // Gửi tin nhắn khi nhấn Enter
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Ngăn không xuống dòng
-                sendMessage();
-            }
-        });
-
-        // Hàm gửi tin nhắn
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message && selectedGroupId) {
-                // Ở đây có thể thêm code gửi dữ liệu thực tế đến server
-                console.log(`Gửi "${message}" đến nhóm ${selectedGroupId}`);
-
-                // Tự động đóng modal
-                shareModal.style.display = 'none';
-                resetShareModal();
-            }
+          stompClient.connect({}, (frame) => {
+            console.log("✅ STOMP connected:", frame);
+            stompClient.connected = true; // flag
+          }, (error) => {
+            console.error("❌ STOMP error:", error);
+          });
         }
 
-        // Thêm sự kiện click cho từng nhóm
-        groupItems.forEach(group => {
-            group.addEventListener('click', () => {
-                // Xóa class selected từ tất cả các nhóm
-                groupItems.forEach(item => {
-                    item.classList.remove('selected');
-                });
+        connectWebsocket();
 
-                // Thêm class selected cho nhóm được chọn
-                group.classList.add('selected');
+        // globals
+        window.selectedGroupId = null;
+        window.currentProduct = null;
+        window.currentUserId = document.getElementById('currentUserId') ? document.getElementById('currentUserId').value : null;
+        function selectGroup(groupId) {
+            window.selectedGroupId = groupId;
 
-                // Lưu id nhóm được chọn
-                selectedGroupId = group.dataset.groupId;
+            // Bỏ class selected của tất cả nhóm
+            document.querySelectorAll(".group-item").forEach(el =>
+                el.classList.remove("selected")
+            );
 
-                // Hiển thị ô nhập nội dung
-                messageContainer.style.display = 'block';
+            // Thêm class selected cho nhóm được chọn
+            const selected = document.querySelector(`.group-item[data-chat="${groupId}"]`);
+            if (selected) {
+                selected.classList.add("selected");
+            }
+            const messageContainer = document.getElementById("messageContainer");
+            if (messageContainer) {
+                messageContainer.style.display = "block";
+                document.querySelector(".message-input").focus();
+            }
+        }
+        // Bấm nút "Chia sẻ" -> thu product từ hidden inputs rồi open modal
+        shareButton.addEventListener('click', async () => {
+          const product = {
+            id: document.getElementById('productId') ? document.getElementById('productId').value : null,
+            name: document.getElementById('productName') ? document.getElementById('productName').value : document.querySelector('.product-info-name div')?.innerText?.trim(),
+            imageUrl: document.getElementById('productImage') ? document.getElementById('productImage').value : document.querySelector('.main-img')?.src,
+            price: document.getElementById('productPrice') ? document.getElementById('productPrice').value : document.querySelector('.product-info-price-current')?.innerText?.trim()
+          };
 
-                // Tự động focus vào ô nhập tin nhắn
-                messageInput.focus();
-            });
+          window.currentProduct = product;
+          // load và hiển thị modal + danh sách group
+          await openShareModal(product);
         });
 
-        // Reset modal về trạng thái ban đầu
+        // Hàm mở modal và load nhóm từ API
+        async function openShareModal(product) {
+          shareModal.style.display = 'flex';
+
+          const res = await fetch('/user/share/groups');
+          let groups;
+          try {
+            groups = await res.json();
+          } catch (e) {
+            console.error("Không parse được JSON:", e);
+            const text = await res.text();
+            console.error("Response text:", text);
+            alert("API /share/groups không trả về JSON. Kiểm tra controller.");
+            return;
+          }
+
+          console.log("Groups từ API:", groups);
+
+          // Nếu groups là object, lấy property bên trong
+          if (!Array.isArray(groups)) {
+            if (groups.groups && Array.isArray(groups.groups)) {
+              groups = groups.groups;  // lấy mảng bên trong
+            } else {
+              console.error("API không trả về mảng:", groups);
+              alert("API không trả về danh sách nhóm hợp lệ");
+              return;
+            }
+          }
+
+          groupsContainer.innerHTML = '';
+          groups.forEach(g => {
+            const item = document.createElement('div');
+            item.classList.add('group-item');
+            item.setAttribute('data-group-id', g.id);
+            item.innerHTML = `
+              <div class="group-avatar">${g.avatar ? `<img src="/img/${g.avatar}" alt="">` : '👥'}</div>
+              <span class="group-name">${g.name}</span>
+            `;
+            item.addEventListener('click', () => selectGroup(g.id, item));
+            groupsContainer.appendChild(item);
+          });
+
+          messageContainer.style.display = 'none';
+        }
+
+
+        // Gửi sản phẩm vào nhóm (qua STOMP)
+        sendButton.addEventListener('click', () => {
+          if (!stompClient || !stompClient.connected) {
+            alert("⚠️ STOMP chưa kết nối, không thể gửi.");
+            return;
+          }
+
+          const payload = {
+            senderId: window.currentUserId,
+            product: window.currentProduct,
+            content: messageInput.value.trim()
+          };
+
+          stompClient.send(`/app/chat/${window.selectedGroupId}/shareProduct`, {}, JSON.stringify(payload));
+          console.log("📤 Sent:", payload);
+          document.querySelector("#shareModal").style.display = "none";
+        });
+
+
         function resetShareModal() {
-            selectedGroupId = null;
-            messageInput.value = '';
-            messageContainer.style.display = 'none';
-            groupItems.forEach(item => {
-                item.classList.remove('selected');
-            });
+          window.selectedGroupId = null;
+          window.currentProduct = null;
+          messageInput.value = '';
+          messageContainer.style.display = 'none';
+          document.querySelectorAll('.group-item').forEach(el => el.classList.remove('selected'));
         }
+
+        // đóng modal (nút X và click ngoài)
+        closeButton.addEventListener('click', () => { shareModal.style.display = 'none'; resetShareModal(); });
+        shareModal.addEventListener('click', (e) => {
+          if (e.target === shareModal) { shareModal.style.display = 'none'; resetShareModal(); }
+        });
     </script>
-  <!-- footer -->
+
+
+    <!-- footer -->
   <div th:replace="fragments/footer.html :: footer"></div>
 </div>
 </body>

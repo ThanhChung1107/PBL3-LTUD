@@ -110,70 +110,78 @@
         </div>
       </div>
     </div>
-
-<!--    <div class="messages-container" id="messages">-->
-<!--      <div class="message received">-->
-<!--        <div class="message-avatar">M</div>-->
-<!--        <div class="message-bubble">Chào mọi người! Có ai biết shop nào bán iPhone 15 Pro uy tín không?</div>-->
-<!--      </div>-->
-
-<!--      <div class="message sent">-->
-<!--        <div class="message-bubble">Mình biết một shop rất tốt, để mình share sản phẩm nhé!</div>-->
-<!--        <div class="message-avatar">B</div>-->
-<!--      </div>-->
-
-<!--      <div class="message received">-->
-<!--        <div class="message-avatar">M</div>-->
-<!--        <div class="message-bubble product-message">-->
-<!--          <div class="product-card">-->
-<!--            <div class="product-image"><img src="assets/img/logoshop.webp" alt=""></div>-->
-<!--            <div class="product-info">-->
-<!--              <div class="product-name">iPhone 15 Pro Max 256GB</div>-->
-<!--              <div class="product-price">29.990.000₫</div>-->
-<!--              <div class="product-description">Màn hình 6.7", Camera 48MP, Chip A17 Pro</div>-->
-<!--              <div class="product-actions">-->
-<!--                <a href="detail.html" class="product-btn view-btn">Xem chi tiết</a>-->
-
-<!--              </div>-->
-
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--      <div class="message received">-->
-<!--        <div class="message-avatar">L</div>-->
-<!--        <div class="message-bubble">Wow giá tốt đấy! Shop này ở đâu vậy?</div>-->
-<!--      </div>-->
-
-<!--      <div class="message sent">-->
-<!--        <div class="message-bubble">Shop ở Hà Nội, ship toàn quốc. Bảo hành 12 tháng chính hãng</div>-->
-<!--        <div class="message-avatar">B</div>-->
-<!--      </div>-->
-<!--    </div>-->
     <div class="messages-container" id="messages">
       <th:block th:each="msg : ${messages}">
         <div th:class="'message ' + (${msg.sender.username} == ${session.account.username} ? 'sent' : 'received')">
 
-          <!-- Nếu là của tôi thì bubble trước avatar -->
+          <!-- Nếu là của tôi -->
           <th:block th:if="${msg.sender.username} == ${session.account.username}">
-            <div class="message-bubble" th:text="${msg.content}"></div>
+            <div class="message-bubble">
+              <!-- Nếu là text -->
+              <th:block th:if="${msg.type?.toString() == 'TEXT'}">
+                <span class="message-content" th:text="${msg.content}"></span>
+              </th:block>
+
+              <!-- Nếu là chia sẻ sản phẩm -->
+              <th:block th:if="${msg.type?.toString() == 'PRODUCT_SHARE'}">
+                <div class="shared-product">
+                  <img th:src="@{${msg.sharedProduct.productImage}}" alt="Product" class="product-thumb">
+                  <div class="product-info">
+                    <div class="shared-product-name" th:text="${msg.sharedProduct.productName}">Tên sản phẩm</div>
+                    <div class="shared-product-price"
+                         th:text="${#numbers.formatDecimal(msg.sharedProduct.productPrice, 0, 'COMMA', 0, 'POINT')} + '₫'">
+                      0₫
+                    </div>
+                    <div class="product-actions">
+                      <a th:href="@{'/user/productdetail/' + ${msg.sharedProduct.productId}}" class="product-btn view-btn">Xem chi tiết</a>
+                      <a th:href="@{'/user/cart?buynow=' + ${msg.sharedProduct.productId}}"
+                         class="product-btn buy-btn">Mua ngay</a>
+                    </div>
+                  </div>
+                </div>
+              </th:block>
+            </div>
             <div class="message-avatar">
               <img th:src="@{'/img/' + ${msg.sender.imageurl}}" alt="Avatar">
             </div>
           </th:block>
 
-          <!-- Nếu là người khác thì avatar trước bubble -->
+          <!-- Nếu là của người khác -->
           <th:block th:unless="${msg.sender.username} == ${session.account.username}">
             <div class="message-avatar">
               <img th:src="@{'/img/' + ${msg.sender.imageurl}}" alt="Avatar">
             </div>
-            <div class="message-bubble" th:text="${msg.content}"></div>
-          </th:block>
+            <div class="message-bubble">
+              <!-- Text -->
+              <th:block th:if="${msg.type?.toString() == 'TEXT'}">
+                <span class="sender-name" th:text="${msg.sender.username}"></span>
+                <span class="message-content" th:text="${msg.content}"></span>
+              </th:block>
 
+              <!-- Product share -->
+              <th:block th:if="${msg.type?.toString() == 'PRODUCT_SHARE'}">
+                <div class="shared-product">
+                  <img th:src="@{${msg.sharedProduct.productImage}}" alt="Product" class="product-thumb">
+                  <div class="product-info">
+                    <div class="shared-product-name" th:text="${msg.sharedProduct.productName}">Tên sản phẩm</div>
+                    <div class="shared-product-price"
+                         th:text="${#numbers.formatDecimal(msg.sharedProduct.productPrice, 0, 'COMMA', 0, 'POINT')} + '₫'">
+                      0₫
+                    </div>
+                    <div class="product-actions">
+                      <a th:href="@{'/user/productdetail/' + ${msg.sharedProduct.productId}}" class="product-btn view-btn">Xem chi tiết</a>
+                      <a th:href="@{'/user/cart?buynow=' + ${msg.sharedProduct.productId}}"
+                         class="product-btn buy-btn">Mua ngay</a>
+                    </div>
+                  </div>
+                </div>
+              </th:block>
+            </div>
+          </th:block>
         </div>
       </th:block>
     </div>
+
     <script>
       window.onload = function() {
           const messagesContainer = document.getElementById("messages");

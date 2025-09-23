@@ -1,3 +1,4 @@
+//chatroom.js
 // Hiển thị modal
 function showCreateGroupModal() {
     document.getElementById('createGroupModal').style.display = 'flex';
@@ -142,7 +143,17 @@ function showGroupDetail() {
    function subscribeToGroup(groupId) {
        // Subscribe vào topic của nhóm cụ thể
        stompClient.subscribe(`/topic/group/${groupId}`, function(message) {
-           showMessage(JSON.parse(message.body));
+           const messageData = JSON.parse(message.body);
+           console.log("📨 RAW WebSocket message received:", messageData);
+           console.log("Message keys:", Object.keys(messageData));
+           console.log("Message type:", messageData.type);
+           console.log("Has sharedProduct?", !!messageData.sharedProduct);
+
+           if (messageData.sharedProduct) {
+               console.log("Shared product structure:", messageData.sharedProduct);
+           }
+
+           showMessage(messageData);
        });
    }
 
@@ -203,25 +214,27 @@ function showGroupDetail() {
    }
 
    function showMessage(message) {
+       console.log("🔍 Processing message in showMessage:", message);
+
        const messagesContainer = document.getElementById('messages');
        const currentUser = document.getElementById('username').value;
 
        let messageElement;
 
        if (message.type === 'JOIN' || message.type === 'LEAVE') {
-           // Tin nhắn hệ thống
-
            messageElement = createSystemMessage(message);
        } else if (message.type === 'PRODUCT_SHARE') {
-           // Tin nhắn chia sẻ sản phẩm
-           messageElement = createProductMessage(message);
+           console.log("🎯 Creating PRODUCT_SHARE message element");
+           messageElement = createProductMessage(message, currentUser);
        } else {
-           // Tin nhắn văn bản thông thường
            messageElement = createTextMessage(message, currentUser);
        }
 
-       messagesContainer.appendChild(messageElement);
-       messagesContainer.scrollTop = messagesContainer.scrollHeight;
+       if (messageElement) {
+           messagesContainer.appendChild(messageElement);
+           messagesContainer.scrollTop = messagesContainer.scrollHeight;
+           console.log("✅ Message element added to DOM");
+       }
    }
 
    function createTextMessage(message, currentUser) {
@@ -242,12 +255,13 @@ function showGroupDetail() {
                </div>
            `;
        } else {
-           messageDiv.innerHTML = `
-               <div class="message-avatar">
-                   <img src="${avatar}" alt="Avatar">
-               </div>
-               <div class="message-bubble">${message.content}</div>
-           `;
+           <div class="message-avatar">
+               <img src="${avatar}" alt="Avatar">
+           </div>
+           <div class="message-bubble">
+               <span class="sender-name">${message.senderName}</span>
+               <span class="message-content">${message.content}</span>
+           </div>
        }
 
        return messageDiv;
@@ -263,43 +277,75 @@ function showGroupDetail() {
        return messageDiv;
    }
 
-   function createProductMessage(message) {
-       const messageDiv = document.createElement('div');
-       const currentUser = document.getElementById('username').value;
+   function createProductMessage(message, currentUser) {
+       console.log("🛍️ Creating product message:", message);
+
+       if (!message.sharedProduct) {
+           console.error("❌ MISSING sharedProduct in message:", message);
+           // Thử fallback để debug
+           if (message.product) {
+               console.log("⚠️ Found 'product' instead of 'sharedProduct', trying fallback");
+               message.sharedProduct = message.product;
+           } else {
+               return document.createElement("div");
+           }
+       }
+
+       const p = message.sharedProduct;
        const isSentByMe = message.senderName === currentUser;
 
+       const messageDiv = document.createElement('div');
        messageDiv.className = `message ${isSentByMe ? 'sent' : 'received'}`;
+
+       console.log("🖼️ Product image URL:", p.productImage);
+       console.log("💰 Product price:", p.productPrice);
 
        const productHtml = `
            <div class="message-bubble product-message">
                <div class="product-card">
-                   <div class="product-image">${message.sharedProduct?.image || '📦'}</div>
+                   <div class="product-image">
+                       <img src="${p.productImage}" alt="${p.productName}"
+                            onerror="console.error('Failed to load image:', this.src)">
+                   </div>
                    <div class="product-info">
-                       <div class="product-name">${message.sharedProduct?.name || 'Sản phẩm'}</div>
-                       <div class="product-price">${message.sharedProduct?.price || 'Liên hệ'}</div>
-                       <div class="product-description">${message.sharedProduct?.description || 'Mô tả sản phẩm'}</div>
+                       <div class="product-name">${p.productName || 'No name'}</div>
+                       <div class="product-price">${p.productPrice ? p.productPrice.toLocaleString() + '₫' : 'Liên hệ'}</div>
+                       <div class="product-description">${p.productDescription || ''}</div>
                        <div class="product-actions">
-                           <button class="product-btn view-btn">Xem chi tiết</button>
-                           <button class="product-btn buy-btn">Mua ngay</button>
+                           <a href="/user/productdetail/${p.productId}" class="product-btn view-btn">Xem chi tiết</a>
                        </div>
                    </div>
                </div>
            </div>
        `;
 
+       const avatarSrc = message.senderAvatar ? `/img/${message.senderAvatar}` : '';
+       const avatarHtml = avatarSrc ?
+           `<img src="${avatarSrc}" alt="Avatar">` :
+           `<span>${message.senderName?.charAt(0) || 'U'}</span>`;
+
        if (isSentByMe) {
-           messageDiv.innerHTML = `
-               ${productHtml}
-               <div class="message-avatar">${message.senderAvatar}</div>
-           `;
+           messageDiv.innerHTML = `${productHtml}<div class="message-avatar">${avatarHtml}</div>`;
        } else {
-           messageDiv.innerHTML = `
-               <div class="message-avatar">${message.senderAvatar}</div>
-               ${productHtml}
-           `;
+           messageDiv.innerHTML = `<div class="message-avatar">${avatarHtml}</div>${productHtml}`;
        }
 
        return messageDiv;
+   }
+
+
+   // Gửi tin nhắn sản phẩm
+   function shareProductToGroup(groupId, product) {
+       const senderId = document.getElementById("userId").value;
+
+       stompClient.send(
+           `/app/chat/${groupId}/shareProduct`,
+           {},
+           JSON.stringify({
+               senderId: senderId,
+               product: product
+           })
+       );
    }
 
    // Xử lý sự kiện gửi tin nhắn
@@ -336,15 +382,28 @@ function showGroupDetail() {
    socket.onclose = function() {
        console.log('WebSocket connection closed');
    };
-    function shareProductToGroup(groupId, product) {
-        const senderId = document.getElementById("userId").value;
 
-        stompClient.send(
-            `/app/chat/${groupId}/shareProduct`,
-            {},
-            JSON.stringify({
-                senderId: senderId,
-                product: product
-            })
-        );
+    function renderProductMessage(data) {
+        const chatBox = document.getElementById("chatBox");
+        const p = data.product;
+
+        const html = `
+        <div class="message received">
+          <div class="message-bubble product-message">
+            <div class="product-card">
+              <div class="product-image"><img src="${p.productImage}" alt=""></div>
+              <div class="product-info">
+                <div class="product-name">${p.productName}</div>
+                <div class="product-price">${p.productPrice.toLocaleString()}₫</div>
+                <div class="product-description">${p.productDescription || ""}</div>
+                <div class="product-actions">
+                  <a href="/product/${p.productId}" class="product-btn view-btn">Xem chi tiết</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        `;
+
+        chatBox.innerHTML += html;
     }

@@ -26,11 +26,24 @@ import java.util.Optional;
 @Transactional
 public class MessageService {
 
+//    @Autowired
+private final MessageRepository messageRepository;
+    private final AccountRepository accountRepository;
+    private final ChatGroupRepository groupRepository;
+    private final SharedProductRepository sharedProductRepository;
+
     @Autowired
-    private static MessageRepository messageRepository;
-    private static AccountRepository accountRepository;
-    private static ChatGroupRepository groupRepository;
-    private static SharedProductRepository sharedProductRepository;
+    public MessageService(
+            MessageRepository messageRepository,
+            AccountRepository accountRepository,
+            ChatGroupRepository groupRepository,
+            SharedProductRepository sharedProductRepository
+    ) {
+        this.messageRepository = messageRepository;
+        this.accountRepository = accountRepository;
+        this.groupRepository = groupRepository;
+        this.sharedProductRepository = sharedProductRepository;
+    }
 
     /**
      * Lưu tin nhắn mới
@@ -56,7 +69,7 @@ public class MessageService {
         return messageRepository.findByGroupIdOrderByCreatedAtAsc(groupId);
     }
     @Transactional
-    public static Message shareProduct(Long groupId, Long senderId, SharedProduct productData) {
+    public Message shareProduct(Long groupId, Long senderId, SharedProduct productData) {
         ChatGroup group = groupRepository.findById(Math.toIntExact(groupId))
                 .orElseThrow(() -> new RuntimeException("Group not found"));
         Account sender = accountRepository.findById(Math.toIntExact(senderId))
@@ -87,6 +100,7 @@ public class MessageService {
 
         return savedMessage;
     }
+
     /**
      * Lấy tin nhắn của nhóm theo ID
      */

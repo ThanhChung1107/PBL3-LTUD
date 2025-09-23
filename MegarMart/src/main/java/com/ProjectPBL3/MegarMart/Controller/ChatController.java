@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -122,15 +123,20 @@ public class ChatController {
 
     @MessageMapping("/chat/{groupId}/shareProduct")
     @SendTo("/topic/group/{groupId}")
-    public Message shareProduct(
-            @DestinationVariable Long groupId,
-            @Payload Map<String, Object> payload) {
-
+    public Map<String, Object> shareProduct(@DestinationVariable Long groupId, @Payload Map<String, Object> payload) {
         try {
-            Long senderId = Long.parseLong(payload.get("senderId").toString());
+            System.out.println("🛍️ Processing product share for group: " + groupId);
 
+            Long senderId = Long.parseLong(payload.get("senderId").toString());
             Map<String, Object> productMap = (Map<String, Object>) payload.get("product");
 
+            // Lấy thông tin sender
+            Account sender = accountService.findById(Math.toIntExact(senderId));
+            if (sender == null) {
+                throw new RuntimeException("Sender not found with id: " + senderId);
+            }
+
+            // Tạo shared product
             SharedProduct product = SharedProduct.builder()
                     .productId(Long.parseLong(productMap.get("id").toString()))
                     .productName((String) productMap.get("name"))
@@ -138,9 +144,31 @@ public class ChatController {
                     .productPrice(Double.parseDouble(productMap.get("price").toString()))
                     .build();
 
-            return MessageService.shareProduct(groupId, senderId, product);
+            // Lưu message vào database
+            Message savedMessage = messageService.shareProduct(groupId, senderId, product);
+
+            // ✅ QUAN TRỌNG: Trả về Map với đúng cấu trúc mà JavaScript expect
+            Map<String, Object> response = new HashMap<>();
+            response.put("type", "PRODUCT_SHARE");
+            response.put("senderName", sender.getUsername());
+            response.put("senderAvatar", sender.getImageurl());
+            response.put("createdAt", LocalDateTime.now().toString());
+            response.put("content", sender.getUsername() + " đã chia sẻ một sản phẩm");
+
+            // Đảm bảo sharedProduct có đúng structure
+            Map<String, Object> sharedProductMap = new HashMap<>();
+            sharedProductMap.put("productId", product.getProductId());
+            sharedProductMap.put("productName", product.getProductName());
+            sharedProductMap.put("productImage", product.getProductImage());
+            sharedProductMap.put("productPrice", product.getProductPrice());
+
+            response.put("sharedProduct", sharedProductMap);
+
+            System.out.println("✅ Product share response: " + response);
+            return response;
 
         } catch (Exception e) {
+            System.err.println("❌ Error in shareProduct: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
