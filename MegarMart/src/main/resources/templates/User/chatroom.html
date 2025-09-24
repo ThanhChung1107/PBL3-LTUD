@@ -11,8 +11,10 @@
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
 <body>
+
 <div class="messenger-container">
   <!-- Sidebar -->
+
   <div class="sidebar">
     <div class="sidebar-header">
       <div class="add-group">
@@ -73,6 +75,18 @@
         <i class='bx bx-home'></i>
         <span>Trang Chủ</span>
       </a>
+      <div id="google_translate_element"></div>
+      <script type="text/javascript">
+        function googleTranslateElementInit() {
+          new google.translate.TranslateElement(
+            {pageLanguage: 'vi', includedLanguages: 'en,ja,ko,zh-CN,fr'},
+            'google_translate_element'
+          );
+        }
+      </script>
+      <script type="text/javascript"
+              src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+      </script>
     </div>
   </div>
 

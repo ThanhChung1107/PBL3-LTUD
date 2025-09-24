@@ -255,13 +255,15 @@ function showGroupDetail() {
                </div>
            `;
        } else {
-           <div class="message-avatar">
-               <img src="${avatar}" alt="Avatar">
-           </div>
-           <div class="message-bubble">
-               <span class="sender-name">${message.senderName}</span>
-               <span class="message-content">${message.content}</span>
-           </div>
+           messageDiv.innerHTML = `
+                   <div class="message-avatar">
+                       <img src="${avatar}" alt="Avatar">
+                   </div>
+                   <div class="message-bubble">
+                       <span class="sender-name">${message.senderName}</span>
+                       <span class="message-content">${message.content}</span>
+                   </div>
+               `;
        }
 
        return messageDiv;
