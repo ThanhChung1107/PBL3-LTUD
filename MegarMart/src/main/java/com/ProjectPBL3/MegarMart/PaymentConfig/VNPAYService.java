@@ -24,7 +24,9 @@ public class VNPAYService {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount*100));
+        long amountValue = (long) amount * 100L;
+        vnp_Params.put("vnp_Amount", String.valueOf(amountValue));
+        System.out.println("VNPay gửi vnp_Amount = " + amountValue);
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
@@ -59,14 +61,15 @@ public class VNPAYService {
                 //Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
+                // Thay thế phần try-catch này:
                 try {
                     hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                    //Build query
                     query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
                     query.append('=');
                     query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    // Xử lý lỗi tốt hơn
+                    throw new RuntimeException("Encoding error", e);
                 }
                 if (itr.hasNext()) {
                     query.append('&');
@@ -83,36 +86,37 @@ public class VNPAYService {
     }
 
     public int orderReturn(HttpServletRequest request){
-        Map fields = new HashMap();
-        for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
-            String fieldName = null;
-            String fieldValue = null;
-            try {
-                fieldName = URLEncoder.encode((String) params.nextElement(), StandardCharsets.US_ASCII.toString());
-                fieldValue = URLEncoder.encode(request.getParameter(fieldName), StandardCharsets.US_ASCII.toString());
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                fields.put(fieldName, fieldValue);
-            }
-        }
+        try {
+            Map<String, String> fields = new HashMap<>();
+            Enumeration<String> params = request.getParameterNames();
 
-        String vnp_SecureHash = request.getParameter("vnp_SecureHash");
-        if (fields.containsKey("vnp_SecureHashType")) {
-            fields.remove("vnp_SecureHashType");
-        }
-        if (fields.containsKey("vnp_SecureHash")) {
-            fields.remove("vnp_SecureHash");
-        }
-        String signValue = VNPAYConfig.hashAllFields(fields);
-        if (signValue.equals(vnp_SecureHash)) {
-            if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
-                return 1;
-            } else {
-                return 0;
+            while (params.hasMoreElements()) {
+                String fieldName = params.nextElement();
+                String fieldValue = request.getParameter(fieldName);
+                if (fieldValue != null && !fieldValue.isEmpty()) {
+                    fields.put(fieldName, fieldValue);
+                }
             }
-        } else {
+
+            String vnp_SecureHash = fields.get("vnp_SecureHash");
+            if (vnp_SecureHash == null) {
+                return -1;
+            }
+
+            // Loại bỏ các trường không cần thiết cho chữ ký
+            fields.remove("vnp_SecureHashType");
+            fields.remove("vnp_SecureHash");
+
+            String signValue = VNPAYConfig.hashAllFields(fields);
+
+            if (signValue.equalsIgnoreCase(vnp_SecureHash)) {
+                String transactionStatus = fields.get("vnp_TransactionStatus");
+                return "00".equals(transactionStatus) ? 1 : 0;
+            } else {
+                return -1; // Chữ ký không hợp lệ
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return -1;
         }
     }

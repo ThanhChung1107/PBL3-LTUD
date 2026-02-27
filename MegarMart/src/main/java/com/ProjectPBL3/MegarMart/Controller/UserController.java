@@ -275,181 +275,181 @@ public class UserController {
         return "User/cart";
     }
 
-    @GetMapping("/pay")
-    public String pay(@RequestParam List<Integer> selectedIds,
-                      @RequestParam List<Integer> quantities,
-                      @RequestParam(required = false) String voucher,
-                      RedirectAttributes redirectAttributes,
-                      Model model,
-                      HttpSession session) {
+        @GetMapping("/pay")
+        public String pay(@RequestParam List<Integer> selectedIds,
+                          @RequestParam List<Integer> quantities,
+                          @RequestParam(required = false) String voucher,
+                          RedirectAttributes redirectAttributes,
+                          Model model,
+                          HttpSession session) {
 
-        Account acc = (Account) session.getAttribute("account");
-        if (acc.getName() == null || acc.getName().isEmpty() ||
-                acc.getPhone() == null || acc.getPhone().isEmpty() ||
-                acc.getAddress() == null || acc.getAddress().isEmpty()) {
-            redirectAttributes.addFlashAttribute("fillfull", "Vui lòng điền đầy đủ thông tin để mua hàng");
-            return "redirect:/user/accountdetail";
-        }
+            Account acc = (Account) session.getAttribute("account");
+            if (acc.getName() == null || acc.getName().isEmpty() ||
+                    acc.getPhone() == null || acc.getPhone().isEmpty() ||
+                    acc.getAddress() == null || acc.getAddress().isEmpty()) {
+                redirectAttributes.addFlashAttribute("fillfull", "Vui lòng điền đầy đủ thông tin để mua hàng");
+                return "redirect:/user/accountdetail";
+            }
 
-        List<Product> selectedProducts = cartService.getProductsInCartByIds(acc, selectedIds);
+            List<Product> selectedProducts = cartService.getProductsInCartByIds(acc, selectedIds);
 
-        int totalPrice = 0;
-        for (int i = 0; i < selectedProducts.size(); i++) {
-            Product product = selectedProducts.get(i);
-            int quantity = quantities.get(i);
-            totalPrice += product.getPrice() * quantity;
-        }
+            int totalPrice = 0;
+            for (int i = 0; i < selectedProducts.size(); i++) {
+                Product product = selectedProducts.get(i);
+                int quantity = quantities.get(i);
+                totalPrice += product.getPrice() * quantity;
+            }
 
-        Coupon coupon = null;
-        int coupondiscount = 0;
-        if (voucher != null && !voucher.isEmpty()) {
-            coupon = couponService.findByCode(voucher);
-            if (coupon != null) {
-                if (coupon.getStatus() == 0 || coupon.getCount() >= coupon.getUsagelimit()) {
-                    model.addAttribute("error", "Mã không khả dụng hoặc đã hết lượt dùng!!");
-                    coupon = null;
+            Coupon coupon = null;
+            int coupondiscount = 0;
+            if (voucher != null && !voucher.isEmpty()) {
+                coupon = couponService.findByCode(voucher);
+                if (coupon != null) {
+                    if (coupon.getStatus() == 0 || coupon.getCount() >= coupon.getUsagelimit()) {
+                        model.addAttribute("error", "Mã không khả dụng hoặc đã hết lượt dùng!!");
+                        coupon = null;
+                    } else {
+                        coupondiscount = (int) ((coupon.getDiscount() / 100.0) * totalPrice);
+                    }
                 } else {
-                    coupondiscount = (int) ((coupon.getDiscount() / 100.0) * totalPrice);
+                    model.addAttribute("error", "Mã giảm giá không hợp lệ!");
                 }
-            } else {
-                model.addAttribute("error", "Mã giảm giá không hợp lệ!");
-            }
-        }
-
-        model.addAttribute("selectedProducts", selectedProducts);
-        model.addAttribute("quantities", quantities);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("coupondiscount", coupondiscount);
-        model.addAttribute("coupon", coupon);
-        session.setAttribute("selectedProducts", selectedProducts);
-
-        return "User/pay";
-    }
-
-    @PostMapping("/pay")
-    public String placeOrder(@RequestParam("quantities") List<Integer> quantities,
-                             @RequestParam("couponCode") String couponCode,
-                             HttpSession session,
-                             RedirectAttributes redirectAttributes,
-                             Model model) {
-
-        Account account = (Account) session.getAttribute("account");
-        List<Product> selectedProducts = (List<Product>) session.getAttribute("selectedProducts");
-
-        Orders order = new Orders();
-        order.setAccount(account);
-        order.setName(account.getName());
-        order.setPhone(account.getPhone());
-        order.setAddress(account.getAddress());
-
-        List<OrderDetail> orderDetails = new ArrayList<>();
-        int totalPrice = 0;
-
-        for (int i = 0; i < selectedProducts.size(); i++) {
-            Product product = selectedProducts.get(i);
-            int quantity = quantities.get(i);
-
-            if (product.getStock() < quantity) {
-                model.addAttribute("errorproduct", "Sản phẩm " + product.getName() + " chỉ còn lại " + product.getStock() + " trong kho.");
-                return "User/pay"; // Trả về lại trang pay nếu lỗi
             }
 
-            OrderDetail detail = new OrderDetail();
-            detail.setOrder(order);
-            detail.setProduct(product);
-            detail.setQuantity(quantity);
-            detail.setPrice(product.getPrice() * quantity);
-            orderDetails.add(detail);
+            model.addAttribute("selectedProducts", selectedProducts);
+            model.addAttribute("quantities", quantities);
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("coupondiscount", coupondiscount);
+            model.addAttribute("coupon", coupon);
+            session.setAttribute("selectedProducts", selectedProducts);
 
-            totalPrice += product.getPrice() * quantity;
-
-            deletecart(product.getId(), session);
+            return "User/pay";
         }
 
-        order.setOrderDetails(orderDetails);
-        order.setIsPaid(0);
+        @PostMapping("/pay")
+        public String placeOrder(@RequestParam("quantities") List<Integer> quantities,
+                                 @RequestParam("couponCode") String couponCode,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes,
+                                 Model model) {
 
-        if (couponCode != null && !couponCode.isEmpty()) {
-            Coupon coupon = couponService.findByCode(couponCode);
-            if (coupon != null) {
-                order.setCoupon(coupon);
-                coupon.setCount(coupon.getCount() + 1);
-                couponService.save(coupon);
-                totalPrice -= (int) ((coupon.getDiscount() / 100.0) * totalPrice);
-            }
-        }
+            Account account = (Account) session.getAttribute("account");
+            List<Product> selectedProducts = (List<Product>) session.getAttribute("selectedProducts");
 
-        order.setTotalprice(totalPrice);
-        ordersService.save(order); // Cascade OrderDetails tự động
+            Orders order = new Orders();
+            order.setAccount(account);
+            order.setName(account.getName());
+            order.setPhone(account.getPhone());
+            order.setAddress(account.getAddress());
 
-        redirectAttributes.addAttribute("orderId", order.getId());
-        redirectAttributes.addAttribute("amount", order.getTotalprice());
-        return "redirect:/user/submitOrder";
-    }
+            List<OrderDetail> orderDetails = new ArrayList<>();
+            int totalPrice = 0;
 
-    @GetMapping("/submitOrder")
-    public String submitOrder(@RequestParam("amount") int orderTotal,
-                              @RequestParam("orderId") String orderInfo,
-                              HttpServletRequest request) {
+            for (int i = 0; i < selectedProducts.size(); i++) {
+                Product product = selectedProducts.get(i);
+                int quantity = quantities.get(i);
 
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnpayService.createOrder(request, orderTotal, orderInfo, baseUrl);
-        return "redirect:" + vnpayUrl;
-    }
+                if (product.getStock() < quantity) {
+                    model.addAttribute("errorproduct", "Sản phẩm " + product.getName() + " chỉ còn lại " + product.getStock() + " trong kho.");
+                    return "User/pay"; // Trả về lại trang pay nếu lỗi
+                }
 
-    @GetMapping("/vnpay-payment-return")
-    public String paymentCompleted(HttpServletRequest request, Model model) {
-        int paymentStatus = vnpayService.orderReturn(request);
+                OrderDetail detail = new OrderDetail();
+                detail.setOrder(order);
+                detail.setProduct(product);
+                detail.setQuantity(quantity);
+                detail.setPrice(product.getPrice() * quantity);
+                orderDetails.add(detail);
 
-        String orderInfo = request.getParameter("vnp_OrderInfo");
-        String paymentTime = request.getParameter("vnp_PayDate");
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        LocalDateTime dateTime = LocalDateTime.parse(paymentTime, inputFormatter);
+                totalPrice += product.getPrice() * quantity;
 
-        String transactionId = request.getParameter("vnp_TransactionNo");
-        String totalPrice = request.getParameter("vnp_Amount");
-
-        Orders orders = ordersService.findById(Integer.parseInt(orderInfo));
-
-        if (paymentStatus == 1) {
-            ordersService.updateisPaid(orders); // Cập nhật isPaid = 1
-
-            // ✅ Cập nhật kho và doanh thu
-            for (OrderDetail detail : orders.getOrderDetails()) {
-                Product product = detail.getProduct();
-                int quantity = detail.getQuantity();
-
-                product.setSold(product.getSold() + quantity);
-                product.setStock(product.getStock() - quantity);
-                product.setRevenue(product.getRevenue() + detail.getPrice());
-
-                productService.update(product);
+                deletecart(product.getId(), session);
             }
 
-            // Gửi email xác nhận
-            Account account = orders.getAccount();
-            String subject = "Đơn hàng #" + orderInfo + " đã được thanh toán thành công!";
-            String content = "Chào " + account.getName() + ",\n\n"
-                    + "Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi.\n"
-                    + "Thông tin đơn hàng:\n"
-                    + "- Mã đơn: " + orderInfo + "\n"
-                    + "- Số tiền: " + (Integer.parseInt(totalPrice) / 100) + " VNĐ\n"
-                    + "- Thời gian thanh toán: " + dateTime + "\n"
-                    + "- Mã giao dịch: " + transactionId + "\n\n"
-                    + "Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.\n"
-                    + "Trân trọng,\n"
-                    + "Đội ngũ hỗ trợ khách hàng";
+            order.setOrderDetails(orderDetails);
+            order.setIsPaid(0);
 
-            emailService.sendEmail(account.getEmail(), subject, content);
+            if (couponCode != null && !couponCode.isEmpty()) {
+                Coupon coupon = couponService.findByCode(couponCode);
+                if (coupon != null) {
+                    order.setCoupon(coupon);
+                    coupon.setCount(coupon.getCount() + 1);
+                    couponService.save(coupon);
+                    totalPrice -= (int) ((coupon.getDiscount() / 100.0) * totalPrice);
+                }
+            }
+
+            order.setTotalprice(totalPrice);
+            ordersService.save(order); // Cascade OrderDetails tự động
+
+            redirectAttributes.addAttribute("orderId", order.getId());
+            redirectAttributes.addAttribute("amount", order.getTotalprice());
+            return "redirect:/user/submitOrder";
         }
 
-        model.addAttribute("orderId", orderInfo);
-        model.addAttribute("totalPrice", Integer.parseInt(totalPrice) / 100);
-        model.addAttribute("paymentTime", dateTime);
-        model.addAttribute("transactionId", transactionId);
+        @GetMapping("/submitOrder")
+        public String submitOrder(@RequestParam("amount") int orderTotal,
+                                  @RequestParam("orderId") String orderInfo,
+                                  HttpServletRequest request) {
 
-        return paymentStatus == 1 ? "Payment/orderSuccess" : "Payment/orderFail";
-    }
+            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+            String vnpayUrl = vnpayService.createOrder(request, orderTotal, orderInfo, baseUrl);
+            return "redirect:" + vnpayUrl;
+        }
+
+        @GetMapping("/vnpay-payment-return")
+        public String paymentCompleted(HttpServletRequest request, Model model) {
+            int paymentStatus = vnpayService.orderReturn(request);
+
+            String orderInfo = request.getParameter("vnp_OrderInfo");
+            String paymentTime = request.getParameter("vnp_PayDate");
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            LocalDateTime dateTime = LocalDateTime.parse(paymentTime, inputFormatter);
+
+            String transactionId = request.getParameter("vnp_TransactionNo");
+            String totalPrice = request.getParameter("vnp_Amount");
+
+            Orders orders = ordersService.findById(Integer.parseInt(orderInfo));
+
+            if (paymentStatus == 1) {
+                ordersService.updateisPaid(orders); // Cập nhật isPaid = 1
+
+                // ✅ Cập nhật kho và doanh thu
+                for (OrderDetail detail : orders.getOrderDetails()) {
+                    Product product = detail.getProduct();
+                    int quantity = detail.getQuantity();
+
+                    product.setSold(product.getSold() + quantity);
+                    product.setStock(product.getStock() - quantity);
+                    product.setRevenue(product.getRevenue() + detail.getPrice());
+
+                    productService.update(product);
+                }
+
+                // Gửi email xác nhận
+                Account account = orders.getAccount();
+                String subject = "Đơn hàng #" + orderInfo + " đã được thanh toán thành công!";
+                String content = "Chào " + account.getName() + ",\n\n"
+                        + "Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi.\n"
+                        + "Thông tin đơn hàng:\n"
+                        + "- Mã đơn: " + orderInfo + "\n"
+                        + "- Số tiền: " + (Integer.parseInt(totalPrice) / 100) + " VNĐ\n"
+                        + "- Thời gian thanh toán: " + dateTime + "\n"
+                        + "- Mã giao dịch: " + transactionId + "\n\n"
+                        + "Chúng tôi sẽ sớm xử lý và giao hàng đến bạn.\n"
+                        + "Trân trọng,\n"
+                        + "Đội ngũ hỗ trợ khách hàng";
+
+                emailService.sendEmail(account.getEmail(), subject, content);
+            }
+
+            model.addAttribute("orderId", orderInfo);
+            model.addAttribute("totalPrice", Integer.parseInt(totalPrice) / 100);
+            model.addAttribute("paymentTime", dateTime);
+            model.addAttribute("transactionId", transactionId);
+
+            return paymentStatus == 1 ? "Payment/orderSuccess" : "Payment/orderFail";
+        }
 
 
     @GetMapping("/ReviewProduct-add")

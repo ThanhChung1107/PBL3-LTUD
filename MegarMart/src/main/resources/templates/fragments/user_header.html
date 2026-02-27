@@ -151,19 +151,21 @@
                         <div th:if="${not #lists.isEmpty(session.listcart)}">
                         <h4 class="header__cart-heading">Sản Phẩm Đã Thêm </h4>
                         <ul class="header__cart-list-item">
-                            <li class="header__cart-item" th:each="product : ${session.listcart}">
-                                <img th:src="@{/img/{imgfile}(imgfile=${product.imageurl})}" alt="No ava" class="header__cart-img">
-                                <div class="header__cart-item-info">
-                                    <div class="header__cart-item-head">
-                                        <h5 class="header__cart-item-name" th:text="${product.name}"></h5>
-                                        <div class="header__cart-item-price-wrap">
-                                            <span class="header__cart-item-price" th:text="${#numbers.formatInteger(product.price, 1, 'POINT')+'đ'}"></span>
+                            <li  th:each="product : ${session.listcart}">
+                                <a href="@{/user/productdetail/{proid}(proid = ${pro.id})}" class="header__cart-item">
+                                    <img th:src="@{/img/{imgfile}(imgfile=${product.imageurl})}" alt="No ava" class="header__cart-img">
+                                    <div class="header__cart-item-info">
+                                        <div class="header__cart-item-head">
+                                            <h5 class="header__cart-item-name" th:text="${product.name}"></h5>
+                                            <div class="header__cart-item-price-wrap">
+                                                <span class="header__cart-item-price" th:text="${#numbers.formatInteger(product.price, 1, 'POINT')+'đ'}"></span>
+                                            </div>
                                         </div>
+                                        <!--                                    <div class="header__cart-item-body">-->
+                                        <!--                                        <span class="header__cart-item-remove">Xóa</span>-->
+                                        <!--                                    </div>-->
                                     </div>
-<!--                                    <div class="header__cart-item-body">-->
-<!--                                        <span class="header__cart-item-remove">Xóa</span>-->
-<!--                                    </div>-->
-                                </div>
+                                </a>
                             </li>
                         </ul>
                         <a th:href="@{/user/cart}">
